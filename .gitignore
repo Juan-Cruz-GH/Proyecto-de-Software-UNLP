@@ -1,0 +1,8 @@
+admin/__pycache__/
+admin/src/core/board/__pycache__/
+admin/src/web/__pycache__/
+admin/src/web/controllers/__pycache__/
+admin/src/web/helpers/__pycache__/
+admin/src/web/config.py
+*/__pycache__
+*/__pycache__*
