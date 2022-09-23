@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template
-from src.core import board
+from src.core.board.issue import Issue
 
 issue_blueprint = Blueprint("issues", __name__, url_prefix="/consultas")
 
 @issue_blueprint.get("/")
 def issue_index():
-    kwargs = {"issues": board.list_issues()}
+
+    issue = Issue()
+    kwargs = {"issues": issue.getAll()}
     return render_template("issues/index.html", **kwargs)
