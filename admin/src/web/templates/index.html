@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Ejemplo Proyecto
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+    <h1>Hola {{contenido}}</h1>
+    <a href="{{ url_for('issues.issue_index') }}"> Issues </a>
+{% endblock %}
