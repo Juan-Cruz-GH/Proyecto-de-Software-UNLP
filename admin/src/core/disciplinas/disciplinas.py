@@ -18,7 +18,6 @@ class Disciplina(db.Model):
     horarios = db.Column(db.String, nullable=False)
     costo = db.Column(db.String, nullable=False)
     habilitada = db.Column(db.Boolean, nullable=False)
-    socios = db.relationship("Socio", back_populates="Disciplina")
     inserted_at = db.Column(db.DateTime, default=datetime.now())
 
     socios = db.relationship("Socio", secondary=Socio_Disciplina)
