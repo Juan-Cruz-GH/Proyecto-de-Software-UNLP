@@ -17,10 +17,10 @@ class Socio(db.Model):
     direccion = db.Column(db.String, nullable=False)
     telefono = db.Column(db.String, nullable=False)
     pagos = db.relationship("Pago", back_populates="socio")
-    inserted_ad = db.Column(db.DateTime, default=datetime.now)
+    inserted_at = db.Column(db.DateTime, default=datetime.now)
    
 
-    def __init__(self, nombre=None, apellido=None, email=None, activo=None, tipo_documento=None, dni=None, genero=None, direccion=None, telefono=None):
+    def __init__(self, nombre=None, apellido=None, email=None, activo=True, tipo_documento=None, dni=None, genero=None, direccion=None, telefono=None):
         self.nombre = nombre
         self.apellido = apellido
         self.email = email
