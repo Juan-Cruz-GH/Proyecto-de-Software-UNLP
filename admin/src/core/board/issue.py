@@ -1,12 +1,12 @@
-import psycopg2
-import psycopg2.extras
-class Issue:
-    def getAll(self):
-        conn = psycopg2.connect(host="localhost", database="proyecto_db", user="postgres", password="proyecto")
-        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute('select * from issues')
-        issues = cur.fetchall()
-        print(issues)
-        cur.close()
-        conn.close()
-        return issues
+from datetime import datetime
+from src.core.db import db
+
+class Issue(db.Model):
+    __tablename__ = "Issues"
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    email = db.Column(db.String)
+    title = db.Column(db.String)
+    description = db.Column(db.String)
+    status = db.Column(db.String)
+    inserted_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now)
+    created_at = db.Column(db.DateTime, default=datetime.now())

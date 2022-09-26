@@ -1,4 +1,10 @@
-from src.core.board import issue
+from src.core.board.issue import Issue
+from src.core.db import db
 
 def list_issues():
-    return issue.all()
+    return Issue.query.all()
+
+def create_issue(**kwargs):
+    issue = Issue(**kwargs)
+    db.session.add(issue)
+    db.session.commit()
