@@ -6,7 +6,7 @@ Permiso_Rol=db.Table(
     db.Column("id_rol", db.Integer,db.ForeignKey("Roles.id"), nullable=False, primary_key=True),
 )
 
-class Permiso(db.model):
+class Permiso(db.Model):
     __tablename__ = "Permisos"
 
     #columnas

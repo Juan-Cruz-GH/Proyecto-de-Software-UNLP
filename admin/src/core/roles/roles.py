@@ -7,7 +7,7 @@ Usuario_Rol=db.Table(
     db.Column("id_rol", db.Integer,db.ForeignKey("Roles.id"), nullable=False, primary_key=True),
 )
 
-class Rol(db.model):
+class Rol(db.Model):
     __tablename__="Roles"
 
     #Columnas
