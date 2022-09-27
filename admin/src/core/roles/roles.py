@@ -3,8 +3,8 @@ from src.core.db import db
 #Tabla N a N de Usuario con Rol
 Usuario_Rol=db.Table(
     "Permiso_Rol",
-    db.column("id_usuario",db.Integer,db.ForeignKey("Usuario.id"), nullable=False),
-    db.column("id_rol", db.Integer,db.ForeignKey("Roles.id"), nullable=False),
+    db.column("id_usuario",db.Integer,db.ForeignKey("Usuario.id"), nullable=False, primary_key=True),
+    db.column("id_rol", db.Integer,db.ForeignKey("Roles.id"), nullable=False, primary_key=True),
 )
 
 class Rol(db.model):
