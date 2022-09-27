@@ -1,10 +1,11 @@
 from src.core.db import db
 from datetime import datetime
 
+
 Socio_Disciplina=db.Table(
     "Socio_Disciplina",
-    db.column("id_socio", db.Integer, db.ForeignKey(Socios.id), nullable=False),
-    db.column("id_disciplina", db.Integer, db.ForeignKey(Disciplinas.id), nullable=False)
+    db.Column("id_socio", db.Integer, db.ForeignKey("Socios.id"), nullable=False),
+    db.Column("id_disciplina", db.Integer, db.ForeignKey("Disciplinas.id"), nullable=False)
 )
 
 class Disciplina(db.Model):
