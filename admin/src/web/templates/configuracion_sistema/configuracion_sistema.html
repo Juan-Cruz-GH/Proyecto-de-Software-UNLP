@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Configuracion del sistema
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{% endblock %}
+
+{% block content %}
+    <h1> Configuración del sistema</h1>
+    <article>
+        <form method="post" action="">
+            <label for="paginacion"> Cantidad de elementos por pagina</label>
+            <select id="paginacion"> <option>10</option> <option>25</option><option>50</option></select> 
+        </form>
+        <form>
+            <label for="criterioDeOrdenacion"> Criterio de ordenación</label>
+            <select id="criterioDeOrdenacion"> 
+                <option> Alfabético</option>
+                <option> Alfabético descendente</option>
+            </select>
+        </form>
+    </article>
+    
+{% endblock %}
+
+
+
+
+
