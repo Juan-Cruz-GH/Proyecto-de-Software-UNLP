@@ -14,7 +14,7 @@ class Usuario(db.Model):
     activo = db.Column(db.Boolean, nullable=False)
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
-    inserted_ad = db.Column(db.Datetime, default=datetime.now)
+    inserted_at = db.Column(db.DateTime, default=datetime.now)
 
 def __init__(self, nombre=None, apellido=None, email=None, activo=None, username=None, password=None):
     self.nombre = nombre
@@ -27,4 +27,3 @@ def __init__(self, nombre=None, apellido=None, email=None, activo=None, username
 def __repr__(self):
     return f"Usuario(id={self.id!r}, nombre={self.nombre!r}, apellido={self.apellido!r})"
 
-"falta hacer configurar el init del modelo de usuario"
