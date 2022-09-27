@@ -6,3 +6,5 @@ admin/src/web/helpers/__pycache__/
 admin/src/core/__pycache__/
 */__pycache__
 */__pycache__*
+admin/src/core/pagos/__pycache__/
+admin/src/core/socios/__pycache__/
