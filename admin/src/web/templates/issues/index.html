@@ -14,20 +14,22 @@
     <thead>
         <tr>
         <th>#</th>
-        <th>Autor</th>
+        <th>Email</th>
         <th>Título</th>
         <th>Descripción</th>
         <th>Estado</th>
+        <th>Creado en</th>
         </tr>
     </thead>
     <tbody>
         {% for issue in issues %}
         <tr>
         <th>{{ issue.id }}</th>
-        <th>{{ issue.user }}</th>
+        <th>{{ issue.email }}</th>
         <th>{{ issue.title }}</th>
         <th>{{ issue.description }}</th>
         <th>{{ issue.status }}</th>
+        <th>{{ issue.inserted_at }}</th>
         </tr>
         {% endfor %}
     </tbody>
