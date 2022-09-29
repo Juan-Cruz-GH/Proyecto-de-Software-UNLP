@@ -7,7 +7,7 @@ def listar_disciplinas(page):
 
 def agregar_disciplina(data):
     '''Dar de alta una disciplina en la BD, chequeando que no exista primero.'''
-    if( Disciplina.query.filter_by(nombre = data["nombre"]).first() ):
+    if( Disciplina.query.filter_by(nombre = data["nombre"]).first() is not None):
         return "Ya existe la disciplina."
     else:
         disciplina = Disciplina(**data)
