@@ -14,9 +14,9 @@ class Disciplina(db.Model):
     categoria = db.Column(db.String(50), nullable=False)
     nombre_instructor = db.Column(db.String(30), nullable=False)
     apellido_instructor = db.Column(db.String(40), nullable=False)
-    dias = db.Column(db.String, nullable=False)
+    dias = db.Column(db.String(100), nullable=False)
     horarios = db.Column(db.String, nullable=False)
-    costo = db.Column(db.String, nullable=False)
+    costo = db.Column(db.String, nullable=False)        # El formato de la moneda debe respetar el configurado en el modulo de cfg.
     habilitada = db.Column(db.Boolean, nullable=False)
     inserted_at = db.Column(db.DateTime, default=datetime.now)
 
