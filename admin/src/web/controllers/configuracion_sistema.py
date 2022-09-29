@@ -6,5 +6,6 @@ configuracion_sistema_blueprint=Blueprint("configuracion_sistema",__name__, url_
 
 @configuracion_sistema_blueprint.get("/")
 def configuracion_index():
-    kwargs = {"config": configuracion_sistema.getPaginado()}
+    kwargs = {"pageconfig": configuracion_sistema.getPaginado()}
+    kwargs2= {"generalconfig":configuracion_sistema.getConfiguracionGeneral()}
     return render_template("configuracion_sistema/configuracion_sistema.html", **kwargs)
