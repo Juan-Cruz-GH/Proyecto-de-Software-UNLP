@@ -10,18 +10,6 @@
 
 {% block content %}
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-    <div class="alert alert-warning" role="alert">
-        <li>{{ message }}</li>
-    </div>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-
 <h1>Socios</h1>
     <div class="table-responsive">
         <table class="table align-middle mb-0 bg-white">

@@ -8,6 +8,17 @@
 {% endblock %} 
 
 {% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+    <div class="alert alert-warning" role="alert">
+        <li>{{ message }}</li>
+    </div>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 <div class="card">
     <h5 class="card-header">Modificar Socio</h5>
     <div class="card-body">
@@ -58,7 +69,7 @@
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label" for="documento">Documento</label>
-                        <input type="text" id="documento" name="documento" class="form-control" value="{{socio.dni}}" />
+                        <input type="number" id="documento" name="documento" class="form-control" value="{{socio.dni}}" />
                     </div>
                 </div>
             </div>
@@ -67,7 +78,7 @@
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label" for="telefono">Telefono</label>
-                        <input type="text" id="telefono" name="telefono" class="form-control" value="{{socio.telefono}}" />
+                        <input type="number" id="telefono" name="telefono" class="form-control" value="{{socio.telefono}}" />
                     </div>
                 </div>
                 <div class="col">

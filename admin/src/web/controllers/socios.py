@@ -36,13 +36,12 @@ def socio_add():
         "direccion": request.form.get("direccion"),
         "telefono": request.form.get("telefono"),
     }
-    socio = socios.agregar_socio(data_socio)
-    if(socio == 1):
-        flash("El Dni ya esta cargado en el sistema")
+    validacion, mensaje = socios.validar_datos_existentes(data_socio["dni"], data_socio["email"], "alta")
+    if(validacion == False):
+        flash(mensaje)
         return redirect("/socios/alta-socio")
-    elif(socio == 2):
-        flash("El Email ya esta cargado en el sistema")
-        return redirect("/socios/alta-socio")
+    else:
+        socio = socios.agregar_socio(data_socio)
     #generacion_pagos = pagos.generar_pagos(socio.id)
     return redirect("/socios")
 
@@ -61,7 +60,12 @@ def socio_update():
         "direccion": request.form.get("direccion"),
         "telefono": request.form.get("telefono"),
     }
-    socio = socios.modificar_socio(data_socio)
+    validacion, mensaje = socios.validar_datos_existentes(data_socio["dni"], data_socio["email"], "modificacion", data_socio["id"])
+    if(validacion == False):
+        flash(mensaje)
+        return redirect("/socios/" + data_socio["id"])
+    else:
+        socio = socios.modificar_socio(data_socio)
     return redirect("/socios")
 
 @socio_blueprint.route("/eliminar/<id>", methods=["POST", "GET"])

@@ -8,3 +8,5 @@ admin/src/core/pagos/__pycache__/
 admin/src/core/socios/__pycache__/
 */__pycache__
 */__pycache__*
+*.pyc
+__pycache__/
