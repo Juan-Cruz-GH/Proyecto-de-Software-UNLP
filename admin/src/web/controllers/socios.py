@@ -26,8 +26,8 @@ def socio_add():
     '''Esta funcion llama al metodo correspondiente para dar de alta un socio. 
     Si recibe un 1 es porque ese dni ya esta cargado, si devuelve un 2 es porque ese mail ya esta cargado.'''
     data_socio = {
-        "nombre": request.form.get("nombre"),
-        "apellido": request.form.get("apellido"),
+        "nombre": request.form.get("nombre").capitalize(),
+        "apellido": request.form.get("apellido").capitalize(),
         "email": request.form.get("email"),
         "activo": True,
         "tipo_documento": request.form.get("tipo_documento"),
@@ -51,8 +51,8 @@ def socio_update():
     '''Esta funcion llama al metodo correspondiente para modificar los datos de un socio.'''
     data_socio = {
         "id": request.form.get("id"),
-        "nombre": request.form.get("nombre"),
-        "apellido": request.form.get("apellido"),
+        "nombre": request.form.get("nombre").capitalize(),
+        "apellido": request.form.get("apellido").capitalize(),
         "email": request.form.get("email"),
         "activo": True,
         "tipo_documento": request.form.get("tipo_documento"),
