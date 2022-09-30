@@ -1,6 +1,4 @@
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import String
+from datetime import datetime
 from src.core.db import db
 
 class Pago(db.Model):
@@ -9,6 +7,7 @@ class Pago(db.Model):
     total = db.Column(db.Integer, nullable=False)
     fecha_pago = db.Column(db.DateTime, nullable=False)
     nro_cuota = db.Column(db.Integer, nullable=False)
+    año_cuota = db.Column(db.Integer, nullable=False, default=datetime.now().year)
     estado = db.Column(db.Boolean, nullable=False)
     socio_id = db.Column(db.Integer, db.ForeignKey("Socios.id"))
     socio = db.relationship("Socio", back_populates="pagos")
