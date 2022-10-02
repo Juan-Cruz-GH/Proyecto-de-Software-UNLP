@@ -10,5 +10,5 @@
 
 {% block content %} 
     <h1>Hola {{contenido}}</h1>
-    <a href="{{ url_for('socios.socio_index') }}"> Socios </a>
+    <a href="{{ url_for('socios.socio_index', page_num=1) }}"> Socios </a>
 {% endblock %}
