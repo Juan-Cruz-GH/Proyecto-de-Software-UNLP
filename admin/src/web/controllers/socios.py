@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash
 from src.core import socios
+from src.core import pagos
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
@@ -7,7 +8,9 @@ socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 def socio_index():
     '''Esta funcion llama al modulo correspondiente para obtener todos los socios paginados.'''
     page = request.args.get('page', 1, type=int)
-    kwargs = {"socios": socios.listar_socios(page)}
+    apellido = request.args.get('busqueda', type=str)
+    tipo = request.args.get('tipo', type=str)
+    kwargs = {"socios": socios.listar_socios(page, apellido, tipo), "apellido": apellido, "tipo":tipo}
     return render_template("socios/index.html", **kwargs)
 
 @socio_blueprint.route("/alta-socio")
@@ -42,7 +45,7 @@ def socio_add():
         return redirect("/socios/alta-socio")
     else:
         socio = socios.agregar_socio(data_socio)
-    #generacion_pagos = pagos.generar_pagos(socio.id)
+        generacion_pagos = pagos.generar_pagos(socio.id)
     return redirect("/socios")
 
 @socio_blueprint.route("/modificacion", methods=["POST"])
