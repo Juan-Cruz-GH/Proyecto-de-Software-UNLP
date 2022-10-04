@@ -1,7 +1,5 @@
 from distutils.command.config import config
 from os import environ
-from turtle import fd
-
 
 class Config(object):
     """Base configuration."""
