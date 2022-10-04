@@ -45,8 +45,8 @@
                   Disciplinas
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item" href="#">Ver Disciplinas</a></li>
-                  <li><a class="dropdown-item" href="#">Agregar Disciplinas</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('disciplinas.disciplina_index') }}">Ver Disciplinas</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('disciplinas.form_disciplina') }}">Agregar Disciplinas</a></li>
                 </ul>
               </li>
               <li class="nav-item dropdown">
