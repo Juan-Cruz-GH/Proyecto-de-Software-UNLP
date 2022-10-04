@@ -71,15 +71,14 @@ def socio_update():
         "telefono": request.form.get("telefono"),
     }
     validacion_datos_existentes, mensaje = socios.validar_datos_existentes(data_socio["dni"], data_socio["email"], "modificacion", data_socio["id"])
-    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
     if(not validacion_datos_existentes):
         flash(mensaje)
         return redirect("/socios/" + data_socio["id"])
-    elif(not validacion_inputs):
+    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
+    if(not validacion_inputs):
         flash(mensaje)
         return redirect("/socios/" + data_socio["id"])
-    else:
-        socio = socios.modificar_socio(data_socio)
+    socio = socios.modificar_socio(data_socio)
     return redirect("/socios")
 
 @socio_blueprint.route("/eliminar/<id>", methods=["POST", "GET"])
