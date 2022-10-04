@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Ejemplo Proyecto
+    Home - Club Villa Elisa
 {% endblock %} 
 
 {%block head %} 
@@ -10,5 +10,5 @@
 
 {% block content %} 
     <h1>Hola {{contenido}}</h1>
-    <a href="{{ url_for('issues.issue_index') }}"> Issues </a>
+    <a href="{{ url_for('socios.socio_index', page_num=1) }}"> Socios </a>
 {% endblock %}
