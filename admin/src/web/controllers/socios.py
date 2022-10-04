@@ -43,16 +43,15 @@ def socio_add():
         "telefono": request.form.get("telefono"),
     }
     validacion, mensaje = socios.validar_datos_existentes(data_socio["dni"], data_socio["email"], "alta")
-    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
     if(validacion == False):
         flash(mensaje)
         return redirect("/socios/alta-socio")
-    elif(not validacion_inputs):
+    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
+    if(not validacion_inputs):
         flash(mensaje)
         return redirect("/socios/alta-socio")
-    else:
-        socio = socios.agregar_socio(data_socio)
-        generacion_pagos = pagos.generar_pagos(socio.id)
+    socio = socios.agregar_socio(data_socio)
+    generacion_pagos = pagos.generar_pagos(socio.id)
     return redirect("/socios")
 
 @socio_blueprint.route("/modificacion", methods=["POST"])
