@@ -1,6 +1,9 @@
+import csv
+from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, flash
 from src.core import socios
 from src.core import pagos
+from src.utils import PDF
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
@@ -40,7 +43,11 @@ def socio_add():
         "telefono": request.form.get("telefono"),
     }
     validacion, mensaje = socios.validar_datos_existentes(data_socio["dni"], data_socio["email"], "alta")
+    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
     if(validacion == False):
+        flash(mensaje)
+        return redirect("/socios/alta-socio")
+    elif(not validacion_inputs):
         flash(mensaje)
         return redirect("/socios/alta-socio")
     else:
@@ -63,8 +70,12 @@ def socio_update():
         "direccion": request.form.get("direccion"),
         "telefono": request.form.get("telefono"),
     }
-    validacion, mensaje = socios.validar_datos_existentes(data_socio["dni"], data_socio["email"], "modificacion", data_socio["id"])
-    if(validacion == False):
+    validacion_datos_existentes, mensaje = socios.validar_datos_existentes(data_socio["dni"], data_socio["email"], "modificacion", data_socio["id"])
+    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
+    if(not validacion_datos_existentes):
+        flash(mensaje)
+        return redirect("/socios/" + data_socio["id"])
+    elif(not validacion_inputs):
         flash(mensaje)
         return redirect("/socios/" + data_socio["id"])
     else:
@@ -76,3 +87,43 @@ def socio_delete(id):
     '''Esta funcion llama al metodo correspondiente para eliminar un socio.'''
     socio = socios.eliminar_socio(id)
     return redirect("/socios")
+
+@socio_blueprint.route("/exportar-csv")
+def exportar_csv():
+    data_socios = socios.todos_los_socios()
+    headers = ['id', 'apellido', 'activo', 'dni', 'genero', 'telefono', 'nombre', 'email', 'tipo_documento', 'direccion']
+    with open('socios.csv', 'w') as f:
+        writer = csv.DictWriter(f, fieldnames=headers)
+        writer.writeheader()
+        writer.writerows(data_socios)
+    return redirect('/socios')
+
+@socio_blueprint.route("/exportar-pdf")
+def exportar_pdf():
+    data_socios = socios.todos_los_socios()
+    pdf = PDF()
+    pdf.add_page()
+    pdf.alias_nb_pages()
+    pdf.set_font('Arial', 'B', 16)
+    pdf.cell(40, 20, f'{datetime.now().date()}')
+    pdf.set_font('Arial', 'B', 12)
+    y_height = 5
+    pdf.set_xy(0, 50)
+    pdf.cell(15)
+    pdf.cell(30, y_height, 'Nombre', border=1)
+    pdf.cell(30, y_height, 'Apellido', border=1)
+    pdf.cell(25, y_height, 'Dni', border=1)
+    pdf.cell(25, y_height, 'Telefono', border=1)
+    pdf.cell(30, y_height, 'Genero', border=1)
+    pdf.cell(40, y_height, 'Direccion', border=1, ln=1)
+    pdf.set_font('Arial', '', 12)
+    for socio in data_socios:
+        pdf.cell(5)
+        pdf.cell(30, y_height, socio["nombre"], border=1)
+        pdf.cell(30, y_height, socio["apellido"], border=1)
+        pdf.cell(25, y_height, socio["dni"], border=1)
+        pdf.cell(25, y_height, socio["telefono"], border=1)
+        pdf.cell(30, y_height, socio["genero"], border=1)
+        pdf.cell(40, y_height, socio["direccion"], border=1, ln=1)
+    pdf.output('listado_socios.pdf', 'F')
+    return redirect('/socios')

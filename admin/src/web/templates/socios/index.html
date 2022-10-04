@@ -8,6 +8,17 @@
 {% endblock %} 
 
 {% block content %}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+        <div class="alert alert-warning" role="alert">
+            <li>{{ message }}</li>
+        </div>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
 <div class="table-responsive">
   <table class="table align-middle mb-0 bg-white caption-top">
     <caption>
@@ -111,45 +122,58 @@
       {% endfor %}
     </tbody>
   </table>
-  <div class="pagination mt-3">
-    <ul class="pagination">
-      {% if socios.has_prev %}
-      <li class="page-item">
-        <a
-          class="page-link"
-          href="{{ url_for('socios.socio_index', page=socios.prev_num, busqueda=apellido, tipo=tipo) }}"
-        >
-          {{ '<<<' }}
-        </a>
-      </li>
-      {% endif %} 
-      {% for number in socios.iter_pages() %} 
-      {% if socios.page != number %}
-      <li class="page-item">
-        <a
-          class="page-link"
-          href="{{ url_for('socios.socio_index', page=number, busqueda=apellido, tipo=tipo) }}"
-        >
-          {{ number }}
-        </a>
-      </li>
-      {% else %}
-      <li class="page-item active">
-        <span class="page-link">{{ number }}</span>
-      </li>
-      {% endif %} 
-      {% endfor %} 
-      {% if socios.has_next %}
-      <li class="page-item">
-        <a
-          class="page-link"
-          href="{{ url_for('socios.socio_index', page=socios.next_num, busqueda=apellido, tipo=tipo) }}"
-        >
-          {{ '>>>' }}
-        </a>
-      </li>
-      {% endif %}
-    </ul>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="pagination mt-3">
+        <ul class="pagination">
+          {% if socios.has_prev %}
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="{{ url_for('socios.socio_index', page=socios.prev_num, busqueda=apellido) }}"
+            >
+              {{ '<<<' }}
+            </a>
+          </li>
+          {% endif %} {% for number in socios.iter_pages() %} {% if socios.page
+          != number %}
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="{{ url_for('socios.socio_index', page=number, busqueda=apellido) }}"
+            >
+              {{ number }}
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item active">
+            <span class="page-link">{{ number }}</span>
+          </li>
+          {% endif %} {% endfor %} {% if socios.has_next %}
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="{{ url_for('socios.socio_index', page=socios.next_num, busqueda=apellido) }}"
+            >
+              {{ '>>>' }}
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4 offset-md-4 mt-3">
+      <a
+        href="{{ url_for('socios.exportar_csv') }}"
+        class="btn btn-link float-md-end"
+        >Exportar CSV</a
+      >
+      <a
+        href="{{ url_for('socios.exportar_pdf') }}"
+        class="btn btn-link float-md-end"
+        >Exportar PDF</a
+      >
+    </div>
   </div>
 </div>
 {% endblock %}

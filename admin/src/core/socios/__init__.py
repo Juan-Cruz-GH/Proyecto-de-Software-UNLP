@@ -1,5 +1,16 @@
+import re
 from src.core.socios.socios import Socio
 from src.core.db import db
+
+def todos_los_socios():
+    '''Retorna todos los socios en una lista de diccionarios'''
+    data_socios = []
+    for socio in Socio.query.all():
+        row = socio.__dict__
+        row.pop("_sa_instance_state")
+        row.pop("inserted_at")
+        data_socios.append(row)
+    return data_socios
 
 def listar_socios(page, apellido=None, tipo=None):
     '''Esta funcion devuelve todos los socios de forma paginada segun la configuracion
@@ -69,3 +80,17 @@ def validar_datos_existentes(dni, email, accion, id=None):
             return False, "El Email ya esta cargado en el sistema."
         else:
             return True, "Ambos son validos"
+
+def validar_inputs(data):
+    '''Esta funcion valida que los inputs sean del tipo correcto.'''
+    regex_email = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+    if not(data["nombre"] != '' and data["apellido"] != '' and data["email"] != '' and data["tipo_documento"] != '' and data["dni"] != '' and data["genero"] != '' and data["direccion"] != '' and data["genero"] != ''):
+        return False, "Todos los datos deben estar completos"
+    elif not (data["dni"].isdigit() and data["telefono"].isdigit()):
+        return False, "El telefono y dni deben ser solo numeros, sin guiones ni puntos."
+    elif not(re.fullmatch(r"[A-Za-z ]{1,50}", data["nombre"]) and re.fullmatch(r"[A-Za-z ]{1,50}", data["apellido"])):
+        return False, "El nombre o apellido son incorrectos."
+    elif not(re.search(regex_email,data["email"])):
+        return False, "El email debe ser valido"
+    else:
+        return True, "Inputs Validos"
