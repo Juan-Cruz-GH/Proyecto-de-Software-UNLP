@@ -2,10 +2,19 @@ import re
 from src.core.socios.socios import Socio
 from src.core.db import db
 
-def todos_los_socios():
+def todos_los_socios(apellido=None, tipo=None):
     '''Retorna todos los socios en una lista de diccionarios'''
     data_socios = []
-    for socio in Socio.query.all():
+    if(apellido is not None):
+        socios = Socio.query.filter_by(apellido=apellido.capitalize())
+    elif(tipo is not None):
+        if(tipo == "true"):
+            socios = Socio.query.filter(Socio.activo.is_(True))
+        else:
+            socios = Socio.query.filter(Socio.activo.is_(False))
+    else:
+        socios = Socio.query.all()
+    for socio in socios:
         row = socio.__dict__
         row.pop("_sa_instance_state")
         row.pop("inserted_at")

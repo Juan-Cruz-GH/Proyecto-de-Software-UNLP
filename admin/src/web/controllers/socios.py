@@ -90,7 +90,9 @@ def socio_delete(id):
 
 @socio_blueprint.route("/exportar-csv")
 def exportar_csv():
-    data_socios = socios.todos_los_socios()
+    apellido = request.args.get('busqueda', type=str)
+    tipo = request.args.get('tipo', type=str)
+    data_socios = socios.todos_los_socios(apellido, tipo)
     headers = ['id', 'apellido', 'activo', 'dni', 'genero', 'telefono', 'nombre', 'email', 'tipo_documento', 'direccion']
     with open('socios.csv', 'w') as f:
         writer = csv.DictWriter(f, fieldnames=headers)
@@ -100,7 +102,9 @@ def exportar_csv():
 
 @socio_blueprint.route("/exportar-pdf")
 def exportar_pdf():
-    data_socios = socios.todos_los_socios()
+    apellido = request.args.get('busqueda', type=str)
+    tipo = request.args.get('tipo', type=str)
+    data_socios = socios.todos_los_socios(apellido, tipo)
     pdf = PDF()
     pdf.add_page()
     pdf.alias_nb_pages()

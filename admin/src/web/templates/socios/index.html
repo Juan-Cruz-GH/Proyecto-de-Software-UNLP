@@ -164,12 +164,12 @@
     </div>
     <div class="col-md-4 offset-md-4 mt-3">
       <a
-        href="{{ url_for('socios.exportar_csv') }}"
+        href="{{ url_for('socios.exportar_csv', busqueda=apellido, tipo=tipo) }}"
         class="btn btn-link float-md-end"
         >Exportar CSV</a
       >
       <a
-        href="{{ url_for('socios.exportar_pdf') }}"
+        href="{{ url_for('socios.exportar_pdf', busqueda=apellido, tipo=tipo) }}"
         class="btn btn-link float-md-end"
         >Exportar PDF</a
       >
