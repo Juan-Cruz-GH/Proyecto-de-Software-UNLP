@@ -1,6 +1,3 @@
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import String
 from src.core.db import db
 from datetime import datetime
 

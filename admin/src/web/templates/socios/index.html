@@ -109,7 +109,7 @@
           <a class="btn btn-primary">Inscribir</a>
         </td>
         <td>
-          <a class="btn btn-success">Ver Pagos</a>
+          <a href="{{ url_for('pagos.pagos_socios', id=socio.id, page_num=1) }}" class="btn btn-success">Ver Pagos</a>
         </td>
         <td>
           <a
