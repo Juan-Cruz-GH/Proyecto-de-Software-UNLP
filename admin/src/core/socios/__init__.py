@@ -1,9 +1,19 @@
 from src.core.socios.socios import Socio
 from src.core.db import db
 
-def listar_socios(page):
-    '''Esta funcion devuelve todos los socios de forma paginada segun la configuracion.'''
-    return Socio.query.paginate(page, per_page=1)
+def listar_socios(page, apellido=None, tipo=None):
+    '''Esta funcion devuelve todos los socios de forma paginada segun la configuracion
+    y segun si se esta realizando un tipo de busqueda.'''
+    if(apellido is not None):
+        socios = Socio.query.filter_by(apellido=apellido.capitalize()).paginate(page, per_page=1)
+    elif(tipo is not None):
+        if(tipo == "true"):
+            socios = Socio.query.filter(Socio.activo.is_(True)).paginate(page, per_page=1)
+        else:
+            socios = Socio.query.filter(Socio.activo.is_(False)).paginate(page, per_page=1)
+    else:
+        socios = Socio.query.paginate(page, per_page=1)
+    return socios
 
 def agregar_socio(data):
     '''Esta funcion se utiliza para dar de alta un socio'''
