@@ -2,10 +2,6 @@ from src.core.pagos.pagos import Pago
 from datetime import datetime
 from src.core.db import db
 
-def listar_pagos():
-    '''Esta funcion devuelve todos los pagos de un socio paginados.'''
-    return Pago.query.all()
-
 def generar_pagos(id_socio):
     '''Esta funcion genera los cuotas a pagar por el socio cuando se lo da de alta.'''
     año_acutal = str(datetime.now().year)
@@ -24,3 +20,8 @@ def generar_pagos(id_socio):
         pago = Pago(**data_pago)
         db.session.add(pago)
         db.session.commit()
+
+def listar_pagos_socio(id, page):
+    '''Esta funcion realiza la consulta para obtener los pagos del socio recibido'''
+    pagos = Pago.query.filter_by(socio_id=id).paginate(page, per_page=1)
+    return pagos
