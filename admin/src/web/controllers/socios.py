@@ -1,9 +1,7 @@
-import csv
-from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, flash
 from src.core import socios
 from src.core import pagos
-from src.utils import PDF
+from src import exportaciones
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
@@ -88,44 +86,18 @@ def socio_delete(id):
 
 @socio_blueprint.route("/exportar-csv")
 def exportar_csv():
+    '''Esta funcion genera un archivo CSV a partir de los datos solicitados de socios'''
     apellido = request.args.get('busqueda', type=str)
     tipo = request.args.get('tipo', type=str)
     data_socios = socios.todos_los_socios(apellido, tipo)
-    headers = ['id', 'apellido', 'activo', 'dni', 'genero', 'telefono', 'nombre', 'email', 'tipo_documento', 'direccion']
-    with open('socios.csv', 'w') as f:
-        writer = csv.DictWriter(f, fieldnames=headers)
-        writer.writeheader()
-        writer.writerows(data_socios)
-    return redirect('/socios')
+    output = exportaciones.generarCSV(data_socios)
+    return output
 
 @socio_blueprint.route("/exportar-pdf")
 def exportar_pdf():
+    '''Esta funcion genera un archivo PDF a partir de los datos solicitados de socios'''
     apellido = request.args.get('busqueda', type=str)
     tipo = request.args.get('tipo', type=str)
     data_socios = socios.todos_los_socios(apellido, tipo)
-    pdf = PDF()
-    pdf.add_page()
-    pdf.alias_nb_pages()
-    pdf.set_font('Arial', 'B', 16)
-    pdf.cell(40, 20, f'{datetime.now().date()}')
-    pdf.set_font('Arial', 'B', 12)
-    y_height = 5
-    pdf.set_xy(0, 50)
-    pdf.cell(15)
-    pdf.cell(30, y_height, 'Nombre', border=1)
-    pdf.cell(30, y_height, 'Apellido', border=1)
-    pdf.cell(25, y_height, 'Dni', border=1)
-    pdf.cell(25, y_height, 'Telefono', border=1)
-    pdf.cell(30, y_height, 'Genero', border=1)
-    pdf.cell(40, y_height, 'Direccion', border=1, ln=1)
-    pdf.set_font('Arial', '', 12)
-    for socio in data_socios:
-        pdf.cell(5)
-        pdf.cell(30, y_height, socio["nombre"], border=1)
-        pdf.cell(30, y_height, socio["apellido"], border=1)
-        pdf.cell(25, y_height, socio["dni"], border=1)
-        pdf.cell(25, y_height, socio["telefono"], border=1)
-        pdf.cell(30, y_height, socio["genero"], border=1)
-        pdf.cell(40, y_height, socio["direccion"], border=1, ln=1)
-    pdf.output('listado_socios.pdf', 'F')
-    return redirect('/socios')
+    output = exportaciones.generarPDF(data_socios)
+    return output
