@@ -5,7 +5,12 @@ from src.core.db import db
 def todos_los_socios(apellido=None, tipo=None):
     '''Retorna todos los socios en una lista de diccionarios'''
     data_socios = []
-    if(apellido is not None):
+    if((apellido is not None) and (tipo is not None)):
+        if(tipo == "true"):
+            socios = Socio.query.filter_by(apellido=apellido.capitalize()).filter(Socio.activo.is_(True))
+        else:
+            socios = Socio.query.filter_by(apellido=apellido.capitalize()).filter(Socio.activo.is_(False))
+    elif(apellido is not None):
         socios = Socio.query.filter_by(apellido=apellido.capitalize())
     elif(tipo is not None):
         if(tipo == "true"):
@@ -24,7 +29,12 @@ def todos_los_socios(apellido=None, tipo=None):
 def listar_socios(page, apellido=None, tipo=None):
     '''Esta funcion devuelve todos los socios de forma paginada segun la configuracion
     y segun si se esta realizando un tipo de busqueda.'''
-    if(apellido is not None):
+    if((apellido is not None) and (tipo is not None)):
+        if(tipo == "true"):
+            socios = Socio.query.filter_by(apellido=apellido.capitalize()).filter(Socio.activo.is_(True)).paginate(page, per_page=1)
+        else:
+            socios = Socio.query.filter_by(apellido=apellido.capitalize()).filter(Socio.activo.is_(False)).paginate(page, per_page=1)
+    elif(apellido is not None):
         socios = Socio.query.filter_by(apellido=apellido.capitalize()).paginate(page, per_page=1)
     elif(tipo is not None):
         if(tipo == "true"):

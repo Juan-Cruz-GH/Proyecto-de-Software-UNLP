@@ -28,7 +28,7 @@
         </div>
         <div class="col-7 ms-auto">
           <div class="row">
-            <div class="col-6">
+            <div class="col-12">
               <form
                 class="d-flex"
                 method="GET"
@@ -43,21 +43,10 @@
                   <option value="true">Activo</option>
                   <option value="false">No-Activo</option>
                 </select>
-                <button class="btn btn-outline-success" type="submit">
-                  Buscar
-                </button>
-              </form>
-            </div>
-            <div class="col-6">
-              <form
-                class="d-flex"
-                method="GET"
-                action="{{ url_for('socios.socio_index', page_num=1) }}"
-              >
                 <input
                   class="form-control me-2"
                   type="search"
-                  placeholder="Buscar Socio..."
+                  placeholder="Buscar socio por apellido..."
                   aria-label="Buscar por apellido"
                   id="busqueda"
                   name="busqueda"

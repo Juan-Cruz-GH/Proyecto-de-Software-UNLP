@@ -9,8 +9,8 @@ socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 def socio_index():
     '''Esta funcion llama al modulo correspondiente para obtener todos los socios paginados.'''
     page = request.args.get('page', 1, type=int)
-    apellido = request.args.get('busqueda', type=str)
-    tipo = request.args.get('tipo', type=str)
+    apellido = request.args.get('busqueda', type=str) if request.args.get('busqueda', type=str) != '' else None
+    tipo = request.args.get('tipo', type=str) if request.args.get('tipo', type=str) != '' else None
     kwargs = {"socios": socios.listar_socios(page, apellido, tipo), "apellido": apellido, "tipo":tipo}
     return render_template("socios/index.html", **kwargs)
 
