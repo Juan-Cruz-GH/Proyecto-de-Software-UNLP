@@ -8,6 +8,7 @@ from src.web.controllers.socios import socio_blueprint
 from src.web.controllers.pagos import pago_blueprint
 from src.web.controllers.roles import rol_blueprint
 from src.web.controllers.permisos import permiso_blueprint
+from src.web.controllers.auth import auth_blueprint
 
 from src.web.config import config
 from src.core.db import db, init_db
@@ -30,6 +31,7 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(pago_blueprint)
     app.register_blueprint(rol_blueprint)
     app.register_blueprint(permiso_blueprint)
+    app.register_blueprint(auth_blueprint)
     
 
     with app.app_context():

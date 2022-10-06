@@ -13,7 +13,7 @@ class Usuario(db.Model):
     password = db.Column(db.String, nullable=False)
     inserted_at = db.Column(db.DateTime, default=datetime.now)
 
-def __init__(self, nombre=None, apellido=None, email=None, activo=None, username=None, password=None):
+def __init__(self, nombre, apellido, email, activo, username, password):
     self.nombre = nombre
     self.apellido = apellido
     self.email = email
