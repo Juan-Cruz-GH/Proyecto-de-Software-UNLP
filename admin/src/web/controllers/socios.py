@@ -87,8 +87,8 @@ def socio_delete(id):
 @socio_blueprint.route("/exportar-csv")
 def exportar_csv():
     '''Esta funcion genera un archivo CSV a partir de los datos solicitados de socios'''
-    apellido = request.args.get('busqueda', type=str)
-    tipo = request.args.get('tipo', type=str)
+    apellido = request.args.get('busqueda', type=str) if request.args.get('busqueda', type=str) != '' else None
+    tipo = request.args.get('tipo', type=str) if request.args.get('tipo', type=str) != '' else None
     data_socios = socios.todos_los_socios(apellido, tipo)
     output = exportaciones.generarCSV(data_socios)
     return output
@@ -96,8 +96,8 @@ def exportar_csv():
 @socio_blueprint.route("/exportar-pdf")
 def exportar_pdf():
     '''Esta funcion genera un archivo PDF a partir de los datos solicitados de socios'''
-    apellido = request.args.get('busqueda', type=str)
-    tipo = request.args.get('tipo', type=str)
+    apellido = request.args.get('busqueda', type=str) if request.args.get('busqueda', type=str) != '' else None
+    tipo = request.args.get('tipo', type=str) if request.args.get('tipo', type=str) != '' else None
     data_socios = socios.todos_los_socios(apellido, tipo)
     output = exportaciones.generarPDF(data_socios)
     return output
