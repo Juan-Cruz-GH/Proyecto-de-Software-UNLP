@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, flash
 from src.core import socios
+from src.core import pagos
+from src import exportaciones
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
@@ -7,7 +9,9 @@ socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 def socio_index():
     '''Esta funcion llama al modulo correspondiente para obtener todos los socios paginados.'''
     page = request.args.get('page', 1, type=int)
-    kwargs = {"socios": socios.listar_socios(page)}
+    apellido = request.args.get('busqueda', type=str) if request.args.get('busqueda', type=str) != '' else None
+    tipo = request.args.get('tipo', type=str) if request.args.get('tipo', type=str) != '' else None
+    kwargs = {"socios": socios.listar_socios(page, apellido, tipo), "apellido": apellido, "tipo":tipo}
     return render_template("socios/index.html", **kwargs)
 
 @socio_blueprint.route("/alta-socio")
@@ -40,9 +44,12 @@ def socio_add():
     if(validacion == False):
         flash(mensaje)
         return redirect("/socios/alta-socio")
-    else:
-        socio = socios.agregar_socio(data_socio)
-    #generacion_pagos = pagos.generar_pagos(socio.id)
+    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
+    if(not validacion_inputs):
+        flash(mensaje)
+        return redirect("/socios/alta-socio")
+    socio = socios.agregar_socio(data_socio)
+    generacion_pagos = pagos.generar_pagos(socio.id)
     return redirect("/socios")
 
 @socio_blueprint.route("/modificacion", methods=["POST"])
@@ -60,12 +67,15 @@ def socio_update():
         "direccion": request.form.get("direccion"),
         "telefono": request.form.get("telefono"),
     }
-    validacion, mensaje = socios.validar_datos_existentes(data_socio["dni"], data_socio["email"], "modificacion", data_socio["id"])
-    if(validacion == False):
+    validacion_datos_existentes, mensaje = socios.validar_datos_existentes(data_socio["dni"], data_socio["email"], "modificacion", data_socio["id"])
+    if(not validacion_datos_existentes):
         flash(mensaje)
         return redirect("/socios/" + data_socio["id"])
-    else:
-        socio = socios.modificar_socio(data_socio)
+    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
+    if(not validacion_inputs):
+        flash(mensaje)
+        return redirect("/socios/" + data_socio["id"])
+    socio = socios.modificar_socio(data_socio)
     return redirect("/socios")
 
 @socio_blueprint.route("/eliminar/<id>", methods=["POST", "GET"])
@@ -73,3 +83,21 @@ def socio_delete(id):
     '''Esta funcion llama al metodo correspondiente para eliminar un socio.'''
     socio = socios.eliminar_socio(id)
     return redirect("/socios")
+
+@socio_blueprint.route("/exportar-csv")
+def exportar_csv():
+    '''Esta funcion genera un archivo CSV a partir de los datos solicitados de socios'''
+    apellido = request.args.get('busqueda', type=str) if request.args.get('busqueda', type=str) != '' else None
+    tipo = request.args.get('tipo', type=str) if request.args.get('tipo', type=str) != '' else None
+    data_socios = socios.todos_los_socios(apellido, tipo)
+    output = exportaciones.generarCSV(data_socios)
+    return output
+
+@socio_blueprint.route("/exportar-pdf")
+def exportar_pdf():
+    '''Esta funcion genera un archivo PDF a partir de los datos solicitados de socios'''
+    apellido = request.args.get('busqueda', type=str) if request.args.get('busqueda', type=str) != '' else None
+    tipo = request.args.get('tipo', type=str) if request.args.get('tipo', type=str) != '' else None
+    data_socios = socios.todos_los_socios(apellido, tipo)
+    output = exportaciones.generarPDF(data_socios)
+    return output
