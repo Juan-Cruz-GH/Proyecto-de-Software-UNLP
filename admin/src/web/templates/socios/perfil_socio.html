@@ -23,6 +23,7 @@
     <h5 class="card-header">Modificar Socio</h5>
     <div class="card-body">
         <form method="POST" action="{{ url_for('socios.socio_update')}}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="text" id="id" name="id" value="{{socio.id}}" hidden readonly/>
             <div class="row mb-4">
               <div class="col">

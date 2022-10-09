@@ -12,7 +12,6 @@ def generar_pagos(id_socio):
     for i in range(desde, 13):
         data_pago = {
             "total": 0,
-            "fecha_pago": datetime.strptime("01/01/2000", "%d/%m/%Y").date(),
             "socio_id": id_socio,
             "nro_cuota": i,
             "estado": False,
