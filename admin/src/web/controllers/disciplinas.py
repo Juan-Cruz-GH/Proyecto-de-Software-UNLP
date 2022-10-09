@@ -48,7 +48,7 @@ def disciplina_update():
     disciplinas.modificar_disciplina(data_disciplina) 
     return redirect("/disciplinas")
 
-@disciplina_blueprint.route("/eliminar/<id>", methods=["POST", "GET"])
+@disciplina_blueprint.route("/eliminar/<id>", methods=["DELETE", "GET"])
 def disciplina_delete(id):
     disciplinas.eliminar_disciplina(id)
     return redirect("/disciplinas")

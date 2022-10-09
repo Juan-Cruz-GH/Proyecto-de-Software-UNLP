@@ -78,7 +78,7 @@ def socio_update():
     socio = socios.modificar_socio(data_socio)
     return redirect("/socios")
 
-@socio_blueprint.route("/eliminar/<id>", methods=["POST", "GET"])
+@socio_blueprint.route("/eliminar/<id>", methods=["DELETE", "GET"])
 def socio_delete(id):
     '''Esta funcion llama al metodo correspondiente para eliminar un socio.'''
     socio = socios.eliminar_socio(id)

@@ -103,7 +103,7 @@ def validar_datos_existentes(dni, email, accion, id=None):
 def validar_inputs(data):
     '''Esta funcion valida que los inputs sean del tipo correcto.'''
     regex_email = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-    if not(data["nombre"] != '' and data["apellido"] != '' and data["email"] != '' and data["tipo_documento"] != '' and data["dni"] != '' and data["genero"] != '' and data["direccion"] != '' and data["genero"] != ''):
+    if not(data["nombre"] != '' and data["apellido"] != '' and data["email"] != '' and data["tipo_documento"] != '' and data["dni"] != '' and data["genero"] != '' and data["direccion"] != '' and data["genero"] != '' and data["telefono"] != ''):
         return False, "Todos los datos deben estar completos"
     elif not (data["dni"].isdigit() and data["telefono"].isdigit()):
         return False, "El telefono y dni deben ser solo numeros, sin guiones ni puntos."
@@ -111,5 +111,9 @@ def validar_inputs(data):
         return False, "El nombre o apellido son incorrectos."
     elif not(re.search(regex_email,data["email"])):
         return False, "El email debe ser valido"
+    elif(len(data["dni"]) != 8):
+        return False, "El dni debe contener 8 numeros"
+    elif(len(data["telefono"]) != 10 and len(data["telefono"]) != 7):
+        return False, "El numero de telefono debe tener 10 numeros si es celular y 7 si es de casa."
     else:
         return True, "Inputs Validos"
