@@ -53,9 +53,15 @@
         <td>
           <p class="fw-normal mb-1">{{pago.total}}</p>
         </td>
+        {% if pago.estado == False %}
+        <td>
+          <p class="fw-normal mb-1">Sin Fecha</p>
+        </td>
+        {% else %}
         <td>
           <p class="fw-normal mb-1">{{pago.fecha_pago.strftime('%Y-%m-%d')}}</p>
         </td>
+        {% endif %}
         <td>
           <p class="fw-normal mb-1">{{pago.nro_cuota}}</p>
         </td>

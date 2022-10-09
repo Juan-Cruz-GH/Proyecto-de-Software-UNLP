@@ -23,6 +23,7 @@
     <h5 class="card-header">Modificar Disciplina</h5>
     <div class="card-body">
         <form method="POST" action="{{ url_for('disciplinas.disciplina_update')}}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="text" id="id" name="id" value="{{disciplina.id}}" hidden readonly/>
             <div class="row mb-4">
               <div class="col">

@@ -70,7 +70,7 @@ def disciplina_update():
         flash(mensaje)
         return redirect("/disciplinas" + data_disciplina["id"])
 
-@disciplina_blueprint.route("/eliminar/<id>", methods=["POST", "GET"])
+@disciplina_blueprint.route("/eliminar/<id>", methods=["DELETE", "GET"])
 def disciplina_delete(id):
     '''Le dice al modelo que borre la disciplina enviada'''
     disciplinas.eliminar_disciplina(id)
