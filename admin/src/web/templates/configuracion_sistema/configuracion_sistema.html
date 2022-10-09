@@ -11,16 +11,15 @@ Configuracion del sistema
 {% block content %}
     <h1> Configuración del sistema</h1>
     <article>
-        <form method="post" action="">
+        <form action="{{url_for('configuracion_sistema.configuracion_actualizar')}}" method="post">
             <label for="paginacion"> Cantidad de elementos por pagina</label>
-            <select id="paginacion"> <option>10</option> <option>25</option><option>50</option></select> 
-        </form>
-        <form>
+            <select id="elementos_pagina" name="elementos_pagina"> <option>10</option> <option>25</option><option>50</option></select> 
             <label for="criterioDeOrdenacion"> Criterio de ordenación</label>
             <select id="criterioDeOrdenacion"> 
                 <option> Alfabético</option>
                 <option> Alfabético descendente</option>
             </select>
+            <button> Actualizar</button>
         </form>
     </article>
     
