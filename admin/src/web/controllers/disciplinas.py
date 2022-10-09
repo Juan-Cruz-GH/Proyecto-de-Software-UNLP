@@ -1,7 +1,14 @@
+import json
 from flask import Blueprint, render_template, request, redirect, flash
 from src.core import disciplinas
 
+
 disciplina_blueprint = Blueprint("disciplinas", __name__, url_prefix="/disciplinas")
+
+@disciplina_blueprint.route("/api")
+def disciplina_json():
+    '''Retorna el json con todas las disciplinas hacia la api'''
+    return json.dumps(disciplinas.listar_disciplinas_diccionario())
 
 @disciplina_blueprint.route("/")
 def disciplina_index():

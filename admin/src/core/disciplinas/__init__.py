@@ -2,6 +2,17 @@ import re
 from src.core.disciplinas.disciplinas import Disciplina
 from src.core.db import db
 
+def listar_disciplinas_diccionario():
+    '''Devuelve una lista de diccionarios con todas las disciplinas.'''
+    lista = []
+    disciplinas = Disciplina.query.all()
+    for disciplina in disciplinas:
+        row = disciplina.__dict__
+        row.pop("_sa_instance_state")
+        row.pop("inserted_at")
+        lista.append(row)
+    return lista
+    
 def listar_disciplinas(page):
     '''Listado de las disciplinas según el paginado definido en el módulo de configuración'''
     return Disciplina.query.paginate(page, per_page=1)  # hardcodeado a 5 por ahora, luego consultará al modulo de cfg
