@@ -45,7 +45,7 @@ def validad_entero(dato):
         n=int(dato)
     except ValueError:
         return False, "Ingrese numero valido"
-    return True, "Nímero valido"
+    return True, "Número valido"
 
 def validar_cadena(dato):
     if (len(dato)>500):
