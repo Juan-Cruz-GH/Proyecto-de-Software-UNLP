@@ -38,13 +38,14 @@ def validar_digito(dato):
         n=float(dato)  
     except ValueError:
         return False, "no es un digito valido"
-    return True, "Digito valido"
+    return True, "Dígito valido"
     
 def validad_entero(dato):
     try:
         n=int(dato)
     except ValueError:
         return False, "Ingrese numero valido"
+    return True, "Nímero valido"
 
 def validar_cadena(dato):
     if (len(dato)>500):
