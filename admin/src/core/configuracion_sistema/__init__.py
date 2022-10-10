@@ -1,3 +1,4 @@
+from curses.ascii import isdigit
 from src.core.configuracion_sistema.configuracion_paginado import Configuracion_paginado
 from src.core.configuracion_sistema.configuracion_general import Configuracion_general
 from src.core.db import db
@@ -32,4 +33,23 @@ def modificar_configuracion(data, data_paginado):
     db.session.commit()
     return paginado
 
+def validar_digito(dato):
+    try:
+        n=float(dato)  
+    except ValueError:
+        return False, "no es un digito valido"
+    return True, "Digito valido"
+    
+def validad_entero(dato):
+    try:
+        n=int(dato)
+    except ValueError:
+        return False, "Ingrese numero valido"
+
+def validar_cadena(dato):
+    if (len(dato)>500):
+        return False, "Limite de caracteres excedido"
+    return True, "Cadena valida"
+        
+    
     

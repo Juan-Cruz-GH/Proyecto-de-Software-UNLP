@@ -9,6 +9,18 @@
 {% endblock %}
 
 {% block content %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+        {% for message in messages %}
+            <div class="alert alert-warning" role="alert">
+                <li>{{ message }}</li>
+            </div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
     <h1> Configuración del sistema</h1>
     <article>
         <form action="{{url_for('configuracion_sistema.configuracion_actualizar')}}" method="post">
@@ -31,11 +43,11 @@
                     </div>
                     <div>    
                         <label for="cuota_base">Valor de la cuota base </label>
-                        <input id ="cuota_base" name="cuota_base" type="number" value="{{config.cuota_base}}">
+                        <input id ="cuota_base" name="cuota_base" type="number" step=".01" value="{{config.cuota_base}}">
                     </div>
                     <div>
                         <label for="porcentaje_recargo">  Porcentaje de recargo</label>
-                        <input id="porcentaje_recargo" name="porcentaje_recargo" type="number" value="{{config.porcentaje_recargo}}">
+                        <input id="porcentaje_recargo" name="porcentaje_recargo" type="number" step=".01" value="{{config.porcentaje_recargo}}">
                     </div>
                     <div>
                         <label for="encabezado_recibos"> Encabezado de los recibos </label>

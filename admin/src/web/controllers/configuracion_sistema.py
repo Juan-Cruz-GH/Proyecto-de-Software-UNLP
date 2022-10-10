@@ -2,7 +2,7 @@ from src.core.configuracion_sistema.configuracion_paginado import Configuracion_
 from flask import Blueprint, render_template
 from src.core import configuracion_sistema
 from src.core.db import db
-from flask import request, redirect
+from flask import request, redirect , flash
 
 
 configuracion_sistema_blueprint=Blueprint("configuracion_sistema",__name__, url_prefix="/configuracion_del_sistema")
@@ -33,10 +33,37 @@ def configuracion_actualizar():
         "porcentaje_recargo": request.form.get("porcentaje_recargo")
     }
 
+    #Sanitizar datos
     if (configuraciones["activar_pagos"]== "pagos activados"):
         configuraciones["activar_pagos"] = True
     else:
         configuraciones["activar_pagos"]= False
+
+    validar,mensaje=configuracion_sistema.validar_digito(paginado["elementos_pagina"])
+    if (not validar):
+        flash("Elementos por página: " + mensaje)
+        return redirect("/configuracion_del_sistema/")
+
+    validar,mensaje=configuracion_sistema.validar_digito(configuraciones["cuota_base"])
+    if (not validar):
+        flash("El valor de la cuota " + mensaje)
+        return redirect("/configuracion_del_sistema/")
+
+    validar,mensaje=configuracion_sistema.validar_digito(configuraciones["porcentaje_recargo"])
+    if (not validar):
+        flash("El valor de porcentaje de recargo " + mensaje)
+        return redirect("/configuracion_del_sistema/")
+    
+    validar,mensaje=configuracion_sistema.validar_cadena(configuraciones["informacion_contacto"])
+    if (not validar):
+        flash("Informacion de contacto: " + mensaje)
+        return redirect("/configuracion_del_sistema/")
+
+    validar,mensaje=configuracion_sistema.validar_cadena(configuraciones["encabezado_recibos"])
+    if (not validar):
+        flash("Encabezado de los recibos: " + mensaje)
+        return redirect("/configuracion_del_sistema/")
+
 
     config= configuracion_sistema.modificar_configuracion(configuraciones, paginado)
     return redirect("/configuracion_del_sistema/")
