@@ -9,8 +9,15 @@ def getConfiguracionGeneral():
     return Configuracion_general.query.first()
 
 def modificar_configuracion(data, data_paginado):
+    #Recuperar cantidad de paginas, si no existe la fila en la db se la crea
     paginado = Configuracion_paginado.query.first()
-    paginado.elementos_pagina=data_paginado["elementos_pagina"]
+    if (paginado == None):
+        paginado= Configuracion_paginado(**data_paginado)
+        db.session.add(paginado)
+    else:
+        paginado.elementos_pagina=data_paginado["elementos_pagina"]
+    
+    #Recuperar configuracion general, si no existe la fila en la db se la crea
     config= Configuracion_general.query.first()
     if (config ==None):
         config= Configuracion_general(**data)
@@ -21,6 +28,7 @@ def modificar_configuracion(data, data_paginado):
         config.informacion_contacto=data["informacion_contacto"]
         config.cuota_base=data["cuota_base"]
         config.porcentaje_recargo=data["porcentaje_recargo"]
+        
     db.session.commit()
     return paginado
 
