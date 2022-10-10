@@ -12,13 +12,43 @@ Configuracion del sistema
     <h1> Configuración del sistema</h1>
     <article>
         <form action="{{url_for('configuracion_sistema.configuracion_actualizar')}}" method="post">
-            <label for="paginacion"> Cantidad de elementos por pagina</label>
-            <select id="elementos_pagina" name="elementos_pagina"> <option>10</option> <option>25</option><option>50</option></select> 
-            <label for="criterioDeOrdenacion"> Criterio de ordenación</label>
-            <select id="criterioDeOrdenacion"> 
-                <option> Alfabético</option>
-                <option> Alfabético descendente</option>
-            </select>
+            <div>
+                <div class="configuracion_paginacion">
+                    <h3>Paginación</h3>
+                    <label for="elementos_pagina"> Cantidad de elementos por pagina</label>
+                    <select id="elementos_pagina" name="elementos_pagina">
+                        <option value="{{paginado.elementos_pagina}}"selected>{{paginado.elementos_pagina}}</option> 
+                        <option>10</option> 
+                        <option>25</option>
+                        <option>50</option>
+                    </select> 
+                </div>
+                <div class="configuracion_pagos">
+                    <h3> Configuracion de pagos</h3>
+                    <div>    
+                        <label for="activar_pagos"> Activar pagos</label>
+                        <input id="activar_pagos" name="activar_pagos" type="checkbox" value="pagos activados" {{config.activar_pagos}}> 
+                    </div>
+                    <div>    
+                        <label for="cuota_base">Valor de la cuota base </label>
+                        <input id ="cuota_base" name="cuota_base" type="number" value="{{config.cuota_base}}">
+                    </div>
+                    <div>
+                        <label for="porcentaje_recargo">  Porcentaje de recargo</label>
+                        <input id="porcentaje_recargo" name="porcentaje_recargo" type="number" value="{{config.porcentaje_recargo}}">
+                    </div>
+                    <div>
+                        <label for="encabezado_recibos"> Encabezado de los recibos </label>
+                        <input id="encabezado_recibos" name="encabezado_recibos" type="text" value="{{config.encabezado_recibos}}">
+                    </div>
+                </div>
+                <div class="otras_configuraciones">
+                    <h3>Otras configuraciones</h3>
+                    <label for="informacion_contacto"> Información de Contacto</label>
+                    <input id="informacion_contacto" name="informacion_contacto" type="text" value="{{config.informacion_contacto}}">
+
+                </div>
+            </div>
             <button> Actualizar</button>
         </form>
     </article>
