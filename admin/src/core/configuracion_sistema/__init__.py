@@ -52,5 +52,6 @@ def validar_cadena(dato):
         return False, "Limite de caracteres excedido"
     return True, "Cadena valida"
         
+
     
     
