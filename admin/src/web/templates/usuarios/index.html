@@ -1,0 +1,89 @@
+{% extends "layout.html" %} 
+
+{% block title %}
+    Usuarios - Club Villa Elisa
+{% endblock %} 
+
+{% block head %} 
+{{ super() }}
+{% endblock %} 
+
+{% block content %}
+
+<h1>Usuarios</h1>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0 bg-white">
+            <thead class="bg-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Nombre de Usuario</th>
+                    <th>Modificar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios.items %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-1">
+                                    <p class="fw-bold mb-1">{{usuario.id}}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">{{usuario.nombre}}</p>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">{{usuario.apellido}}</p>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">{{usuario.email}}</p>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">{{usuario.username}}</p>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('usuarios.usuario_profile', id=usuario.id) }}" class="btn btn-warning">Modificar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    <div class="pagination mt-3">
+        <ul class="pagination">
+            {% if usuarios.has_prev %}
+                <li class="page-item">
+                    <a class='page-link' href="{{ url_for('usuarios.usuario_index', page=usuarios.prev_num) }}">
+                        {{ '<<<' }}
+                    </a>
+                </li>
+            {% endif %}
+        
+            {% for number in usuarios.iter_pages() %}
+                {% if usuarios.page != number %}
+                    <li class="page-item">
+                        <a class='page-link' href="{{ url_for('usuarios.usuario_index', page=number) }}">
+                            {{ number }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item active">
+                        <span class='page-link'>{{ number }}</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        
+            {% if usuarios.has_next %}
+                <li class="page-item">
+                    <a class='page-link' href="{{ url_for('usuarios.usuario_index', page=usuarios.next_num) }}">
+                        {{ '>>>' }}
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+  </div>
+{% endblock %}
