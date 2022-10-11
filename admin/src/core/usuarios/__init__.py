@@ -5,7 +5,7 @@ import re
 
 def listar_usuarios(page):
     '''Esta funcion devuelve todos los usuarios de forma paginada segun la configuracion.'''
-    return Usuario.query.paginate(page, per_page=1)
+    return Usuario.query.paginate(page, per_page=5)
 
 
 def agregar_usuario(data):
@@ -56,8 +56,10 @@ def validar_datos_existentes(email, username, accion, id=None):
         email_existente = Usuario.query.filter_by(email=email).filter(Usuario.id != id).first()
         username_existente = Usuario.query.filter_by(username=username).filter(Usuario.id != id).first()
         if(email_existente is not None):
+            print('entro por email')
             return False, "El Email ya esta cargado en el sistema."
         elif(username_existente is not None):
+            print('entro por username')
             return False, "El Nombre de Usuario ya esta cargado en el sistema."
         else:
             return True, "Ambos son validos"

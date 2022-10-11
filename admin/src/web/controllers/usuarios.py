@@ -34,13 +34,13 @@ def usuario_add():
         "apellido": request.form.get("apellido").capitalize(),
         "email": request.form.get("email"),
         "activo": True,
-        "username": request.form.get("username").capitalize(),
-        "password": request.form.get("password").capitalize(),
+        "username": request.form.get("username"),
+        "password": request.form.get("password")
     }
     validacion, mensaje = usuarios.validar_datos_existentes(data_usuario["email"], data_usuario["username"], "alta")
     if(validacion == False):
         flash(mensaje)
-        return redirect("/usuarios/alta-usuarios")
+        return redirect("/usuarios/alta-usuario")
     else:
         usuario = usuarios.agregar_usuario(data_usuario)
     #generacion_pagos = pagos.generar_pagos(socio.id)
@@ -56,7 +56,7 @@ def usuario_update():
         "apellido": request.form.get("apellido").capitalize(),
         "email": request.form.get("email"),
         "activo": True,
-        "username": request.form.get("username").capitalize()
+        "username": request.form.get("username")
     }
     validacion, mensaje = usuarios.validar_datos_existentes(data_usuario["email"], data_usuario["username"], "modificacion", data_usuario["id"])
     if(validacion == False):
