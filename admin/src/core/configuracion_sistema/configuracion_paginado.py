@@ -6,7 +6,7 @@ class Configuracion_paginado(db.Model):
     id=db.Column(db.Integer, primary_key=True, nullable= False, unique=True)
     elementos_pagina=db.Column(db.Integer, nullable=False)
 
-    def __init__(self, elementos_pagina=None):
+    def __init__(self, elementos_pagina):
         self.elementos_pagina=elementos_pagina
 
     
