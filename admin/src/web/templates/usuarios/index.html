@@ -20,6 +20,7 @@
                     <th>Apellido</th>
                     <th>Email</th>
                     <th>Nombre de Usuario</th>
+                    <th>Estado</th>
                     <th>Modificar</th>
                 </tr>
             </thead>
@@ -44,6 +45,13 @@
                         </td>
                         <td>
                             <p class="fw-normal mb-1">{{usuario.username}}</p>
+                        </td>
+                        <td>
+                            {% if usuario.activo == True %}
+                                <p class="fw-normal mb-1">Activo</p>
+                            {% else %}
+                                <p class="fw-normal mb-1">Inactivo</p>
+                            {% endif %}
                         </td>
                         <td>
                             <a href="{{ url_for('usuarios.usuario_profile', id=usuario.id) }}" class="btn btn-warning">Modificar</a>

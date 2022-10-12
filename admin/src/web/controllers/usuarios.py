@@ -50,12 +50,13 @@ def usuario_add():
 @usuario_blueprint.route("/modificacion", methods=["POST"])
 def usuario_update():
     '''Esta funcion llama al metodo correspondiente para modificar los datos de un usuario.'''
+    estado = usuarios.validar_estado(request.form.get("activo"))
     data_usuario = {
         "id": request.form.get("id"),
         "nombre": request.form.get("nombre").capitalize(),
         "apellido": request.form.get("apellido").capitalize(),
         "email": request.form.get("email"),
-        "activo": True,
+        "activo": estado,
         "username": request.form.get("username")
     }
     validacion, mensaje = usuarios.validar_datos_existentes(data_usuario["email"], data_usuario["username"], "modificacion", data_usuario["id"])

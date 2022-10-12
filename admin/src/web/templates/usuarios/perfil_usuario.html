@@ -48,6 +48,15 @@
                 </div>
                 <div class="col">
                     <div class="form-outline">
+                        <label class="form-label" for="activo">Estado</label>
+                        <select class="form-control select-input" id="activo" name="activo" required>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-outline">
                         <label class="form-label" for="username">Nombre de Usuario</label>
                         <input type="username" id="username" name="username" class="form-control" value="{{usuario.username}}" />
                     </div>

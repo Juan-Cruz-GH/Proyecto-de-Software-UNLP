@@ -38,6 +38,12 @@ def validar_inputs(email, password):
     else:
         return True, "Credenciales validas"
 
+def validar_estado(estado):
+    '''Esta funcion valida el dato enviado al modificar el estado de un usuario'''
+    if(estado == "activo"):
+        return True
+    elif(estado == "inactivo"):
+        return False
 
 def validar_datos_existentes(email, username, accion, id=None):
     '''Esta funcion valida que el dni o el email ingresados para dar de alta o modificar un usuario no existan.
@@ -71,6 +77,7 @@ def modificar_usuario(data):
     usuario.nombre = data["nombre"]
     usuario.apellido = data["apellido"]
     usuario.email = data["email"]
+    usuario.activo = data["activo"]
     usuario.username = data["username"]
     db.session.commit()
     return usuario
