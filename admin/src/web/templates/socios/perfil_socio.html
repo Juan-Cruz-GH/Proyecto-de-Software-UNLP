@@ -23,18 +23,19 @@
     <h5 class="card-header">Modificar Socio</h5>
     <div class="card-body">
         <form method="POST" action="{{ url_for('socios.socio_update')}}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="text" id="id" name="id" value="{{socio.id}}" hidden readonly/>
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="nombre">Nombre</label>
-                  <input type="text" id="nombre" name="nombre" class="form-control" value="{{socio.nombre}}" />
+                  <input type="text" id="nombre" name="nombre" class="form-control" value="{{socio.nombre}}" required/>
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="apellido">Apellido</label>
-                  <input type="text" id="apellido" name="apellido" class="form-control" value="{{socio.apellido}}" />
+                  <input type="text" id="apellido" name="apellido" class="form-control" value="{{socio.apellido}}" required/>
                 </div>
               </div>
             </div>
@@ -43,13 +44,13 @@
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label" for="email">Email</label>
-                        <input type="email" id="email" name="email" class="form-control" value="{{socio.email}}" />
+                        <input type="email" id="email" name="email" class="form-control" value="{{socio.email}}" required/>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label" for="direccion">Direccion</label>
-                        <input type="text" id="direccion" name="direccion" class="form-control" value="{{socio.direccion}}" />
+                        <input type="text" id="direccion" name="direccion" class="form-control" value="{{socio.direccion}}" required/>
                     </div>
                 </div>
             </div>
@@ -58,7 +59,7 @@
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label" for="tipo documento">Tipo documento</label>
-                        <select class="form-control select-input" id="tipo_documento" name="tipo_documento">
+                        <select class="form-control select-input" id="tipo_documento" name="tipo_documento" required>
                             <option value="{{socio.tipo_documento}}" selected>{{socio.tipo_documento}}</option>
                             <option value="LE">LE</option>
                             <option value="LC">LC</option>
@@ -69,7 +70,7 @@
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label" for="documento">Documento</label>
-                        <input type="number" id="documento" name="documento" class="form-control" value="{{socio.dni}}" />
+                        <input type="number" id="documento" name="documento" class="form-control" value="{{socio.dni}}" required/>
                     </div>
                 </div>
             </div>
@@ -78,13 +79,13 @@
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label" for="telefono">Telefono</label>
-                        <input type="number" id="telefono" name="telefono" class="form-control" value="{{socio.telefono}}" />
+                        <input type="number" id="telefono" name="telefono" class="form-control" value="{{socio.telefono}}" required/>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label" for="genero">Genero</label>
-                        <select class="form-control select-input" id="genero" name="genero">
+                        <select class="form-control select-input" id="genero" name="genero" required>
                             <option value="{{socio.genero}}" selected>{{socio.genero}}</option>
                             <option value="femenino">Femenino</option>
                             <option value="otro">Otro</option>

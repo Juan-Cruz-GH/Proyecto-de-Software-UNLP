@@ -45,8 +45,8 @@
                   Disciplinas
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item" href="#">Ver Disciplinas</a></li>
-                  <li><a class="dropdown-item" href="#">Agregar Disciplinas</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('disciplinas.disciplina_index') }}">Ver Disciplinas</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('disciplinas.form_disciplina') }}">Agregar Disciplinas</a></li>
                 </ul>
               </li>
               <li class="nav-item dropdown">
@@ -57,6 +57,9 @@
                   <li><a class="dropdown-item" href="#">Ver Usuario</a></li>
                   <li><a class="dropdown-item" href="#">Agregar Usuario</a></li>
                 </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link mx-2" aria-current="page" href="{{ url_for('configuracion_sistema.configuracion_index') }}">Configuración</a>
               </li>
             </ul>
             <ul class="navbar-nav ms-auto d-lg-inline-flex">

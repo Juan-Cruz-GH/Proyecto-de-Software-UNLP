@@ -1,28 +1,72 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Configuracion del sistema
+    Configuración del sistema - Club Villa Elisa
 {% endblock %}
 
 {% block head %}
-{{super()}}
+{{ super() }}
 {% endblock %}
 
 {% block content %}
-    <h1> Configuración del sistema</h1>
-    <article>
-        <form method="post" action="">
-            <label for="paginacion"> Cantidad de elementos por pagina</label>
-            <select id="paginacion"> <option>10</option> <option>25</option><option>50</option></select> 
-        </form>
-        <form>
-            <label for="criterioDeOrdenacion"> Criterio de ordenación</label>
-            <select id="criterioDeOrdenacion"> 
-                <option> Alfabético</option>
-                <option> Alfabético descendente</option>
-            </select>
-        </form>
-    </article>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+        {% for message in messages %}
+            <div class="alert alert-warning" role="alert">
+                <li>{{ message }}</li>
+            </div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <div class="card">
+        <h5 classs="card-header"> Configuración del sistema</h5>
+        <div class="card-body">
+            <form action="{{url_for('configuracion_sistema.configuracion_actualizar')}}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div>
+                    <h3>Paginación</h3>
+                    <div class="form-outline" name="configuracion_paginacion">
+                        <label for="elementos_pagina"> Cantidad de elementos por pagina</label>
+                        <select id="elementos_pagina" name="elementos_pagina">
+                            <option value="{{paginado.elementos_pagina}}"selected>{{paginado.elementos_pagina}}</option> 
+                            <option>10</option> 
+                            <option>25</option>
+                            <option>50</option>
+                        </select> 
+                    </div>
+                    <div class="row mb-4" name="configuracion_pagos">
+                        <h3> Configuracion de pagos</h3>
+                        <div class="col">    
+                            <label for="activar_pagos"> Activar pagos</label>
+                            <input id="activar_pagos" name="activar_pagos" type="checkbox" value="pagos activados" {{config.activar_pagos}}> 
+                        </div>
+                        <div class="col">    
+                            <label for="cuota_base">Valor de la cuota base </label>
+                            <input id ="cuota_base" name="cuota_base" type="number" min="0" step=".01" value="{{config.cuota_base}}">
+                        </div>
+                        <div class="col">
+                            <label for="porcentaje_recargo">  Porcentaje de recargo</label>
+                            <input id="porcentaje_recargo" name="porcentaje_recargo" type="number" min="0" step=".01" value="{{config.porcentaje_recargo}}">
+                        </div>
+                        <div class="row">
+                            <label for="encabezado_recibos"> Encabezado de los recibos </label>
+                            <input id="encabezado_recibos" name="encabezado_recibos" type="text" value="{{config.encabezado_recibos}}">
+                        </div>
+                    </div>
+                    <div class="row mb-4" name="otras_configuraciones">
+                        <h3>Otras configuraciones</h3>
+                        <div class="row">
+                            <label for="informacion_contacto"> Información de Contacto</label>
+                            <input id="informacion_contacto" name="informacion_contacto" type="text" value="{{config.informacion_contacto}}">
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block mb-4"> Actualizar</button>
+            </form>
+        </div>
+    </div>
     
 {% endblock %}
 

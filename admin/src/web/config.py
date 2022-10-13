@@ -1,6 +1,10 @@
 from distutils.command.config import config
 from os import environ
 
+
+
+
+
 class Config(object):
     """Base configuration."""
     SECRET_KEY = "secret"
