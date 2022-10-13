@@ -103,7 +103,7 @@ def validar_datos_existentes(dni, email, accion, id=None):
 
 def validar_inputs(data):
     '''Esta funcion valida que los inputs sean del tipo correcto.'''
-    regex_email = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+    regex_email = '^[A-Za-z0-9]+[\._]?[A-Za-z0-9]+[@]\w+[.]\w{2,3}$'
     if not(data["nombre"] != '' and data["apellido"] != '' and data["email"] != '' and data["tipo_documento"] != '' and data["dni"] != '' and data["genero"] != '' and data["direccion"] != '' and data["genero"] != '' and data["telefono"] != ''):
         return False, "Todos los datos deben estar completos"
     elif not (data["dni"].isdigit() and data["telefono"].isdigit()):
