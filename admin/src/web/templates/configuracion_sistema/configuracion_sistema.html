@@ -44,11 +44,11 @@
                         </div>
                         <div class="col">    
                             <label for="cuota_base">Valor de la cuota base </label>
-                            <input id ="cuota_base" name="cuota_base" type="number" step=".01" value="{{config.cuota_base}}">
+                            <input id ="cuota_base" name="cuota_base" type="number" min="0" step=".01" value="{{config.cuota_base}}">
                         </div>
                         <div class="col">
                             <label for="porcentaje_recargo">  Porcentaje de recargo</label>
-                            <input id="porcentaje_recargo" name="porcentaje_recargo" type="number" step=".01" value="{{config.porcentaje_recargo}}">
+                            <input id="porcentaje_recargo" name="porcentaje_recargo" type="number" min="0" step=".01" value="{{config.porcentaje_recargo}}">
                         </div>
                         <div class="row">
                             <label for="encabezado_recibos"> Encabezado de los recibos </label>
