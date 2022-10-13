@@ -1,4 +1,5 @@
 import re
+from src.core import configuracion_sistema
 from src.core.disciplinas.disciplinas import Disciplina
 from src.core.db import db
 
@@ -15,7 +16,7 @@ def listar_disciplinas_diccionario():
     
 def listar_disciplinas(page):
     '''Listado de las disciplinas según el paginado definido en el módulo de configuración'''
-    return Disciplina.query.paginate(page, per_page=1)  # hardcodeado a 5 por ahora, luego consultará al modulo de cfg
+    return Disciplina.query.paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)  
 
 def buscar_disciplina(id):
     '''Devuelve la disciplina con el id indicado'''

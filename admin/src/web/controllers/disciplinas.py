@@ -72,7 +72,7 @@ def disciplina_update():
             return redirect("/disciplinas")
         else:
             flash(mensaje)
-            return redirect("/disciplina" + data_disciplina["id"]) 
+            return redirect("/disciplinas/" + data_disciplina["id"]) 
     else:
         flash(mensaje)
         return redirect("/disciplinas/" + data_disciplina["id"])

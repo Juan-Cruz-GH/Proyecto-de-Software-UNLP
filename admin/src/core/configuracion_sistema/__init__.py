@@ -8,6 +8,14 @@ def getPaginado():
 def getConfiguracionGeneral():
     return Configuracion_general.query.first()
 
+def configuracionPredeterminada():
+    paginado= Configuracion_paginado(10)
+    config=Configuracion_general(False, "Encabezado para los recibos", "Informacion de Conctacto del club", 0, 0)
+    db.session.add(paginado)
+    db.session.add(config)
+    db.session.commit()
+    return paginado,config
+
 def modificar_configuracion(data, data_paginado):
     #Recuperar cantidad de paginas, si no existe la fila en la db se la crea
     paginado = Configuracion_paginado.query.first()
@@ -45,6 +53,9 @@ def validad_entero(dato):
     except ValueError:
         return False, "Ingrese numero valido"
     return True, "Número valido"
+
+def validar_positivo(dato):
+    return float(dato)>=0, "debe ser un numero positivo"
 
 def validar_cadena(dato):
     if (len(dato)>500):
