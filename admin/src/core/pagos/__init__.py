@@ -1,6 +1,7 @@
 from src.core.pagos.pagos import Pago
 from datetime import datetime
 from src.core.db import db
+from src.core import configuracion_sistema
 
 def generar_pagos(id_socio):
     '''Esta funcion genera los cuotas a pagar por el socio cuando se lo da de alta.'''
@@ -22,5 +23,5 @@ def generar_pagos(id_socio):
 
 def listar_pagos_socio(id, page):
     '''Esta funcion realiza la consulta para obtener los pagos del socio recibido'''
-    pagos = Pago.query.filter_by(socio_id=id).paginate(page, per_page=1)
+    pagos = Pago.query.filter_by(socio_id=id).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
     return pagos
