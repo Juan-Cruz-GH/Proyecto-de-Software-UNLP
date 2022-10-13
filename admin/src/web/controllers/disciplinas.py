@@ -37,11 +37,11 @@ def disciplina_add():
         "instructores": request.form.get("instructores"),
         "horarios": request.form.get("horarios"),
         "costo": request.form.get("costo"),
-        "habilitada": request.form.get("habilitada")
+        "habilitada": True if (request.form.get("habilitada") == "Si") else False
     }
     resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
     if(resultado):
-        resultado, mensaje = disciplinas.validar_disciplina_repetida(data_disciplina["nombre"], "alta", data_disciplina["id"])
+        resultado, mensaje = disciplinas.validar_disciplina_repetida(data_disciplina["nombre"], "alta")
         if(resultado):
             disciplinas.agregar_disciplina(data_disciplina)
             return redirect("/disciplinas")
@@ -62,7 +62,7 @@ def disciplina_update():
         "instructores": request.form.get("instructores"),
         "horarios": request.form.get("horarios"),
         "costo": request.form.get("costo"),
-        "habilitada": request.form.get("habilitada")
+        "habilitada": True if (request.form.get("habilitada") == "Si") else False
     }
     resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
     if(resultado):

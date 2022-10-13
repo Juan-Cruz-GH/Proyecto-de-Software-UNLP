@@ -46,7 +46,7 @@ def modificar_disciplina(data):
     db.session.commit()
     return disciplina
 
-def validar_disciplina_repetida(nombre, accion, id):
+def validar_disciplina_repetida(nombre, accion, id=None):
     '''Chequea que la disciplina no exista ya'''
     if(accion == "alta"):
         nombre_existente = Disciplina.query.filter_by(nombre=nombre).first()
@@ -71,7 +71,5 @@ def validar_inputs(data):
         return False, "El costo no puede ser negativo"
     elif not(re.fullmatch(r"[A-Za-z ]{1,50}", data["nombre"])):
         return False, "El nombre de la disciplina no puede tener numeros"
-    elif(data["habilitada"].lower() != "si" and data["habilitada"].lower() != "no"):
-        return False, 'Habilitada debe indicar "si" o "no"'
     else:
         return True, "Los datos son validos"
