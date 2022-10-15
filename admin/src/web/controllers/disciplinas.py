@@ -41,7 +41,7 @@ def disciplina_add():
     }
     resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
     if(resultado):
-        resultado, mensaje = disciplinas.validar_disciplina_repetida(data_disciplina["nombre"], "alta")
+        resultado, mensaje = disciplinas.validar_disciplina_repetida(data_disciplina["nombre"], data_disciplina["categoria"], "alta")
         if(resultado):
             disciplinas.agregar_disciplina(data_disciplina)
             return redirect("/disciplinas")

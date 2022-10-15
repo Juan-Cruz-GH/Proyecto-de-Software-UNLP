@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, flash
 from src.core import socios
 from src.core import pagos
 from src import exportaciones
+from src.core import disciplinas
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
@@ -101,3 +102,10 @@ def exportar_pdf():
     data_socios = socios.todos_los_socios(apellido, tipo)
     output = exportaciones.generarPDF(data_socios)
     return output
+
+@socio_blueprint.route("/inscripcion-socio/<id>")
+def inscripcion_socio(id):
+    '''Esta funcion retorna el formulario para la inscripcion del socio a una disciplina'''
+    disciplinas2 = ['futbol', 'basquet']
+    kwargs = {'id_socio': id, 'disciplinas': disciplinas.todas_las_disciplinas(), 'categorias': disciplinas.categorias_de_cada_disciplina()}
+    return render_template("/socios/inscripcion_socios.html", **kwargs)

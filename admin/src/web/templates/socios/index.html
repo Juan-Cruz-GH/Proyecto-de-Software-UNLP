@@ -62,7 +62,7 @@
     </caption>
     <thead class="bg-light">
       <tr>
-        <th>ID</th>
+        <th>NroSocio</th>
         <th>Nombre</th>
         <th>Apellido</th>
         <th>Email</th>
@@ -95,7 +95,7 @@
           <p class="fw-normal mb-1">{{socio.dni}}</p>
         </td>
         <td>
-          <a class="btn btn-primary">Inscribir</a>
+          <a href="{{ url_for('socios.inscripcion_socio', id=socio.id) }}" class="btn btn-primary">Inscribir</a>
         </td>
         <td>
           <a href="{{ url_for('pagos.pagos_socios', id=socio.id, page_num=1) }}" class="btn btn-success">Ver Pagos</a>
