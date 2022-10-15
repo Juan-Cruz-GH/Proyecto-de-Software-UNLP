@@ -29,8 +29,6 @@ def categorias_de_cada_disciplina():
             todas_las_categorias[disciplina[0]] = categorias
     return todas_las_categorias
         
-
-    
 def listar_disciplinas(page):
     '''Listado de las disciplinas según el paginado definido en el módulo de configuración'''
     return Disciplina.query.paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)  
