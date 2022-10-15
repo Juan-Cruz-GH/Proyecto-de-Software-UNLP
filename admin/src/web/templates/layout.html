@@ -54,8 +54,8 @@
                   Usuarios
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item" href="#">Ver Usuario</a></li>
-                  <li><a class="dropdown-item" href="#">Agregar Usuario</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('usuarios.usuario_index') }}">Ver Usuario</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('usuarios.form_usuario') }}">Agregar Usuario</a></li>
                 </ul>
               </li>
               <li class="nav-item">
@@ -70,7 +70,7 @@
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li><a class="dropdown-item" href="#">Perfil</a></li>
                   <li><a class="dropdown-item" href="#">Configuracion</a></li>
-                  <li><a class="dropdown-item" href="#">Cerrar Sesion</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Cerrar Sesion</a></li>
                 </ul>
               </li>
             </ul>
@@ -79,7 +79,10 @@
       </nav>
     </div>
 
-    <div id="main">{% block content %} {% endblock %}</div>
+    <div id="main">
+      {% block content %} 
+      {% endblock %}
+    </div>
 
     <div id="footer">{% block footer %} {% endblock %}</div>
 
@@ -88,5 +91,7 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+    <script src="{{ url_for('static',filename='scripts.js') }}"> 
+    </script>
   </body>
 </html>

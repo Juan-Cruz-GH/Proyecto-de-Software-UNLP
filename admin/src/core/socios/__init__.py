@@ -3,6 +3,9 @@ from src.core.socios.socios import Socio
 from src.core.db import db
 from src.core import configuracion_sistema
 
+def estaHabilitado(id):
+    return Socio.query.get(id).activo
+
 def todos_los_socios(apellido=None, tipo=None):
     '''Retorna todos los socios en una lista de diccionarios'''
     data_socios = []
@@ -116,5 +119,9 @@ def validar_inputs(data):
         return False, "El dni debe contener 8 numeros"
     elif(len(data["telefono"]) != 10 and len(data["telefono"]) != 7):
         return False, "El numero de telefono debe tener 10 numeros si es celular y 7 si es de casa."
+    elif(data["genero"] != "masculino" and data["genero"] != "femenino" and data["genero"] != "otro"):
+        return False, "El genero debe estar dentro de las opciones."
+    elif(data["tipo_documento"] != "DNI" and data["tipo_documento"] != "LE" and data["tipo_documento"] != "LC" and data["tipo_documento"] != "DE"):
+        return False, "El tipo de documento debe estar dentro de las opciones."
     else:
         return True, "Inputs Validos"

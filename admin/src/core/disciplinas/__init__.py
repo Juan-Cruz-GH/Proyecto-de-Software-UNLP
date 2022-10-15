@@ -1,19 +1,47 @@
 import re
+from src.core.socios import buscar_socio
 from src.core import configuracion_sistema
 from src.core.disciplinas.disciplinas import Disciplina
+from src.core.socios.socios import Socio
 from src.core.db import db
+
+
+def relacionarSocioDisciplina(idDisciplina, idSocio):
+    disciplina = buscar_disciplina(idDisciplina)
+    socio = buscar_socio(idSocio)
+    disciplina.socios.append(socio)
+    db.session.commit()
+
+def estaHabilitada(id):
+    return buscar_disciplina(id).habilitada
 
 def listar_disciplinas_diccionario():
     '''Devuelve una lista de diccionarios con todas las disciplinas.'''
     lista = []
     disciplinas = Disciplina.query.all()
     for disciplina in disciplinas:
-        row = disciplina.__dict__
-        row.pop("_sa_instance_state")
-        row.pop("inserted_at")
-        lista.append(row)
+        fila = disciplina.__dict__
+        dias_horarios = fila["horarios"].split(" de ")
+        diccionario = {"name": fila["nombre"], 
+                       "days": dias_horarios[0],    # hay que consultar con el ayudante
+                       "time": dias_horarios[1],    #
+                       "teacher": fila["instructores"]} 
+        lista.append(diccionario)
     return lista
-    
+
+def todas_las_disciplinas():
+    nombres = db.session.query(Disciplina.nombre.distinct()).all()
+    return nombres
+
+def categorias_de_cada_disciplina():
+    disciplinas = todas_las_disciplinas()
+    todas_las_categorias = {}
+    for disciplina in disciplinas:
+        categorias = db.session.query(Disciplina.categoria, Disciplina.id).filter(Disciplina.nombre==disciplina[0]).all()
+        for categoria in categorias:
+            todas_las_categorias[disciplina[0]] = categorias
+    return todas_las_categorias
+        
 def listar_disciplinas(page):
     '''Listado de las disciplinas según el paginado definido en el módulo de configuración'''
     return Disciplina.query.paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)  
@@ -46,16 +74,16 @@ def modificar_disciplina(data):
     db.session.commit()
     return disciplina
 
-def validar_disciplina_repetida(nombre, accion, id=None):
-    '''Chequea que la disciplina no exista ya'''
+def validar_disciplina_repetida(nombre, categoria, accion, id=None):
+    '''Chequea que no haya ya una disciplina con mismo nombre y misma categoria'''
     if(accion == "alta"):
-        nombre_existente = Disciplina.query.filter_by(nombre=nombre).first()
+        nombre_existente = Disciplina.query.filter_by(nombre=nombre).filter(Disciplina.categoria==categoria).first()
         if(nombre_existente is None):
             return True, "La disciplina no existe aún"
         else:
             return False, "La disciplina ya existe"
     elif(accion == "modificacion"):
-        nombre_existente = Disciplina.query.filter_by(nombre=nombre).filter(Disciplina.id != id).first()
+        nombre_existente = Disciplina.query.filter_by(nombre=nombre).filter(Disciplina.categoria==categoria).filter(Disciplina.id != id).first()
         if(nombre_existente is None):
             return True, "La disciplina no existe aún"
         else:

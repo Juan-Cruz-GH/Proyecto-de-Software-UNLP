@@ -33,6 +33,7 @@
                     <th>Instructores</th>
                     <th>Horarios</th>
                     <th>Costo</th>
+                    <th>Habilitada</th>
                     <th>Modificar</th>
                 </tr>
             </thead>
@@ -58,8 +59,17 @@
                         <td>
                             <p class="fw-normal mb-1">{{disciplina.horarios}}</p>
                         </td>
+                        
                         <td>
                             <p class="fw-normal mb-1">{{disciplina.costo}}</p>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">{% if disciplina.habilitada %}
+                                                          {{ "Si" }} 
+                                                      {% else %}
+                                                          {{ "No" }}
+                                                      {% endif %}
+                            </p>
                         </td>
                         <td>
                             <a href="{{ url_for('disciplinas.disciplina_profile', id=disciplina.id) }}" class="btn btn-warning">Modificar</a>

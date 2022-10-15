@@ -7,7 +7,7 @@ disciplina_blueprint = Blueprint("disciplinas", __name__, url_prefix="/disciplin
 
 @disciplina_blueprint.route("/api")
 def disciplina_json():
-    '''Retorna el json con todas las disciplinas hacia la api'''
+    '''Retorna el json con todas las disciplinas'''
     return json.dumps(disciplinas.listar_disciplinas_diccionario())
 
 @disciplina_blueprint.route("/")
@@ -37,11 +37,11 @@ def disciplina_add():
         "instructores": request.form.get("instructores"),
         "horarios": request.form.get("horarios"),
         "costo": request.form.get("costo"),
-        "habilitada": True if (request.form.get("habilitada") == "Si") else False
+        "habilitada": (request.form.get("habilitada") == "Si")
     }
     resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
     if(resultado):
-        resultado, mensaje = disciplinas.validar_disciplina_repetida(data_disciplina["nombre"], "alta")
+        resultado, mensaje = disciplinas.validar_disciplina_repetida(data_disciplina["nombre"], data_disciplina["categoria"], "alta")
         if(resultado):
             disciplinas.agregar_disciplina(data_disciplina)
             return redirect("/disciplinas")
@@ -62,11 +62,11 @@ def disciplina_update():
         "instructores": request.form.get("instructores"),
         "horarios": request.form.get("horarios"),
         "costo": request.form.get("costo"),
-        "habilitada": True if (request.form.get("habilitada") == "Si") else False
+        "habilitada": (request.form.get("habilitada") == "Si")
     }
     resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
     if(resultado):
-        resultado, mensaje = disciplinas.validar_disciplina_repetida(data_disciplina["nombre"], "modificacion", data_disciplina["id"])
+        resultado, mensaje = disciplinas.validar_disciplina_repetida(data_disciplina["nombre"], data_disciplina["categoria"], "modificacion", data_disciplina["id"])
         if(resultado):
             disciplinas.modificar_disciplina(data_disciplina)
             return redirect("/disciplinas")
