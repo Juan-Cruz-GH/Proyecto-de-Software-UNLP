@@ -8,10 +8,12 @@ def listar_disciplinas_diccionario():
     lista = []
     disciplinas = Disciplina.query.all()
     for disciplina in disciplinas:
-        row = disciplina.__dict__
-        row.pop("_sa_instance_state")
-        row.pop("inserted_at")
-        lista.append(row)
+        fila = disciplina.__dict__
+        diccionario = {"name": fila["nombre"], 
+                       "days": fila["horarios"],    # hay que consultar con el ayudante
+                       "time": fila["horarios"],    #
+                       "teacher": fila["instructores"]} 
+        lista.append(diccionario)
     return lista
 
 def todas_las_disciplinas():

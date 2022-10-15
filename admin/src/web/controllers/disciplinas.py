@@ -7,7 +7,7 @@ disciplina_blueprint = Blueprint("disciplinas", __name__, url_prefix="/disciplin
 
 @disciplina_blueprint.route("/api")
 def disciplina_json():
-    '''Retorna el json con todas las disciplinas hacia la api'''
+    '''Retorna el json con todas las disciplinas'''
     return json.dumps(disciplinas.listar_disciplinas_diccionario())
 
 @disciplina_blueprint.route("/")
