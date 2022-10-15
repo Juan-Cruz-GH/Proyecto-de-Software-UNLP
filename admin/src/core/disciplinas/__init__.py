@@ -62,7 +62,7 @@ def modificar_disciplina(data):
     return disciplina
 
 def validar_disciplina_repetida(nombre, categoria, accion, id=None):
-    '''Chequea que la disciplina no exista ya'''
+    '''Chequea que no haya ya una disciplina con mismo nombre y misma categoria'''
     if(accion == "alta"):
         nombre_existente = Disciplina.query.filter_by(nombre=nombre).filter(Disciplina.categoria==categoria).first()
         if(nombre_existente is None):

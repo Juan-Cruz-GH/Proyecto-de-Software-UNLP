@@ -66,7 +66,7 @@ def disciplina_update():
     }
     resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
     if(resultado):
-        resultado, mensaje = disciplinas.validar_disciplina_repetida(data_disciplina["nombre"], "modificacion", data_disciplina["id"])
+        resultado, mensaje = disciplinas.validar_disciplina_repetida(data_disciplina["nombre"], data_disciplina["categoria"], "modificacion", data_disciplina["id"])
         if(resultado):
             disciplinas.modificar_disciplina(data_disciplina)
             return redirect("/disciplinas")
