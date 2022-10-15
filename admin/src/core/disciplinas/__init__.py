@@ -1,7 +1,19 @@
 import re
+from src.core.socios import buscar_socio
 from src.core import configuracion_sistema
 from src.core.disciplinas.disciplinas import Disciplina
+from src.core.socios.socios import Socio
 from src.core.db import db
+
+
+def relacionarSocioDisciplina(idDisciplina, idSocio):
+    disciplina = buscar_disciplina(idDisciplina)
+    socio = buscar_socio(idSocio)
+    disciplina.socios.append(socio)
+    db.session.commit()
+
+def estaHabilitada(id):
+    return buscar_disciplina(id).habilitada
 
 def listar_disciplinas_diccionario():
     '''Devuelve una lista de diccionarios con todas las disciplinas.'''
@@ -9,9 +21,10 @@ def listar_disciplinas_diccionario():
     disciplinas = Disciplina.query.all()
     for disciplina in disciplinas:
         fila = disciplina.__dict__
+        dias_horarios = fila["horarios"].split(" de ")
         diccionario = {"name": fila["nombre"], 
-                       "days": fila["horarios"],    # hay que consultar con el ayudante
-                       "time": fila["horarios"],    #
+                       "days": dias_horarios[0],    # hay que consultar con el ayudante
+                       "time": dias_horarios[1],    #
                        "teacher": fila["instructores"]} 
         lista.append(diccionario)
     return lista

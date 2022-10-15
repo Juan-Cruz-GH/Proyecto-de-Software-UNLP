@@ -109,3 +109,16 @@ def inscripcion_socio(id):
     disciplinas2 = ['futbol', 'basquet']
     kwargs = {'id_socio': id, 'disciplinas': disciplinas.todas_las_disciplinas(), 'categorias': disciplinas.categorias_de_cada_disciplina()}
     return render_template("/socios/inscripcion_socios.html", **kwargs)
+
+@socio_blueprint.route("/inscripcion", methods=["POST"])
+def add_inscripcion():
+    id_socio = request.form.get("id_socio")
+    id_disciplina = request.form.get("categoria")
+    socioActivo = socios.estaHabilitado(id_socio)
+    disciplinaActiva = disciplinas.estaHabilitada(id_disciplina)
+    if (socioActivo and disciplinaActiva):
+        disciplinas.relacionarSocioDisciplina(id_disciplina, id_socio)
+        return redirect("/socios/")
+    else: 
+        flash("La disciplina o el socio no están habilitados.")
+        return redirect("/socios/inscripcion-socio/" + id_socio)

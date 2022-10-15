@@ -2,6 +2,9 @@ import re
 from src.core.socios.socios import Socio
 from src.core.db import db
 
+def estaHabilitado(id):
+    return Socio.query.get(id).activo
+
 def todos_los_socios(apellido=None, tipo=None):
     '''Retorna todos los socios en una lista de diccionarios'''
     data_socios = []
