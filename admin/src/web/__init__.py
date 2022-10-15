@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask_wtf.csrf import CSRFProtect
 from src.web.helpers import handlers
 
@@ -20,8 +20,7 @@ def create_app(env="development", static_folder="static"):
 
     @app.get("/")
     def home():
-        kwargs = {"contenido": " Mundo!!"}
-        return render_template("index.html", **kwargs)
+        return redirect("/socios/")
         
 
     app.register_blueprint(usuario_blueprint)
