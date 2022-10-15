@@ -1,6 +1,7 @@
 from src.core.db import db
 from datetime import datetime
 
+
 Socio_Disciplina=db.Table(
     "Socio_Disciplina",
     db.Column("id_socio", db.Integer, db.ForeignKey("Socios.id"), nullable=False),
