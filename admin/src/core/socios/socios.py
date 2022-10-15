@@ -1,6 +1,3 @@
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import String
 from src.core.db import db
 from datetime import datetime
 
@@ -20,7 +17,7 @@ class Socio(db.Model):
     inserted_at = db.Column(db.DateTime, default=datetime.now)
    
 
-    def __init__(self, nombre=None, apellido=None, email=None, activo=True, tipo_documento=None, dni=None, genero=None, direccion=None, telefono=None):
+    def __init__(self, nombre, apellido, email, tipo_documento, dni, genero, direccion, telefono, activo=True):
         self.nombre = nombre
         self.apellido = apellido
         self.email = email
