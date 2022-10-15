@@ -3,9 +3,23 @@ from src.core.usuarios.usuarios import Usuario
 import re
 
 
-def listar_usuarios(page):
-    '''Esta funcion devuelve todos los usuarios de forma paginada segun la configuracion.'''
-    return Usuario.query.paginate(page, per_page=5)
+def listar_usuarios(page, email=None, tipo=None):
+    '''Esta funcion devuelve todos los usuarios de forma paginada segun la configuracion, y segun si se esta realizando una busqueda.'''
+    if ((email is not None) and (tipo is not None)):
+        if (tipo == "true"):
+            usuarios = Usuario.query.filter_by(email=email).filter(Usuario.activo.is_(True)).paginate(page, per_page=1)
+        else:
+            usuarios = Usuario.query.filter_by(email=email).filter(Usuario.activo.is_(False)).paginate(page, per_page=1)
+    elif (email is not None):
+        usuarios = Usuario.query.filter_by(email=email).paginate(page, per_page=1)
+    elif (tipo is not None):
+        if (tipo == "true"):
+            usuarios = Usuario.query.filter(Usuario.activo.is_(True)).paginate(page, per_page=1)
+        else:
+            usuarios = Usuario.query.filter(Usuario.activo.is_(False)).paginate(page, per_page=1)
+    else:
+        usuarios = Usuario.query.paginate(page, per_page=1)
+    return usuarios
 
 
 def agregar_usuario(data):
@@ -42,7 +56,7 @@ def validar_estado(estado):
     '''Esta funcion valida el dato enviado al modificar el estado de un usuario'''
     if(estado == "activo"):
         return True
-    elif(estado == "inactivo"):
+    else:
         return False
 
 def validar_datos_existentes(email, username, accion, id=None):

@@ -8,7 +8,9 @@ usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
 def usuario_index():
     '''Esta funcion llama al modulo correspondiente para obtener todos los usuarios paginados.'''
     page = request.args.get('page', 1, type=int)
-    kwargs = {"usuarios": usuarios.listar_usuarios(page)}
+    email = request.args.get('busqueda', type=str) if request.args.get('busqueda', type=str) != '' else None
+    tipo = request.args.get('tipo', type=str) if request.args.get('tipo', type=str) != '' else None
+    kwargs = {"usuarios": usuarios.listar_usuarios(page, email, tipo), "email":email, "tipo":tipo}
     return render_template("usuarios/index.html", **kwargs)
 
 
