@@ -112,6 +112,7 @@ def inscripcion_socio(id):
 
 @socio_blueprint.route("/inscripcion", methods=["POST"])
 def add_inscripcion():
+    '''Esta funcion realiza la inscripcion de un socio a una disciplina'''
     id_socio = request.form.get("id_socio")
     id_disciplina = request.form.get("categoria")
     socioActivo = socios.estaHabilitado(id_socio)

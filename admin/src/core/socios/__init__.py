@@ -10,11 +10,11 @@ def todos_los_socios(apellido=None, tipo=None):
     data_socios = []
     if((apellido is not None) and (tipo is not None)):
         if(tipo == "true"):
-            socios = Socio.query.filter_by(apellido=apellido.capitalize()).filter(Socio.activo.is_(True))
+            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(True))
         else:
-            socios = Socio.query.filter_by(apellido=apellido.capitalize()).filter(Socio.activo.is_(False))
+            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(False))
     elif(apellido is not None):
-        socios = Socio.query.filter_by(apellido=apellido.capitalize())
+        socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize()))
     elif(tipo is not None):
         if(tipo == "true"):
             socios = Socio.query.filter(Socio.activo.is_(True))
@@ -26,6 +26,12 @@ def todos_los_socios(apellido=None, tipo=None):
         row = socio.__dict__
         row.pop("_sa_instance_state")
         row.pop("inserted_at")
+        if(row['activo']):
+            row['activo'] = 'si'
+        else:
+            row['activo'] = 'no'
+        row['nro_socio'] = row['id']
+        del row['id']
         data_socios.append(row)
     return data_socios
 
@@ -34,11 +40,11 @@ def listar_socios(page, apellido=None, tipo=None):
     y segun si se esta realizando un tipo de busqueda.'''
     if((apellido is not None) and (tipo is not None)):
         if(tipo == "true"):
-            socios = Socio.query.filter_by(apellido=apellido.capitalize()).filter(Socio.activo.is_(True)).paginate(page, per_page=1)
+            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(True)).paginate(page, per_page=1)
         else:
-            socios = Socio.query.filter_by(apellido=apellido.capitalize()).filter(Socio.activo.is_(False)).paginate(page, per_page=1)
+            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(False)).paginate(page, per_page=1)
     elif(apellido is not None):
-        socios = Socio.query.filter_by(apellido=apellido.capitalize()).paginate(page, per_page=1)
+        socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).paginate(page, per_page=1)
     elif(tipo is not None):
         if(tipo == "true"):
             socios = Socio.query.filter(Socio.activo.is_(True)).paginate(page, per_page=1)
