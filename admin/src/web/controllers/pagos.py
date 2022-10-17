@@ -15,3 +15,7 @@ def pagos_socios(id):
     page = request.args.get('page', 1, type=int)
     kwargs = {"pagos": pagos.listar_pagos_socio(id, page), "id_socio": id}
     return render_template("pagos/pagos_socio.html", **kwargs)
+
+@pago_blueprint.route("/pago_de_cuota")
+def pagar_cuota():
+    return caca

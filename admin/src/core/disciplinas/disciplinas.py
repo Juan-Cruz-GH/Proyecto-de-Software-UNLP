@@ -18,7 +18,7 @@ class Disciplina(db.Model):
     costo = db.Column(db.String, nullable=False)  # El formato de la moneda debe respetar el configurado en el modulo de cfg.
     habilitada = db.Column(db.Boolean, nullable=False)
     inserted_at = db.Column(db.DateTime, default=datetime.now)
-    socios = db.relationship("Socio", secondary=Socio_Disciplina)
+    socios = db.relationship("Socio", secondary=Socio_Disciplina, backref="disciplinas")
 
     def __init__(self, nombre, categoria, instructores, horarios, costo, habilitada):
         self.nombre = nombre
