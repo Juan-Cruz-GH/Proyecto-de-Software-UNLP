@@ -97,3 +97,8 @@ def eliminar_usuario(id):
     usuario = Usuario.query.get(id)
     db.session.delete(usuario)
     db.session.commit()
+
+def buscar_socio_email(email):
+    usuario = Usuario.query.filter_by(email=email).first()
+    return usuario
+    

@@ -21,7 +21,6 @@ def authenticate():
         flash("Credenciales invalidas", "error")
         return redirect(url_for("auth.login"))
     session["user"] = params["email"]
-    flash(mensaje, "success")
 
     return redirect(url_for("home"))
 
