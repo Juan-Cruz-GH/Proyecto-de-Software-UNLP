@@ -23,6 +23,7 @@
     <h5 class="card-header">Modificar Usuario</h5>
     <div class="card-body">
         <form method="POST" action="{{ url_for('usuarios.usuario_update')}}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="text" id="id" name="id" value="{{usuario.id}}" hidden readonly/>
             <div class="row mb-4">
               <div class="col">
