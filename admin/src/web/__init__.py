@@ -11,6 +11,7 @@ from src.web.controllers.pagos import pago_blueprint
 from src.web.controllers.roles import rol_blueprint
 from src.web.controllers.permisos import permiso_blueprint
 from src.web.controllers.auth import auth_blueprint
+from src.decoradores.login import login_requerido
 
 from src.web.config import config
 from src.core.db import db, init_db
@@ -22,6 +23,7 @@ def create_app(env="development", static_folder="static"):
     csrf = CSRFProtect(app)
 
     @app.get("/")
+    @login_requerido
     def home():
         return redirect("/socios/")
         
