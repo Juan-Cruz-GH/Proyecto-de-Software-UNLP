@@ -1,12 +1,13 @@
 from flask import Blueprint
 from src.web.controllers import disciplinas
+from src.web.controllers import configuracion_sistema
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
 @api_blueprint.route("/club/info")  # No requiere auth
 def obtener_info():
-    ''''''
-    pass
+    '''Obtiene el json con la informacion de contacto y lo retorna'''
+    return configuracion_sistema.info_contacto_json()
 
 @api_blueprint.route("/club/disciplinas") # No requiere auth
 def obtener_disciplinas():

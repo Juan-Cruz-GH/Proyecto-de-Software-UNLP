@@ -1,11 +1,17 @@
 from src.core.configuracion_sistema.configuracion_paginado import Configuracion_paginado
-from flask import Blueprint, render_template
 from src.core import configuracion_sistema
 from src.core.db import db
-from flask import request, redirect , flash
+from flask import Blueprint, render_template, request, redirect, flash
+import json
 
 
 configuracion_sistema_blueprint=Blueprint("configuracion_sistema",__name__, url_prefix="/configuracion_del_sistema")
+
+
+@configuracion_sistema_blueprint.route("/api")
+def info_contacto_json():
+    '''Retorna el json con todas las disciplinas'''
+    return json.dumps(configuracion_sistema.get_info_contacto_diccionario())
 
 @configuracion_sistema_blueprint.get("/")
 def configuracion_index():

@@ -8,6 +8,15 @@ def getPaginado():
 def getConfiguracionGeneral():
     return Configuracion_general.query.first()
 
+def get_info_contacto_diccionario():
+    '''Devuelve un diccionario con la informacion de contacto'''
+    info = (getConfiguracionGeneral().informacion_contacto).split(" | ")
+    email = info[0]
+    telefono = info[1]
+    diccionario = { "email": email,
+                    "phone": telefono }
+    return diccionario
+
 def configuracionPredeterminada():
     paginado= Configuracion_paginado(10)
     config=Configuracion_general(False, "Encabezado para los recibos", "Informacion de Conctacto del club", 0, 0)
