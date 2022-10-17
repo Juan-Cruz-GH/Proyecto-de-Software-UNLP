@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, flash, redirect
-from werkzeug.security import generate_password_hash
 from src.core import usuarios
 
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
@@ -37,7 +36,7 @@ def usuario_add():
         "email": request.form.get("email"),
         "activo": True,
         "username": request.form.get("username"),
-        "password": generate_password_hash(request.form.get("password"), method="sha256")
+        "password": request.form.get("password")
     }
     validacion, mensaje = usuarios.validar_datos_existentes(data_usuario["email"], data_usuario["username"], "alta")
     if(validacion == False):

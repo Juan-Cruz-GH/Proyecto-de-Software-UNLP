@@ -1,28 +1,31 @@
 from src.core.db import db
 from src.core.usuarios.usuarios import Usuario
+from src.core import configuracion_sistema
+from werkzeug.security import check_password_hash, generate_password_hash
 import re
 
 def listar_usuarios(page, email=None, tipo=None):
     '''Esta funcion devuelve todos los usuarios de forma paginada segun la configuracion, y segun si se esta realizando una busqueda.'''
     if ((email is not None) and (tipo is not None)):
         if (tipo == "true"):
-            usuarios = Usuario.query.filter_by(email=email).filter(Usuario.activo.is_(True)).paginate(page, per_page=1)
+            usuarios = Usuario.query.filter_by(email=email).filter(Usuario.activo.is_(True)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
         else:
-            usuarios = Usuario.query.filter_by(email=email).filter(Usuario.activo.is_(False)).paginate(page, per_page=1)
+            usuarios = Usuario.query.filter_by(email=email).filter(Usuario.activo.is_(False)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
     elif (email is not None):
-        usuarios = Usuario.query.filter_by(email=email).paginate(page, per_page=1)
+        usuarios = Usuario.query.filter_by(email=email).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
     elif (tipo is not None):
         if (tipo == "true"):
-            usuarios = Usuario.query.filter(Usuario.activo.is_(True)).paginate(page, per_page=1)
+            usuarios = Usuario.query.filter(Usuario.activo.is_(True)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
         else:
-            usuarios = Usuario.query.filter(Usuario.activo.is_(False)).paginate(page, per_page=1)
+            usuarios = Usuario.query.filter(Usuario.activo.is_(False)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
     else:
-        usuarios = Usuario.query.paginate(page, per_page=1)
+        usuarios = Usuario.query.paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
     return usuarios
 
 def agregar_usuario(data):
     '''Esta funcion se utiliza para dar de alta un usuario'''
     usuario = Usuario(**data)
+    usuario.password = generate_password_hash(usuario.password, method="sha256")
     db.session.add(usuario)
     db.session.commit()
     return usuario
@@ -34,7 +37,12 @@ def buscar_usuario(id):
 
 def find_user_by_mail_and_pass(email, password):
     '''esta funcion verifica que el usuario ingresado en login exista'''
-    return Usuario.query.filter(Usuario.email == email, Usuario.password == password).first()
+    #return Usuario.query.filter(Usuario.email == email, Usuario.password == password).first()
+    usuario = Usuario.query.filter(Usuario.email == email).first()
+    if usuario is None: 
+        return None
+    elif(check_password_hash(usuario.password, password)):
+        return usuario
 
 def validar_inputs(email, password):
     '''Esta funcion valida que los inputs sean del tipo correcto. (falta comprobar password mediante hash)'''

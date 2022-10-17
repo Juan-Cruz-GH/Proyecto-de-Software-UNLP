@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, flash, url_for, session, redirect
-from werkzeug.security import generate_password_hash
 from src.core import usuarios
 
 
@@ -12,8 +11,7 @@ def login():
 @auth_blueprint.post("/authenticate")
 def authenticate():
     params = request.form
-
-    user = usuarios.find_user_by_mail_and_pass(params["email"], generate_password_hash(params["password"], method="sha256"))
+    user = usuarios.find_user_by_mail_and_pass(params["email"], params["password"])
     validacion, mensaje = usuarios.validar_inputs(params["email"], params["password"])
 
     if not validacion:
