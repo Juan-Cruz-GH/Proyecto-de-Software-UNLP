@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, flash
+from flask import Blueprint, session, render_template, request, redirect, flash
 from src.core import socios
 from src.core import pagos
 from src import exportaciones
 from src.core import disciplinas
+from src.core import usuarios
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
@@ -112,6 +113,7 @@ def inscripcion_socio(id):
 
 @socio_blueprint.route("/inscripcion", methods=["POST"])
 def add_inscripcion():
+    '''Esta funcion realiza la inscripcion de un socio a una disciplina'''
     id_socio = request.form.get("id_socio")
     id_disciplina = request.form.get("categoria")
     socioActivo = socios.estaHabilitado(id_socio)

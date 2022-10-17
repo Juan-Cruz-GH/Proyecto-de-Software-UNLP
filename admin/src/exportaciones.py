@@ -52,7 +52,7 @@ def generarPDF(data_socios):
     return response
 
 def generarCSV(data_socios):
-    headers = ['id', 'apellido', 'nombre', 'dni', 'email', 'telefono', 'direccion', 'genero', 'tipo_documento', 'activo']
+    headers = ['nro_socio', 'apellido', 'nombre','tipo_documento', 'dni', 'email', 'telefono', 'direccion', 'genero', 'activo']
     si = StringIO()
     with open('socios.csv', 'w') as f:
         writer = csv.DictWriter(si, fieldnames=headers)
