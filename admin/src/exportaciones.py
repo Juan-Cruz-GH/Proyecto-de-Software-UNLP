@@ -17,6 +17,7 @@ class PDF(FPDF):
         self.cell(0, 10, 'Page' + str(self.page_no()) + '/{nb}', 0, 0, 'C')
 
 def generarPDF(data_socios):
+    cant_socios = 0
     pdf = PDF()
     pdf.add_page()
     pdf.alias_nb_pages()
@@ -34,6 +35,10 @@ def generarPDF(data_socios):
     pdf.cell(40, y_height, 'Direccion', border=1, ln=1)
     pdf.set_font('Arial', '', 12)
     for socio in data_socios:
+        cant_socios += 1
+        if(cant_socios == 41):
+            pdf.add_page()
+            cant_socios = 0
         pdf.cell(5)
         pdf.cell(30, y_height, socio["nombre"], border=1)
         pdf.cell(30, y_height, socio["apellido"], border=1)
