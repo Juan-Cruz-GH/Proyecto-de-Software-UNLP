@@ -5,18 +5,12 @@ from src.core.db import db
 from flask import request, redirect, flash
 from src.decoradores.login import login_requerido
 from src.core import usuarios
+import json
 
 
 configuracion_sistema_blueprint = Blueprint(
     "configuracion_sistema", __name__, url_prefix="/configuracion_del_sistema"
 )
-
-
-
-@configuracion_sistema_blueprint.route("/api")
-def info_contacto_json():
-    '''Retorna el json con todas las disciplinas'''
-    return json.dumps(configuracion_sistema.get_info_contacto_diccionario())
 
 
 @configuracion_sistema_blueprint.route("/api")
