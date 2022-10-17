@@ -27,13 +27,6 @@
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-     
-                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                        <ul class="navbar-nav ms-auto ">
-                            <li class="nav-item">
-                                <a class="nav-link mx-2" aria-current="page" href="{{ url_for('home') }}">Home</a>
-                            </li>
-                    </div>
                 </div>
             </nav>
         </div>
@@ -47,14 +40,27 @@
               {% endif %}
             {% endwith %}
         </div>
-
-        <h1>Iniciar Sesion</h1>
-            <form action="{{ url_for('auth.authenticate') }}" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <input name="email" placeholder="Correo" required />
-                <input type="password" name="password" placeholder="Clave" required />
-                <input type="submit" value="Login" />
-            </form>
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+              <div class="card border-0 shadow rounded-3 my-5">
+                <div class="card-body p-4 p-sm-5">
+                  <h5 class="card-title text-center mb-5 fw-light fs-5">Log In</h5>
+                  <form action="{{ url_for('auth.authenticate') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" placeholder="Correo" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <input class="form-control" type="password" name="password" placeholder="Clave" required />
+                    </div>
+                    <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Login" />
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
         {% endblock %}
 
     </body>
