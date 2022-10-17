@@ -27,5 +27,5 @@ def authenticate():
 
 @auth_blueprint.get("/logout")
 def logout():
-    session.pop('username', None)
+    session.pop('user', None)
     return redirect(url_for("home"))

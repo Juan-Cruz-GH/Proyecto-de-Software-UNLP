@@ -23,54 +23,55 @@ def configuracion_predeterminada():
     db.session.add(paginado)
     db.session.add(config)
     db.session.commit()
-    return paginado,config
+    return paginado, config
+
 
 def modificar_configuracion(data, data_paginado):
-    #Recuperar cantidad de paginas, si no existe la fila en la db se la crea
+    # Recuperar cantidad de paginas, si no existe la fila en la db se la crea
     paginado = Configuracion_paginado.query.first()
-    if (paginado == None):
-        paginado= Configuracion_paginado(**data_paginado)
+    if paginado == None:
+        paginado = Configuracion_paginado(**data_paginado)
         db.session.add(paginado)
     else:
-        paginado.elementos_pagina=data_paginado["elementos_pagina"]
-    
-    #Recuperar configuracion general, si no existe la fila en la db se la crea
-    config= Configuracion_general.query.first()
-    if (config ==None):
-        config= Configuracion_general(**data)
+        paginado.elementos_pagina = data_paginado["elementos_pagina"]
+
+    # Recuperar configuracion general, si no existe la fila en la db se la crea
+    config = Configuracion_general.query.first()
+    if config == None:
+        config = Configuracion_general(**data)
         db.session.add(config)
     else:
-        config.activar_pagos= data["activar_pagos"]
-        config.encabezado_recibos= data["encabezado_recibos"]
-        config.informacion_contacto=data["informacion_contacto"]
-        config.cuota_base=data["cuota_base"]
-        config.porcentaje_recargo=data["porcentaje_recargo"]
-        
+        config.activar_pagos = data["activar_pagos"]
+        config.encabezado_recibos = data["encabezado_recibos"]
+        config.informacion_contacto = data["informacion_contacto"]
+        config.cuota_base = data["cuota_base"]
+        config.porcentaje_recargo = data["porcentaje_recargo"]
+
     db.session.commit()
     return paginado
 
+
 def validar_digito(dato):
     try:
-        n=float(dato)  
+        n = float(dato)
     except ValueError:
         return False, "no es un digito valido"
     return True, "Dígito valido"
-    
+
+
 def validad_entero(dato):
     try:
-        n=int(dato)
+        n = int(dato)
     except ValueError:
         return False, "Ingrese numero valido"
     return True, "Número valido"
 
+
 def validar_positivo(dato):
-    return float(dato)>=0, "debe ser un numero positivo"
+    return float(dato) >= 0, "debe ser un numero positivo"
+
 
 def validar_cadena(dato):
-    if (len(dato)>500):
+    if len(dato) > 500:
         return False, "Limite de caracteres excedido"
     return True, "Cadena valida"
-        
-
-    
-    
