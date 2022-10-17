@@ -1,8 +1,5 @@
-from flask import Blueprint
-from flask import render_template
-from flask import request
-from flask import flash, redirect, url_for, session
-
+from flask import Blueprint, render_template, request, flash, url_for, session, redirect
+from werkzeug.security import generate_password_hash
 from src.core import usuarios
 
 
@@ -12,13 +9,11 @@ auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 def login():
     return render_template("auth/login.html")
 
-
 @auth_blueprint.post("/authenticate")
 def authenticate():
     params = request.form
 
-    user = usuarios.find_user_by_mail_and_pass(params["email"], params["password"])
-
+    user = usuarios.find_user_by_mail_and_pass(params["email"], generate_password_hash(params["password"], method="sha256"))
     validacion, mensaje = usuarios.validar_inputs(params["email"], params["password"])
 
     if not validacion:
