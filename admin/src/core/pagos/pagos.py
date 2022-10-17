@@ -1,6 +1,7 @@
 from datetime import datetime
 from src.core.db import db
 
+
 class Pago(db.Model):
     __tablename__ = "Pagos"
     id = db.Column(db.Integer, primary_key=True)

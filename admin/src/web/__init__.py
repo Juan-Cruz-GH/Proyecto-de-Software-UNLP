@@ -26,7 +26,6 @@ def create_app(env="development", static_folder="static"):
     @login_requerido
     def home():
         return redirect("/socios/")
-        
 
     app.register_blueprint(usuario_blueprint)
     app.register_blueprint(configuracion_sistema_blueprint)
@@ -37,7 +36,6 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(permiso_blueprint)
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(api_blueprint)
-    
 
     with app.app_context():
         init_db(app)

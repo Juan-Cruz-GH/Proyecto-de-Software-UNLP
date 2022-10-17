@@ -15,8 +15,9 @@ configuracion_sistema_blueprint = Blueprint(
 
 @configuracion_sistema_blueprint.route("/api")
 def info_contacto_json():
-    '''Retorna el json con todas las disciplinas'''
+    """Retorna el json con todas las disciplinas"""
     return json.dumps(configuracion_sistema.get_info_contacto_diccionario())
+
 
 @configuracion_sistema_blueprint.get("/")
 @login_requerido

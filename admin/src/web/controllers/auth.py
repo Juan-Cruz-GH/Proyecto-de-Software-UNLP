@@ -4,9 +4,11 @@ from src.core import usuarios
 
 auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
+
 @auth_blueprint.get("/")
 def login():
     return render_template("auth/login.html")
+
 
 @auth_blueprint.post("/authenticate")
 def authenticate():
@@ -27,5 +29,5 @@ def authenticate():
 
 @auth_blueprint.get("/logout")
 def logout():
-    session.pop('user', None)
+    session.pop("user", None)
     return redirect(url_for("home"))
