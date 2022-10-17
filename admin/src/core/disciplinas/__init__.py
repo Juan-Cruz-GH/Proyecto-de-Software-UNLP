@@ -99,5 +99,7 @@ def validar_inputs(data):
         return False, "El costo no puede ser negativo"
     elif not(re.fullmatch(r"[A-Za-z ]{1,50}", data["nombre"])):
         return False, "El nombre de la disciplina no puede tener numeros"
+    elif "de" not in data["horarios"]:
+        return False, 'El formato de los horarios es incorrecto, debe ser "Dia1 Dia2 (opcional) de X a Yhs"'
     else:
         return True, "Los datos son validos"
