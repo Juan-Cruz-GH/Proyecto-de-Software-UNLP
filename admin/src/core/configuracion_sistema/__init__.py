@@ -2,22 +2,22 @@ from src.core.configuracion_sistema.configuracion_paginado import Configuracion_
 from src.core.configuracion_sistema.configuracion_general import Configuracion_general
 from src.core.db import db
 
-def getPaginado():
+def get_paginado():
     return Configuracion_paginado.query.first()
 
-def getConfiguracionGeneral():
+def get_configuracion_general():
     return Configuracion_general.query.first()
 
 def get_info_contacto_diccionario():
     '''Devuelve un diccionario con la informacion de contacto'''
-    info = (getConfiguracionGeneral().informacion_contacto).split(" | ")
+    info = (get_configuracion_general().informacion_contacto).split(" | ")
     email = info[0]
     telefono = info[1]
     diccionario = { "email": email,
                     "phone": telefono }
     return diccionario
 
-def configuracionPredeterminada():
+def configuracion_predeterminada():
     paginado= Configuracion_paginado(10)
     config=Configuracion_general(False, "Encabezado para los recibos", "Informacion de Conctacto del club", 0, 0)
     db.session.add(paginado)

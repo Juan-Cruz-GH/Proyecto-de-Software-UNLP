@@ -42,18 +42,18 @@ def listar_socios(page, apellido=None, tipo=None):
     y segun si se esta realizando un tipo de busqueda.'''
     if((apellido is not None) and (tipo is not None)):
         if(tipo == "true"):
-            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(True)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(True)).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
         else:
-            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(False)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(False)).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
     elif(apellido is not None):
-        socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+        socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
     elif(tipo is not None):
         if(tipo == "true"):
-            socios = Socio.query.filter(Socio.activo.is_(True)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+            socios = Socio.query.filter(Socio.activo.is_(True)).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
         else:
-            socios = Socio.query.filter(Socio.activo.is_(False)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+            socios = Socio.query.filter(Socio.activo.is_(False)).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
     else:
-        socios = Socio.query.paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+        socios = Socio.query.paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
     return socios
 
 def agregar_socio(data):

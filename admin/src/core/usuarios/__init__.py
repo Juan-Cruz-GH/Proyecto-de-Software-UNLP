@@ -8,18 +8,18 @@ def listar_usuarios(page, email=None, tipo=None):
     '''Esta funcion devuelve todos los usuarios de forma paginada segun la configuracion, y segun si se esta realizando una busqueda.'''
     if ((email is not None) and (tipo is not None)):
         if (tipo == "true"):
-            usuarios = Usuario.query.filter_by(email=email).filter(Usuario.activo.is_(True)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+            usuarios = Usuario.query.filter_by(email=email).filter(Usuario.activo.is_(True)).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
         else:
-            usuarios = Usuario.query.filter_by(email=email).filter(Usuario.activo.is_(False)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+            usuarios = Usuario.query.filter_by(email=email).filter(Usuario.activo.is_(False)).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
     elif (email is not None):
-        usuarios = Usuario.query.filter_by(email=email).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+        usuarios = Usuario.query.filter_by(email=email).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
     elif (tipo is not None):
         if (tipo == "true"):
-            usuarios = Usuario.query.filter(Usuario.activo.is_(True)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+            usuarios = Usuario.query.filter(Usuario.activo.is_(True)).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
         else:
-            usuarios = Usuario.query.filter(Usuario.activo.is_(False)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+            usuarios = Usuario.query.filter(Usuario.activo.is_(False)).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
     else:
-        usuarios = Usuario.query.paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+        usuarios = Usuario.query.paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
     return usuarios
 
 def agregar_usuario(data):
