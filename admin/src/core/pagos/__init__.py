@@ -5,6 +5,7 @@ from src.core.pagos.pagos import Pago
 from src.core import disciplinas
 from datetime import datetime
 from src.core.db import db
+from src.core import configuracion_sistema
 
 def generar_pagos(id_socio):
     '''Esta funcion genera los cuotas a pagar por el socio cuando se lo da de alta.'''
@@ -49,5 +50,5 @@ def calcular_cuota(id_socio, id_pago):
     return cuota
 
 def cuota_esta_vencida(id_pago):
-    return False
+    return True
 

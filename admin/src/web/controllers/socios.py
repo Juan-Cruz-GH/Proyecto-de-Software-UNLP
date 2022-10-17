@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, flash
+from flask import Blueprint, session, render_template, request, redirect, flash
 from src.core import socios
 from src.core import pagos
 from src import exportaciones
 from src.core import disciplinas
+from src.core import usuarios
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
