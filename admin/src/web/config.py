@@ -20,6 +20,7 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}"
     )
+    SESSION_TYPE = "filesystem"
 
 
 class DevelopmentConfig(Config):
@@ -32,6 +33,7 @@ class DevelopmentConfig(Config):
     DB_PASSWORD = "proyecto"
     DB_PORT = "5432"
     SQLALCHEMY_DATABASE_URI = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_SERVER}:{DB_PORT}/{DB_DATABASE}"
+    SESSION_TYPE = "filesystem"
 
 
 class TestingConfig(Config):
