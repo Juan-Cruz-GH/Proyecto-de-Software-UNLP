@@ -11,7 +11,7 @@ def info_usuario_logueado(email):
 
 
 @usuario_blueprint.route("/")
-#@login_requerido
+@login_requerido
 def usuario_index():
     """Esta funcion llama al modulo correspondiente para obtener todos los usuarios paginados."""
     page = request.args.get("page", 1, type=int)
@@ -35,7 +35,7 @@ def usuario_index():
 
 
 @usuario_blueprint.route("/alta-usuario")
-@login_requerido
+#@login_requerido
 def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
     kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
