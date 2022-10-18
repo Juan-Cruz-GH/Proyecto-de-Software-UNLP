@@ -4,9 +4,11 @@ from src.core import usuarios
 
 auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
+
 @auth_blueprint.get("/")
 def login():
     return render_template("auth/login.html")
+
 
 @auth_blueprint.post("/authenticate")
 def authenticate():
@@ -20,12 +22,16 @@ def authenticate():
     elif not user:
         flash("Credenciales invalidas", "error")
         return redirect(url_for("auth.login"))
-    session["user"] = params["email"]
-
+    elif user.activo == False:
+        flash("Usted no tiene permitido acceder al sistema", "error")
+        return redirect(url_for("auth.login"))
+    session["user"] = user.email
+    flash("Sesión iniciada correctamente")
     return redirect(url_for("home"))
 
 
 @auth_blueprint.get("/logout")
 def logout():
-    session.pop('username', None)
+    session.pop("user", None)
+    flash("Sesión cerrada correctamente")
     return redirect(url_for("home"))
