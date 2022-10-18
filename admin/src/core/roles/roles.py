@@ -28,4 +28,4 @@ class Rol(db.Model):
     nombre = db.Column(db.String(100), nullable=False)
 
     # Relacion
-    usuarios = db.relationship("Usuario", secondary=Usuario_Rol)
+    usuarios = db.relationship("Usuario", secondary=Usuario_Rol, backref="roles")

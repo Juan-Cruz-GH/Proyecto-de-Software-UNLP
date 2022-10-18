@@ -1,5 +1,8 @@
+from src.core.roles.roles import Usuario_Rol
 from src.core.db import db
 from src.core.usuarios.usuarios import Usuario
+from src.core import permisos
+from src.core.roles.roles import Rol
 from src.core import configuracion_sistema
 from werkzeug.security import check_password_hash, generate_password_hash
 import re
@@ -154,3 +157,15 @@ def get_datos_diccionario(email):
         "phone": "?",
     }
     return diccionario
+
+def has_permission(user, permission):
+    usuario = buscar_usuario_email(user)
+    roles = usuario.roles
+    permiso = permisos.buscar_permiso(permission)
+    print(roles)
+    print(permiso)
+    for rol in roles:
+        if (permiso in rol.permisos):
+            return True
+    return False
+        

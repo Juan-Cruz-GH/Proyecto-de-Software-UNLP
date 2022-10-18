@@ -20,7 +20,7 @@ def disciplina_index():
     page = request.args.get("page", 1, type=int)
     kwargs = {
         "disciplinas": disciplinas.listar_disciplinas(page),
-        "usuario": usuarios.buscar_socio_email(session["user"]),
+        "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
     return render_template("disciplinas/index.html", **kwargs)
 
@@ -29,7 +29,7 @@ def disciplina_index():
 @login_requerido
 def form_disciplina():
     """Devuelve el template con el formulario para agregar una disciplina"""
-    kwargs = {"usuario": usuarios.buscar_socio_email(session["user"])}
+    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
     return render_template("disciplinas/alta_disciplinas.html", **kwargs)
 
 
@@ -39,7 +39,7 @@ def disciplina_profile(id):
     """Busca una disciplina por el id indicado en la URL y devuelve el template con el formulario para modificar una disciplina"""
     kwargs = {
         "disciplina": disciplinas.buscar_disciplina(id),
-        "usuario": usuarios.buscar_socio_email(session["user"]),
+        "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
     return render_template("disciplinas/perfil_disciplinas.html", **kwargs)
 

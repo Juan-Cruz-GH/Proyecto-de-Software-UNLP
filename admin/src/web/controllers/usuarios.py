@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template, request, flash, redirect, session
+from flask import Blueprint, render_template, request, flash, redirect, session, abort
 from src.core import usuarios
+from src.web.controllers import auth
+from src.web.helpers.permission import check_permission
 from src.decoradores.login import login_requerido
 import json
 
@@ -14,6 +16,9 @@ def info_usuario_logueado(email):
 @login_requerido
 def usuario_index():
     """Esta funcion llama al modulo correspondiente para obtener todos los usuarios paginados."""
+    if (not check_permission(session["user"],"usuario_index")):
+        abort(403)
+    
     page = request.args.get("page", 1, type=int)
     email = (
         request.args.get("busqueda", type=str)
@@ -29,7 +34,7 @@ def usuario_index():
         "usuarios": usuarios.listar_usuarios(page, email, tipo),
         "email": email,
         "tipo": tipo,
-        "usuario": usuarios.buscar_socio_email(session["user"]),
+        "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
     return render_template("usuarios/index.html", **kwargs)
 
@@ -38,7 +43,7 @@ def usuario_index():
 @login_requerido
 def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
-    kwargs = {"usuario": usuarios.buscar_socio_email(session["user"])}
+    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
     return render_template("usuarios/alta_usuarios.html", **kwargs)
 
 
