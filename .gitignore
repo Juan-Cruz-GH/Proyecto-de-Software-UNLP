@@ -8,3 +8,4 @@ admin/src/core/pagos/__pycache__/
 admin/src/core/socios/__pycache__/
 *.pyc
 __pycache__/
+admin/flask_session
