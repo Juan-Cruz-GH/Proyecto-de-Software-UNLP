@@ -11,7 +11,7 @@ def info_usuario_logueado(email):
 
 
 @usuario_blueprint.route("/")
-@login_requerido
+#@login_requerido
 def usuario_index():
     """Esta funcion llama al modulo correspondiente para obtener todos los usuarios paginados."""
     page = request.args.get("page", 1, type=int)
@@ -51,7 +51,7 @@ def usuario_profile(id):
 
 
 @usuario_blueprint.route("/alta", methods=["POST"])
-@login_requerido
+#@login_requerido
 def usuario_add():
     """Esta funcion llama al metodo correspondiente para dar de alta un usuario.
     Si recibe un 1 es porque ese dni ya esta cargado, si devuelve un 2 es porque ese mail ya esta cargado."""
