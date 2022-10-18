@@ -25,13 +25,14 @@ def pagar_cuota(id):
     '''Paso de confirmacion antes de cambiar el estado de una cuota impaga a pagada'''
     pago=pagos.get_cuota(id)
     socio=socios.buscar_socio(pago.socio.id)
-    total=pagos.calcular_cuota(pago.id,pago.socio.id)
-    
+    if pago.total==0:
+        total=pagos.calcular_cuota(pago.id,pago.socio.id)
+    else: 
+        total=pago.total
     kwargs={
                 "pago":pago,    
                 "total": total
             }
-    
     return render_template("pagos/pago_de_cuota.html",**kwargs)
 
 @pago_blueprint.route("/pago_confirmado/<id>")

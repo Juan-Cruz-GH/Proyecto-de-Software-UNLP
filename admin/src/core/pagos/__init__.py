@@ -30,15 +30,17 @@ def generar_pagos(id_socio):
 def listar_pagos_socio(id, page):
     '''Esta funcion realiza la consulta para obtener los pagos del socio recibido'''
     pagos = Pago.query.filter_by(socio_id=id).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
-    
+
     for pago in pagos.items:    
-        pago.total=calcular_cuota(pago.id,id)
+        if(not pago.estado or pago.total == 0):
+            pago.total=calcular_cuota(pago.id,id)
     return pagos
 
 def pagar_cuota(id_pago,id_socio):
     '''Cambia el estado de una cuota la cual pasa de impaga a paga'''
     cuota=get_cuota(id_pago)
-    cuota.total=calcular_cuota(id_pago ,id_socio)
+    if (cuota.total == 0):
+        cuota.total=calcular_cuota(id_pago ,id_socio)
     cuota.fecha_pago=datetime.now()
     cuota.estado=True
     db.session.commit()
