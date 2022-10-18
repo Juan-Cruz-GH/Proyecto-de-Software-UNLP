@@ -2,7 +2,7 @@ from src.core import socios
 from src.core import configuracion_sistema
 from src.core.pagos.pagos import Pago
 from src.core import disciplinas
-from datetime import datetime
+from datetime import datetime, date
 from src.core.db import db
 from src.core import configuracion_sistema
 
@@ -57,5 +57,7 @@ def calcular_cuota(id_pago, id_socio):
     return cuota
 
 def cuota_esta_vencida(id_pago):
-    return False
+    cuota=get_cuota(id_pago)
+    vencimiento=date(int(cuota.año_cuota),int(cuota.nro_cuota),10)
+    return vencimiento<datetime.now().date()
 
