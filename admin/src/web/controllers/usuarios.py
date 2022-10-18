@@ -1,8 +1,13 @@
 from flask import Blueprint, render_template, request, flash, redirect, session
 from src.core import usuarios
 from src.decoradores.login import login_requerido
+import json
 
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
+
+
+def info_usuario_logueado(email):
+    return json.dumps(usuarios.get_datos_diccionario(email))
 
 
 @usuario_blueprint.route("/")

@@ -22,12 +22,13 @@ def authenticate():
     elif not user:
         flash("Credenciales invalidas", "error")
         return redirect(url_for("auth.login"))
-    session["user"] = params["email"]
-
+    session["user"] = user.email
+    flash("Sesión iniciada correctamente")
     return redirect(url_for("home"))
 
 
 @auth_blueprint.get("/logout")
 def logout():
     session.pop("user", None)
+    flash("Sesión cerrada correctamente")
     return redirect(url_for("home"))

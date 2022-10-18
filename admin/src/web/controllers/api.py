@@ -1,6 +1,7 @@
-from flask import Blueprint
+from flask import Blueprint, session
 from src.web.controllers import disciplinas
 from src.web.controllers import configuracion_sistema
+from src.web.controllers import usuarios
 from src.decoradores.login import login_requerido
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
@@ -27,33 +28,33 @@ def obtener_token():
 @api_blueprint.route("/me/profile")
 @login_requerido
 def obtener_info_usuario():
-    """"""
-    pass
+    """Obtiene el json con todos los datos del usuario logueado en este momento y lo retorna"""
+    return usuarios.info_usuario_logueado(email=session.get("user"))
 
 
 @api_blueprint.route("/me/disciplinas")
 @login_requerido
 def obtener_disciplinas_usuario():
-    """Obtiene el json con todas las disciplinas del usuario autenticado y lo retorna"""
+    """Obtiene el json con todas las disciplinas del usuario logueado en este momento y lo retorna"""
     pass
 
 
 @api_blueprint.route("/me/payments", methods=["GET"])
 @login_requerido
 def obtener_pagos():
-    """"""
+    """Obtiene la lista de pagos registrados del usuario logueado en este momento y lo retorna"""
     pass
 
 
 @api_blueprint.route("/me/payments", methods=["POST"])
 @login_requerido
 def registrar_pagos():
-    """"""
+    """Registra un nuevo pago para el usuario logueado en este momento"""
     pass
 
 
 @api_blueprint.route("/me/license", methods=["GET"])
 @login_requerido
 def obtener_info_credencial():
-    """"""
+    """Obtiene la información personal y el estado de credencial del usuario logueado en este momento y lo retorna"""
     pass

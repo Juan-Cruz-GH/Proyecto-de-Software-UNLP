@@ -61,7 +61,6 @@ def buscar_usuario(id):
 
 def find_user_by_mail_and_pass(email, password):
     """esta funcion verifica que el usuario ingresado en login exista"""
-    # return Usuario.query.filter(Usuario.email == email, Usuario.password == password).first()
     usuario = Usuario.query.filter(Usuario.email == email).first()
     if usuario is None:
         return None
@@ -132,7 +131,26 @@ def eliminar_usuario(id):
     db.session.commit()
 
 
-def buscar_socio_email(email):
+def buscar_usuario_email(email):
     """Esta funcion retorna a un usuario buscado por su email"""
     usuario = Usuario.query.filter_by(email=email).first()
     return usuario
+
+
+def get_datos_diccionario(email):
+    """Retorna un diccionario con todos los datos del usuario logueado con el email enviado por parametro"""
+    usuario = buscar_usuario_email(
+        email
+    )  # es un usuario logueado asi que siempre existe
+    diccionario = {
+        "user": usuario.username,
+        "email": usuario.email,
+        "number": usuario.id,
+        "document_type": "?",
+        "document_number": "?",
+        "gender": "?",
+        "gender_other": "?",
+        "address": "?",
+        "phone": "?",
+    }
+    return diccionario
