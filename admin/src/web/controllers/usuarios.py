@@ -29,7 +29,7 @@ def usuario_index():
         "usuarios": usuarios.listar_usuarios(page, email, tipo),
         "email": email,
         "tipo": tipo,
-        "usuario": usuarios.buscar_socio_email(session["user"]),
+        "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
     return render_template("usuarios/index.html", **kwargs)
 
@@ -38,7 +38,7 @@ def usuario_index():
 @login_requerido
 def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
-    kwargs = {"usuario": usuarios.buscar_socio_email(session["user"])}
+    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
     return render_template("usuarios/alta_usuarios.html", **kwargs)
 
 

@@ -28,7 +28,7 @@ def socio_index():
         "socios": socios.listar_socios(page, apellido, tipo),
         "apellido": apellido,
         "tipo": tipo,
-        "usuario": usuarios.buscar_socio_email(session["user"]),
+        "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
     return render_template("socios/index.html", **kwargs)
 
@@ -37,7 +37,7 @@ def socio_index():
 @login_requerido
 def form_socio():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
-    kwargs = {"usuario": usuarios.buscar_socio_email(session["user"])}
+    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
     return render_template("socios/alta_socios.html", **kwargs)
 
 
@@ -47,7 +47,7 @@ def socio_profile(id):
     """Esta funcion llama al modulo correspondiente para obtener a un socio por su id."""
     kwargs = {
         "socio": socios.buscar_socio(id),
-        "usuario": usuarios.buscar_socio_email(session["user"]),
+        "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
     return render_template("socios/perfil_socio.html", **kwargs)
 
