@@ -11,6 +11,9 @@ python = "^3.8"
 Flask = "^2.2.2"
 psycopg2-binary = "^2.9.3"
 Flask-SQLAlchemy = "^2.5.1"
+fpdf = "^1.7.2"
+Flask-WTF = "^1.0.1"
+Werkzeug = "^2.2.2"
 
 
 [build-system]
