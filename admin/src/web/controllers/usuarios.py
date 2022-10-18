@@ -35,7 +35,7 @@ def usuario_index():
 
 
 @usuario_blueprint.route("/alta-usuario")
-#@login_requerido
+@login_requerido
 def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
     kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
@@ -51,7 +51,7 @@ def usuario_profile(id):
 
 
 @usuario_blueprint.route("/alta", methods=["POST"])
-#@login_requerido
+@login_requerido
 def usuario_add():
     """Esta funcion llama al metodo correspondiente para dar de alta un usuario.
     Si recibe un 1 es porque ese dni ya esta cargado, si devuelve un 2 es porque ese mail ya esta cargado."""
