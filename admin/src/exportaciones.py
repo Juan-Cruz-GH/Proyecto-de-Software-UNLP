@@ -76,7 +76,7 @@ def generarCSV(data_socios):
     return output
 
 def generarReciboPDF(data):
-    
+    '''Genera el pdf de una cuota paga'''
     pdf = PDFRecibo()
     pdf.add_page()
     pdf.alias_nb_pages()
