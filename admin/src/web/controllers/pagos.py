@@ -1,7 +1,8 @@
+from flask import Blueprint, render_template, request
+
 from src.core import configuracion_sistema
 from src.exportaciones import generarReciboPDF
 from src.core import socios
-from flask import Blueprint, render_template, request
 from src.core import pagos
 
 
@@ -27,6 +28,8 @@ def pagos_socios(id):
 def pagar_cuota(id):
     """Paso de confirmacion antes de cambiar el estado de una cuota impaga a pagada"""
     pago = pagos.get_cuota(id)
+    if pago.estado == True:
+        return pagos_socios(pago.socio.id)
     socio = socios.buscar_socio(pago.socio.id)
     if pago.total == 0:
         total = pagos.calcular_cuota(pago.id, pago.socio.id)
@@ -40,7 +43,8 @@ def pagar_cuota(id):
 def confirmar_pago(id):
     """Cambia el estado de una cuota de impaga a pagada. Persiste la fecha y monto de pago en la base de datos"""
     pago = pagos.get_cuota(id)
-    pagos.pagar_cuota(id, pago.socio.id)
+    if pago.estado == False:
+        pagos.pagar_cuota(id, pago.socio.id)
     return pagos_socios(pago.socio.id)
 
 
@@ -51,5 +55,8 @@ def generarRecibo(id):
         "encabezado": configuracion_sistema.getConfiguracionGeneral().encabezado_recibos,
         "pago": pagos.get_cuota(id),
     }
-    output = generarReciboPDF(data_pago)
-    return output
+    if data_pago["pago"].estado == True:
+        output = generarReciboPDF(data_pago)
+        return output
+    else:
+        return pagos_socios(data_pago["pago"].socio.id)

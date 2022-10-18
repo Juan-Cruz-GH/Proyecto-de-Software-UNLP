@@ -16,13 +16,13 @@ def getConfiguracionGeneral():
 def configuracionPredeterminada():
     """Crea una configuracion predeterminada para la configuracion del sistema"""
     paginado = Configuracion_paginado(10)
-    config = Configuracion_general(
+    configuracion = Configuracion_general(
         False, "Encabezado para los recibos", "Informacion de Conctacto del club", 0, 0
     )
     db.session.add(paginado)
-    db.session.add(config)
+    db.session.add(configuracion)
     db.session.commit()
-    return paginado, config
+    return paginado, configuracion
 
 
 def modificar_configuracion(data, data_paginado):
@@ -36,16 +36,16 @@ def modificar_configuracion(data, data_paginado):
         paginado.elementos_pagina = data_paginado["elementos_pagina"]
 
     # Recuperar configuracion general, si no existe la fila en la db se la crea
-    config = Configuracion_general.query.first()
-    if config == None:
-        config = Configuracion_general(**data)
-        db.session.add(config)
+    configuracion = Configuracion_general.query.first()
+    if configuracion == None:
+        configuracion = Configuracion_general(**data)
+        db.session.add(configuracion)
     else:
-        config.activar_pagos = data["activar_pagos"]
-        config.encabezado_recibos = data["encabezado_recibos"]
-        config.informacion_contacto = data["informacion_contacto"]
-        config.cuota_base = data["cuota_base"]
-        config.porcentaje_recargo = data["porcentaje_recargo"]
+        configuracion.activar_pagos = data["activar_pagos"]
+        configuracion.encabezado_recibos = data["encabezado_recibos"]
+        configuracion.informacion_contacto = data["informacion_contacto"]
+        configuracion.cuota_base = data["cuota_base"]
+        configuracion.porcentaje_recargo = data["porcentaje_recargo"]
 
     db.session.commit()
     return paginado

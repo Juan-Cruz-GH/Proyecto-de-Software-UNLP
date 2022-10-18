@@ -13,17 +13,17 @@ configuracion_sistema_blueprint = Blueprint(
 @configuracion_sistema_blueprint.get("/")
 def configuracion_index():
     paginado = {"paginado": configuracion_sistema.getPaginado()}
-    config = {"config": configuracion_sistema.getConfiguracionGeneral()}
-    if config["config"] == None or paginado["paginado"] == None:
+    configuracion = {"config": configuracion_sistema.getConfiguracionGeneral()}
+    if configuracion["config"] == None or paginado["paginado"] == None:
         configuracion_sistema.configuracionPredeterminada()
         paginado = {"paginado": configuracion_sistema.getPaginado()}
-        config = {"config": configuracion_sistema.getConfiguracionGeneral()}
+        configuracion = {"config": configuracion_sistema.getConfiguracionGeneral()}
 
-    if config["config"].activar_pagos == True:
-        config["config"].activar_pagos = "checked"
+    if configuracion["config"].activar_pagos == True:
+        configuracion["config"].activar_pagos = "checked"
     else:
-        config["config"].activar_pagos = ""
-    kwargs = {**paginado, **config}
+        configuracion["config"].activar_pagos = ""
+    kwargs = {**paginado, **configuracion}
 
     return render_template("configuracion_sistema/configuracion_sistema.html", **kwargs)
 
@@ -34,7 +34,7 @@ def configuracion_actualizar():
     paginado = {
         "elementos_pagina": request.form.get("elementos_pagina"),
     }
-    configuraciones = {
+    configuracion = {
         "activar_pagos": request.form.get("activar_pagos"),
         "encabezado_recibos": request.form.get("encabezado_recibos"),
         "informacion_contacto": request.form.get("informacion_contacto"),
@@ -43,10 +43,10 @@ def configuracion_actualizar():
     }
 
     # Sanitizar datos
-    if configuraciones["activar_pagos"] == "pagos activados":
-        configuraciones["activar_pagos"] = True
+    if configuracion["activar_pagos"] == "pagos activados":
+        configuracion["activar_pagos"] = True
     else:
-        configuraciones["activar_pagos"] = False
+        configuracion["activar_pagos"] = False
     validar = True
     hubo_error = False
     validar, mensaje = configuracion_sistema.validar_digito(
@@ -56,43 +56,41 @@ def configuracion_actualizar():
         flash("Elementos por página: " + mensaje)
         hubo_error = True
 
-    validar, mensaje = configuracion_sistema.validar_digito(
-        configuraciones["cuota_base"]
-    )
+    validar, mensaje = configuracion_sistema.validar_digito(configuracion["cuota_base"])
     if not validar:
         flash("El valor de la cuota " + mensaje)
         hubo_error = True
 
     validar, mensaje = configuracion_sistema.validar_digito(
-        configuraciones["porcentaje_recargo"]
+        configuracion["porcentaje_recargo"]
     )
     if not validar:
         flash("El valor de porcentaje de recargo " + mensaje)
         hubo_error = True
 
     validar, mensaje = configuracion_sistema.validar_positivo(
-        configuraciones["porcentaje_recargo"]
+        configuracion["porcentaje_recargo"]
     )
     if not validar:
         flash("El valor de porcentaje de recargo " + mensaje)
         hubo_error = True
 
     validar, mensaje = configuracion_sistema.validar_positivo(
-        configuraciones["cuota_base"]
+        configuracion["cuota_base"]
     )
     if not validar:
         flash("El valor de la cuota " + mensaje)
         hubo_error = True
 
     validar, mensaje = configuracion_sistema.validar_cadena(
-        configuraciones["informacion_contacto"]
+        configuracion["informacion_contacto"]
     )
     if not validar:
         flash("Informacion de contacto: " + mensaje)
         hubo_error = True
 
     validar, mensaje = configuracion_sistema.validar_cadena(
-        configuraciones["encabezado_recibos"]
+        configuracion["encabezado_recibos"]
     )
     if not validar:
         flash("Encabezado de los recibos: " + mensaje)
@@ -101,5 +99,5 @@ def configuracion_actualizar():
     if hubo_error:
         return redirect("/configuracion_del_sistema/")
 
-    config = configuracion_sistema.modificar_configuracion(configuraciones, paginado)
+    config = configuracion_sistema.modificar_configuracion(configuracion, paginado)
     return redirect("/configuracion_del_sistema/")
