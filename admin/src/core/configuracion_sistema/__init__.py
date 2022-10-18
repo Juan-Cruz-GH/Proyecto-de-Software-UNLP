@@ -3,18 +3,24 @@ from src.core.configuracion_sistema.configuracion_general import Configuracion_g
 from src.core.db import db
 
 
-def getPaginado():
-    """Devuelve la tupla que contiene el campo "elementos_pagina" que se usa para determinar cuantos elementos se muestran por pagina"""
+def get_paginado():
     return Configuracion_paginado.query.first()
 
 
-def getConfiguracionGeneral():
-    "Devuelve la tupla de configuracion general que contiene los campos: activar_pagos, encabezado_recibos,informacion_contacto, cuota_base y porcentaje_recargo"
+def get_configuracion_general():
     return Configuracion_general.query.first()
 
 
-def configuracionPredeterminada():
-    """Crea una configuracion predeterminada para la configuracion del sistema"""
+def get_info_contacto_diccionario():
+    """Devuelve un diccionario con la informacion de contacto"""
+    info = (get_configuracion_general().informacion_contacto).split(" | ")
+    email = info[0]
+    telefono = info[1]
+    diccionario = {"email": email, "phone": telefono}
+    return diccionario
+
+
+def configuracion_predeterminada():
     paginado = Configuracion_paginado(10)
     configuracion = Configuracion_general(
         False, "Encabezado para los recibos", "Informacion de Conctacto del club", 0, 0
@@ -26,7 +32,6 @@ def configuracionPredeterminada():
 
 
 def modificar_configuracion(data, data_paginado):
-    """Actualiza los datos de configuracion del sistema"""
     # Recuperar cantidad de paginas, si no existe la fila en la db se la crea
     paginado = Configuracion_paginado.query.first()
     if paginado == None:

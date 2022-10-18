@@ -1,8 +1,11 @@
 from src.core.configuracion_sistema.configuracion_paginado import Configuracion_paginado
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, session
 from src.core import configuracion_sistema
 from src.core.db import db
 from flask import request, redirect, flash
+from src.decoradores.login import login_requerido
+from src.core import usuarios
+import json
 
 
 configuracion_sistema_blueprint = Blueprint(
@@ -10,25 +13,32 @@ configuracion_sistema_blueprint = Blueprint(
 )
 
 
-@configuracion_sistema_blueprint.get("/")
-def configuracion_index():
-    paginado = {"paginado": configuracion_sistema.getPaginado()}
-    configuracion = {"config": configuracion_sistema.getConfiguracionGeneral()}
-    if configuracion["config"] == None or paginado["paginado"] == None:
-        configuracion_sistema.configuracionPredeterminada()
-        paginado = {"paginado": configuracion_sistema.getPaginado()}
-        configuracion = {"config": configuracion_sistema.getConfiguracionGeneral()}
+def info_contacto_json():
+    """Retorna el json con todas las disciplinas"""
+    return json.dumps(configuracion_sistema.get_info_contacto_diccionario())
 
-    if configuracion["config"].activar_pagos == True:
-        configuracion["config"].activar_pagos = "checked"
+
+@configuracion_sistema_blueprint.get("/")
+@login_requerido
+def configuracion_index():
+    paginado = {"paginado": configuracion_sistema.get_paginado()}
+    config = {"config": configuracion_sistema.get_configuracion_general()}
+    if config["config"] == None or paginado["paginado"] == None:
+        configuracion_sistema.configuracion_predeterminada()
+        paginado = {"paginado": configuracion_sistema.get_paginado()}
+        config = {"config": configuracion_sistema.get_configuracion_general()}
+
+    if config["config"].activar_pagos == True:
+        config["config"].activar_pagos = "checked"
     else:
-        configuracion["config"].activar_pagos = ""
-    kwargs = {**paginado, **configuracion}
+        config["config"].activar_pagos = ""
+    kwargs = {**paginado, **config}
 
     return render_template("configuracion_sistema/configuracion_sistema.html", **kwargs)
 
 
 @configuracion_sistema_blueprint.route("/update", methods=["POST"])
+@login_requerido
 def configuracion_actualizar():
 
     paginado = {

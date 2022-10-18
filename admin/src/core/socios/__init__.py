@@ -4,21 +4,27 @@ from src.core import configuracion_sistema
 from src.core.db import db
 from src.core import configuracion_sistema
 
+
 def estaHabilitado(id):
     return Socio.query.get(id).activo
 
+
 def todos_los_socios(apellido=None, tipo=None):
-    '''Retorna todos los socios en una lista de diccionarios'''
+    """Retorna todos los socios en una lista de diccionarios"""
     data_socios = []
-    if((apellido is not None) and (tipo is not None)):
-        if(tipo == "true"):
-            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(True))
+    if (apellido is not None) and (tipo is not None):
+        if tipo == "true":
+            socios = Socio.query.filter(
+                Socio.apellido.contains(apellido.capitalize())
+            ).filter(Socio.activo.is_(True))
         else:
-            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(False))
-    elif(apellido is not None):
+            socios = Socio.query.filter(
+                Socio.apellido.contains(apellido.capitalize())
+            ).filter(Socio.activo.is_(False))
+    elif apellido is not None:
         socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize()))
-    elif(tipo is not None):
-        if(tipo == "true"):
+    elif tipo is not None:
+        if tipo == "true":
             socios = Socio.query.filter(Socio.activo.is_(True))
         else:
             socios = Socio.query.filter(Socio.activo.is_(False))
@@ -28,48 +34,72 @@ def todos_los_socios(apellido=None, tipo=None):
         row = socio.__dict__
         row.pop("_sa_instance_state")
         row.pop("inserted_at")
-        if(row['activo']):
-            row['activo'] = 'si'
+        if row["activo"]:
+            row["activo"] = "si"
         else:
-            row['activo'] = 'no'
-        row['nro_socio'] = row['id']
-        del row['id']
+            row["activo"] = "no"
+        row["nro_socio"] = row["id"]
+        del row["id"]
         data_socios.append(row)
     return data_socios
 
+
 def listar_socios(page, apellido=None, tipo=None):
-    '''Esta funcion devuelve todos los socios de forma paginada segun la configuracion
-    y segun si se esta realizando un tipo de busqueda.'''
-    if((apellido is not None) and (tipo is not None)):
-        if(tipo == "true"):
-            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(True)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+    """Esta funcion devuelve todos los socios de forma paginada segun la configuracion
+    y segun si se esta realizando un tipo de busqueda."""
+    if (apellido is not None) and (tipo is not None):
+        if tipo == "true":
+            socios = (
+                Socio.query.filter(Socio.apellido.contains(apellido.capitalize()))
+                .filter(Socio.activo.is_(True))
+                .paginate(
+                    page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+                )
+            )
         else:
-            socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).filter(Socio.activo.is_(False)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
-    elif(apellido is not None):
-        socios = Socio.query.filter(Socio.apellido.contains(apellido.capitalize())).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
-    elif(tipo is not None):
-        if(tipo == "true"):
-            socios = Socio.query.filter(Socio.activo.is_(True)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+            socios = (
+                Socio.query.filter(Socio.apellido.contains(apellido.capitalize()))
+                .filter(Socio.activo.is_(False))
+                .paginate(
+                    page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+                )
+            )
+    elif apellido is not None:
+        socios = Socio.query.filter(
+            Socio.apellido.contains(apellido.capitalize())
+        ).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
+    elif tipo is not None:
+        if tipo == "true":
+            socios = Socio.query.filter(Socio.activo.is_(True)).paginate(
+                page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+            )
         else:
-            socios = Socio.query.filter(Socio.activo.is_(False)).paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+            socios = Socio.query.filter(Socio.activo.is_(False)).paginate(
+                page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+            )
     else:
-        socios = Socio.query.paginate(page, per_page=configuracion_sistema.getPaginado().elementos_pagina)
+        socios = Socio.query.paginate(
+            page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+        )
     return socios
 
+
 def agregar_socio(data):
-    '''Esta funcion se utiliza para dar de alta un socio'''
+    """Esta funcion se utiliza para dar de alta un socio"""
     socio = Socio(**data)
     db.session.add(socio)
     db.session.commit()
     return socio
 
+
 def buscar_socio(id):
-    '''Esta funcion busca un socio por su id'''
+    """Esta funcion busca un socio por su id"""
     socio = Socio.query.get(id)
     return socio
 
+
 def modificar_socio(data):
-    '''Esta funcion realiza la modificacion de los datos de un socio'''
+    """Esta funcion realiza la modificacion de los datos de un socio"""
     socio = Socio.query.get(data["id"])
     socio.nombre = data["nombre"]
     socio.apellido = data["apellido"]
@@ -82,53 +112,83 @@ def modificar_socio(data):
     db.session.commit()
     return socio
 
+
 def eliminar_socio(id):
-    '''Esta funcion realiza la eliminacion de un socio de la BD'''
+    """Esta funcion realiza la eliminacion de un socio de la BD"""
     socio = Socio.query.get(id)
     db.session.delete(socio)
     db.session.commit()
 
+
 def validar_datos_existentes(dni, email, accion, id=None):
-    '''Esta funcion valida que el dni o el email ingresados para dar de alta o modificar un socio no existan.
-    Si el dni existe se devuelve 1, si el email existe se devuelve 2, en caso de que no exista ningun se 
-    devuelve 3.'''
-    if(accion == "alta"):
+    """Esta funcion valida que el dni o el email ingresados para dar de alta o modificar un socio no existan.
+    Si el dni existe se devuelve 1, si el email existe se devuelve 2, en caso de que no exista ningun se
+    devuelve 3."""
+    if accion == "alta":
         dni_existente = Socio.query.filter_by(dni=dni).first()
         email_existente = Socio.query.filter_by(email=email).first()
-        if(dni_existente is not None):
+        if dni_existente is not None:
             return False, "El Dni ya esta cargado en el sistema."
-        elif(email_existente is not None):
+        elif email_existente is not None:
             return False, "El Email ya esta cargado en el sistema."
         else:
             return True, "Ambos son validos"
-    elif(accion == "modificacion"):
+    elif accion == "modificacion":
         dni_existente = Socio.query.filter_by(dni=dni).filter(Socio.id != id).first()
-        email_existente = Socio.query.filter_by(email=email).filter(Socio.id != id).first()
-        if(dni_existente is not None):
+        email_existente = (
+            Socio.query.filter_by(email=email).filter(Socio.id != id).first()
+        )
+        if dni_existente is not None:
             return False, "El Dni ya esta cargado en el sistema."
-        elif(email_existente is not None):
+        elif email_existente is not None:
             return False, "El Email ya esta cargado en el sistema."
         else:
             return True, "Ambos son validos"
 
+
 def validar_inputs(data):
-    '''Esta funcion valida que los inputs sean del tipo correcto.'''
-    regex_email = '^[A-Za-z0-9]+[\._]?[A-Za-z0-9]+[@]\w+[.]\w{2,3}$'
-    if not(data["nombre"] != '' and data["apellido"] != '' and data["email"] != '' and data["tipo_documento"] != '' and data["dni"] != '' and data["genero"] != '' and data["direccion"] != '' and data["genero"] != '' and data["telefono"] != ''):
+    """Esta funcion valida que los inputs sean del tipo correcto."""
+    regex_email = "^[A-Za-z0-9]+[\._]?[A-Za-z0-9]+[@]\w+[.]\w{2,3}$"
+    if not (
+        data["nombre"] != ""
+        and data["apellido"] != ""
+        and data["email"] != ""
+        and data["tipo_documento"] != ""
+        and data["dni"] != ""
+        and data["genero"] != ""
+        and data["direccion"] != ""
+        and data["genero"] != ""
+        and data["telefono"] != ""
+    ):
         return False, "Todos los datos deben estar completos"
     elif not (data["dni"].isdigit() and data["telefono"].isdigit()):
         return False, "El telefono y dni deben ser solo numeros, sin guiones ni puntos."
-    elif not(re.fullmatch(r"[A-Za-z ]{1,50}", data["nombre"]) and re.fullmatch(r"[A-Za-z ]{1,50}", data["apellido"])):
+    elif not (
+        re.fullmatch(r"[A-Za-z ]{1,50}", data["nombre"])
+        and re.fullmatch(r"[A-Za-z ]{1,50}", data["apellido"])
+    ):
         return False, "El nombre o apellido son incorrectos."
-    elif not(re.search(regex_email,data["email"])):
+    elif not (re.search(regex_email, data["email"])):
         return False, "El email debe ser valido"
-    elif(len(data["dni"]) != 8):
+    elif len(data["dni"]) != 8:
         return False, "El dni debe contener 8 numeros"
-    elif(len(data["telefono"]) != 10 and len(data["telefono"]) != 7):
-        return False, "El numero de telefono debe tener 10 numeros si es celular y 7 si es de casa."
-    elif(data["genero"] != "masculino" and data["genero"] != "femenino" and data["genero"] != "otro"):
+    elif len(data["telefono"]) != 10 and len(data["telefono"]) != 7:
+        return (
+            False,
+            "El numero de telefono debe tener 10 numeros si es celular y 7 si es de casa.",
+        )
+    elif (
+        data["genero"] != "masculino"
+        and data["genero"] != "femenino"
+        and data["genero"] != "otro"
+    ):
         return False, "El genero debe estar dentro de las opciones."
-    elif(data["tipo_documento"] != "DNI" and data["tipo_documento"] != "LE" and data["tipo_documento"] != "LC" and data["tipo_documento"] != "DE"):
+    elif (
+        data["tipo_documento"] != "DNI"
+        and data["tipo_documento"] != "LE"
+        and data["tipo_documento"] != "LC"
+        and data["tipo_documento"] != "DE"
+    ):
         return False, "El tipo de documento debe estar dentro de las opciones."
     else:
         return True, "Inputs Validos"
