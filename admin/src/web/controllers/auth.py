@@ -22,6 +22,9 @@ def authenticate():
     elif not user:
         flash("Credenciales invalidas", "error")
         return redirect(url_for("auth.login"))
+    elif user.activo == False:
+        flash("Usted no tiene permitido acceder al sistema", "error")
+        return redirect(url_for("auth.login"))
     session["user"] = user.email
     flash("Sesión iniciada correctamente")
     return redirect(url_for("home"))
