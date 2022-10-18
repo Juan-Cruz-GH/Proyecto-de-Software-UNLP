@@ -6,7 +6,7 @@ from src.core.socios.socios import Socio
 from src.core.db import db
 
 
-def relacionarSocioDisciplina(idDisciplina, idSocio):
+def relacionar_socio_disciplina(idDisciplina, idSocio):
     disciplina = buscar_disciplina(idDisciplina)
     socio = buscar_socio(idSocio)
     disciplina.socios.append(socio)

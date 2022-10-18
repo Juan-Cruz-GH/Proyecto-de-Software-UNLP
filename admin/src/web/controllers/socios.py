@@ -182,7 +182,7 @@ def add_inscripcion():
     socioActivo = socios.estaHabilitado(id_socio)
     disciplinaActiva = disciplinas.estaHabilitada(id_disciplina)
     if socioActivo and disciplinaActiva:
-        disciplinas.relacionarSocioDisciplina(id_disciplina, id_socio)
+        disciplinas.relacionar_socio_disciplina(id_disciplina, id_socio)
         return redirect("/socios/")
     else:
         flash("La disciplina o el socio no están habilitados.")
