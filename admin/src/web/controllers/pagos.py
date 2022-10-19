@@ -1,13 +1,49 @@
+import json
+
+from flask import Blueprint, render_template, request, session, Response
+
 from src.core import configuracion_sistema
-from src.exportaciones import generarReciboPDF
 from src.core import socios
-from flask import Blueprint, render_template, request, session
 from src.core import pagos
-from src.decoradores.login import login_requerido
 from src.core import usuarios
+from src.exportaciones import generarReciboPDF
+from src.decoradores.login import login_requerido
 
 
 pago_blueprint = Blueprint("pagos", __name__, url_prefix="/pagos")
+
+
+@pago_blueprint.route("/api")
+@login_requerido
+def pagos_json():
+    """Retorna el json con todos los pagos del socio logeado"""
+    return json.dumps(pagos.listar_pagos_diccionario(session["user"]))
+
+
+@pago_blueprint.route("/api")
+def pagar_json(json):
+    """Recibe un json que es una lista con un solo elemento que tendria datos del pago
+    los datos son "month" y "amount"."""
+    diccionario = json[0]
+    if pagos.pagar_con_api(diccionario, session["user"]):
+        return Response(
+            "{'month':'"
+            + str(diccionario["month"])
+            + "', 'amount':'"
+            + str(diccionario["amount"])
+            + "'}",
+            status=201,
+            mimetype="application/json",
+        )
+    return Response(
+        "{'month':'"
+        + str(diccionario["month"])
+        + "', 'amount':'"
+        + str(diccionario["amount"])
+        + "'}",
+        status=200,
+        mimetype="application/json",
+    )
 
 
 @pago_blueprint.route("/")
@@ -61,8 +97,11 @@ def confirmar_pago(id):
 @pago_blueprint.route("/descargar_pdf_recibo/<id>")
 def generarRecibo(id):
     """Descarga un recibo en pdf para una cuota pagada"""
+    configuracion = configuracion_sistema.get_configuracion_general()
     data_pago = {
-        "encabezado": configuracion_sistema.get_configuracion_general().encabezado_recibos,
+        "encabezado": configuracion.encabezado_recibos,
+        "cuota_base": configuracion.cuota_base,
+        "recargo": configuracion.porcentaje_recargo,
         "pago": pagos.get_cuota(id),
     }
     if data_pago["pago"].estado == True:

@@ -8,6 +8,8 @@ class Config(object):
     SECRET_KEY = "secret"
     DEBUG = False
     TESTING = False
+    # Desactivar CSRF para testear API POST de registrar pagos
+    # WTF_CSRF_CHECK_DEFAULT = False
 
 
 class ProductionConfig(Config):

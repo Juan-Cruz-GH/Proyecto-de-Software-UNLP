@@ -1,3 +1,4 @@
+from pickle import TRUE
 from src.core import socios
 from src.core import configuracion_sistema
 from src.core.pagos.pagos import Pago
@@ -5,6 +6,44 @@ from src.core import disciplinas
 from datetime import datetime, date
 from src.core.db import db
 from src.core import configuracion_sistema
+
+
+def listar_pagos_diccionario(email):
+    socio = socios.buscar_socio_email(email)
+    if socio == None:
+        return []
+    todos_los_pagos = socio.pagos
+    pagos_pagados = []
+    for pago in todos_los_pagos:
+        if pago.estado == True:
+            diccionario = {"month": pago.nro_cuota, "amount": pago.total}
+            pagos_pagados.append(diccionario)
+    return pagos_pagados
+
+
+def pagar_con_api(diccionario, email):
+    socio = socios.buscar_socio_email(email)
+    print(socio)
+
+    if socio == None:
+        return False
+
+    for pago in socio.pagos:
+        print(calcular_cuota(pago.id, pago.socio.id))
+        print(diccionario["amount"])
+        if (
+            pago.nro_cuota == diccionario["month"]
+            and pago.año_cuota == datetime.now().year
+            and pago.estado == False
+            and float(diccionario["amount"]) == calcular_cuota(pago.id, pago.socio.id)
+        ):
+
+            pago.total = diccionario["amount"]
+            pago.fecha_pago = datetime.now()
+            pago.estado = True
+            db.session.commit()
+            return True
+    return False
 
 
 def get_cuota(id):
