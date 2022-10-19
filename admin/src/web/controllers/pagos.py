@@ -1,9 +1,50 @@
-from flask import Blueprint, render_template, request, session
+import json
+
+from flask import Blueprint, render_template, request, session, Response
+
+from src.core import configuracion_sistema
+from src.core import socios
 from src.core import pagos
-from src.decoradores.login import login_requerido
 from src.core import usuarios
+from src.exportaciones import generarReciboPDF
+from src.decoradores.login import login_requerido
+
 
 pago_blueprint = Blueprint("pagos", __name__, url_prefix="/pagos")
+
+
+@pago_blueprint.route("/api")
+def pagos_json():
+    """Retorna el json con todos los pagos del socio logeado"""
+    id = request.headers.get("id")
+    return json.dumps(pagos.listar_pagos_diccionario(id))
+
+
+@pago_blueprint.route("/api")
+def pagar_json(json):
+    """Recibe un json que es una lista con un solo elemento que tendria datos del pago
+    los datos son "month" y "amount"."""
+    id = request.headers.get("id")
+    diccionario = json[0]
+    if pagos.pagar_con_api(diccionario, id):
+        return Response(
+            "{'month':'"
+            + str(diccionario["month"])
+            + "', 'amount':'"
+            + str(diccionario["amount"])
+            + "'}",
+            status=201,
+            mimetype="application/json",
+        )
+    return Response(
+        "{'month':'"
+        + str(diccionario["month"])
+        + "', 'amount':'"
+        + str(diccionario["amount"])
+        + "'}",
+        status=200,
+        mimetype="application/json",
+    )
 
 
 @pago_blueprint.route("/")
@@ -28,3 +69,44 @@ def pagos_socios(id):
         "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
     return render_template("pagos/pagos_socio.html", **kwargs)
+
+
+@pago_blueprint.route("/pago_de_cuota/<id>")
+def pagar_cuota(id):
+    """Paso de confirmacion antes de cambiar el estado de una cuota impaga a pagada"""
+    pago = pagos.get_cuota(id)
+    if pago.estado == True:
+        return pagos_socios(pago.socio.id)
+    socio = socios.buscar_socio(pago.socio.id)
+    if pago.total == 0:
+        total = pagos.calcular_cuota(pago.id, pago.socio.id)
+    else:
+        total = pago.total
+    kwargs = {"pago": pago, "total": total}
+    return render_template("pagos/pago_de_cuota.html", **kwargs)
+
+
+@pago_blueprint.route("/pago_confirmado/<id>")
+def confirmar_pago(id):
+    """Cambia el estado de una cuota de impaga a pagada. Persiste la fecha y monto de pago en la base de datos"""
+    pago = pagos.get_cuota(id)
+    if pago.estado == False:
+        pagos.pagar_cuota(id, pago.socio.id)
+    return pagos_socios(pago.socio.id)
+
+
+@pago_blueprint.route("/descargar_pdf_recibo/<id>")
+def generarRecibo(id):
+    """Descarga un recibo en pdf para una cuota pagada"""
+    configuracion = configuracion_sistema.get_configuracion_general()
+    data_pago = {
+        "encabezado": configuracion.encabezado_recibos,
+        "cuota_base": configuracion.cuota_base,
+        "recargo": configuracion.porcentaje_recargo,
+        "pago": pagos.get_cuota(id),
+    }
+    if data_pago["pago"].estado == True:
+        output = generarReciboPDF(data_pago)
+        return output
+    else:
+        return pagos_socios(data_pago["pago"].socio.id)
