@@ -6,8 +6,8 @@ import json
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
 
 
-def info_usuario_logueado(email):
-    return json.dumps(usuarios.get_datos_diccionario(email))
+def info_usuario_logueado():
+    return json.dumps(usuarios.get_datos_diccionario(session["user"]))
 
 
 @usuario_blueprint.route("/")

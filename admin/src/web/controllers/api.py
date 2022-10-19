@@ -31,7 +31,7 @@ def obtener_token():
 @login_requerido
 def obtener_info_usuario():
     """Obtiene el json con todos los datos del usuario logueado en este momento y lo retorna"""
-    return usuarios.info_usuario_logueado(email=session.get("user"))
+    return usuarios.info_usuario_logueado()
 
 
 @api_blueprint.route("/me/disciplinas")

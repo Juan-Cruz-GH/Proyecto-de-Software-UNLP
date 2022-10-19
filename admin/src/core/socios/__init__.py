@@ -99,6 +99,10 @@ def buscar_socio(id):
 
 
 def buscar_socio_email(email):
+<<<<<<< HEAD
+=======
+    """Esta funcion busca un socio por su email"""
+>>>>>>> development
     return Socio.query.filter_by(email=email).first()
 
 
