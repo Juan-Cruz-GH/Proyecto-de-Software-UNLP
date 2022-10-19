@@ -37,7 +37,7 @@ def generar_pagos(id_socio):
 def listar_pagos_socio(id, page):
     """Esta funcion realiza la consulta para obtener los pagos del socio recibido"""
     pagos = Pago.query.filter_by(socio_id=id).paginate(
-        page, per_page=configuracion_sistema.getPaginado().elementos_pagina
+        page, per_page=configuracion_sistema.get_paginado().elementos_pagina
     )
 
     for pago in pagos.items:
@@ -57,9 +57,12 @@ def pagar_cuota(id_pago, id_socio):
 
 
 def calcular_cuota(id_pago, id_socio):
-    """Calcula el valor de una cuota teniendo en cuenta cuota base, costo de cada disciplina del socio y si la cuota esta vencida"""
-    cuota = configuracion_sistema.getConfiguracionGeneral().cuota_base
-    recargo = configuracion_sistema.getConfiguracionGeneral().porcentaje_recargo
+    """
+    Calcula el valor de una cuota teniendo en cuenta cuota base,
+    costo de cada disciplina del socio y si la cuota esta vencida
+    """
+    cuota = configuracion_sistema.get_configuracion_general().cuota_base
+    recargo = configuracion_sistema.get_configuracion_general().porcentaje_recargo
     socio = socios.buscar_socio(id_socio)
 
     for disciplina in socio.disciplinas:

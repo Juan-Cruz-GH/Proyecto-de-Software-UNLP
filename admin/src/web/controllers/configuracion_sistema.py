@@ -1,11 +1,11 @@
+import json
+from flask import Blueprint, render_template, session, request, redirect, flash
+
 from src.core.configuracion_sistema.configuracion_paginado import Configuracion_paginado
-from flask import Blueprint, render_template, session
 from src.core import configuracion_sistema
 from src.core.db import db
-from flask import request, redirect, flash
 from src.decoradores.login import login_requerido
 from src.core import usuarios
-import json
 
 
 configuracion_sistema_blueprint = Blueprint(
@@ -21,6 +21,11 @@ def info_contacto_json():
 @configuracion_sistema_blueprint.get("/")
 @login_requerido
 def configuracion_index():
+    """
+    muestra el modulo de configuracion del sistema con los valores actuales
+    almacenados en la base de datos. Si no existe la tupla en la base de datos
+    se crea automaticamente con una configuracion predeterminada
+    """
     paginado = {"paginado": configuracion_sistema.get_paginado()}
     config = {"config": configuracion_sistema.get_configuracion_general()}
     if config["config"] == None or paginado["paginado"] == None:
@@ -40,7 +45,12 @@ def configuracion_index():
 @configuracion_sistema_blueprint.route("/update", methods=["POST"])
 @login_requerido
 def configuracion_actualizar():
-
+    """
+    Recibe la informacion del formularlio de configuracion_sistema.html.
+    Luego se validan los datos recibidos y si son correctos se actualiza
+    la tupla de configuracion general y la tupla de configuracion
+    paginado
+    """
     paginado = {
         "elementos_pagina": request.form.get("elementos_pagina"),
     }

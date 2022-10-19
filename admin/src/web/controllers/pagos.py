@@ -62,7 +62,7 @@ def confirmar_pago(id):
 def generarRecibo(id):
     """Descarga un recibo en pdf para una cuota pagada"""
     data_pago = {
-        "encabezado": configuracion_sistema.getConfiguracionGeneral().encabezado_recibos,
+        "encabezado": configuracion_sistema.get_configuracion_general().encabezado_recibos,
         "pago": pagos.get_cuota(id),
     }
     if data_pago["pago"].estado == True:
