@@ -14,18 +14,19 @@ pago_blueprint = Blueprint("pagos", __name__, url_prefix="/pagos")
 
 
 @pago_blueprint.route("/api")
-@login_requerido
 def pagos_json():
     """Retorna el json con todos los pagos del socio logeado"""
-    return json.dumps(pagos.listar_pagos_diccionario(session["user"]))
+    id = request.headers.get("id")
+    return json.dumps(pagos.listar_pagos_diccionario(id))
 
 
 @pago_blueprint.route("/api")
 def pagar_json(json):
     """Recibe un json que es una lista con un solo elemento que tendria datos del pago
     los datos son "month" y "amount"."""
+    id = request.headers.get("id")
     diccionario = json[0]
-    if pagos.pagar_con_api(diccionario, session["user"]):
+    if pagos.pagar_con_api(diccionario, id):
         return Response(
             "{'month':'"
             + str(diccionario["month"])

@@ -1,6 +1,7 @@
 import json
 from flask import Blueprint, session, request
 from src.web.controllers import disciplinas
+
 from src.web.controllers import configuracion_sistema
 from src.web.controllers import usuarios
 from src.web.controllers import pagos
@@ -42,14 +43,12 @@ def obtener_disciplinas_usuario():
 
 
 @api_blueprint.route("/me/payments", methods=["GET"])
-@login_requerido
 def obtener_pagos():
     """Obtiene la lista de pagos registrados del usuario logueado en este momento y lo retorna"""
     return pagos.pagos_json()
 
 
 @api_blueprint.route("/me/payments", methods=["POST"])
-@login_requerido
 def registrar_pagos():
     """Registra un nuevo pago para el usuario logueado en este momento"""
     json = request.get_json()

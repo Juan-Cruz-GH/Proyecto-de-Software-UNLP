@@ -8,8 +8,8 @@ from src.core.db import db
 from src.core import configuracion_sistema
 
 
-def listar_pagos_diccionario(email):
-    socio = socios.buscar_socio_email(email)
+def listar_pagos_diccionario(id):
+    socio = socios.buscar_socio(id)
     if socio == None:
         return []
     todos_los_pagos = socio.pagos
@@ -21,8 +21,8 @@ def listar_pagos_diccionario(email):
     return pagos_pagados
 
 
-def pagar_con_api(diccionario, email):
-    socio = socios.buscar_socio_email(email)
+def pagar_con_api(diccionario, id):
+    socio = socios.buscar_socio(id)
     print(socio)
 
     if socio == None:
