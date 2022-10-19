@@ -6,6 +6,7 @@ from src.core import configuracion_sistema
 
 
 def estaHabilitado(id):
+    '''Esta funcion devuelve si el socio esta habilitado o no'''
     return Socio.query.get(id).activo
 
 

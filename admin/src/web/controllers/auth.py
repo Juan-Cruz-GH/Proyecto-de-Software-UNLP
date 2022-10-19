@@ -7,11 +7,13 @@ auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
 @auth_blueprint.get("/")
 def login():
+    '''Esta funcion retorna el template para logearse'''
     return render_template("auth/login.html")
 
 
 @auth_blueprint.post("/authenticate")
 def authenticate():
+    '''Esta funcion realiza la autenticacion de un usuario'''
     params = request.form
     user = usuarios.find_user_by_mail_and_pass(params["email"], params["password"])
     validacion, mensaje = usuarios.validar_inputs(params["email"], params["password"])
@@ -32,6 +34,7 @@ def authenticate():
 
 @auth_blueprint.get("/logout")
 def logout():
+    '''Esta funcion realiza el logout de un usuario'''
     session.pop("user", None)
     flash("Sesión cerrada correctamente")
     return redirect(url_for("home"))

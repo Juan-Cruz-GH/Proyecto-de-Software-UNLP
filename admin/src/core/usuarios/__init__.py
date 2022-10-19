@@ -2,6 +2,7 @@ from src.core.db import db
 from src.core.usuarios.usuarios import Usuario
 from src.core import configuracion_sistema
 from src.core import socios
+from src.core import roles
 from werkzeug.security import check_password_hash, generate_password_hash
 import re
 
@@ -163,3 +164,11 @@ def get_datos_diccionario(id):
 def get_disciplinas_diccionario(id):
     """Retorna un diccionario con todas las disciplinas que realiza el usuario con el id enviado por parametro """
     pass
+
+#def verificar_rol_usuario(id):
+#    usuario = buscar_usuario(id)
+#    rol_admin = roles.buscar_rol('Administrador')
+#    if(rol_admin in usuario.roles):
+#        return True
+#    else:
+#        return False

@@ -7,10 +7,12 @@ usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
 
 
 def info_usuario(id):
+    '''Esta funcion retorna un JSON con informacion del usuario'''
     return json.dumps(usuarios.get_datos_diccionario(id))
 
 
 def disciplinas_usuario(id):
+    '''Esta funcion retorna un JSON con las disciplinas del usuario'''
     return json.dumps(usuarios.get_disciplinas_diccionario(id))
 
 
@@ -83,6 +85,10 @@ def usuario_add():
 @login_requerido
 def usuario_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un usuario."""
+    #if(usuarios.verificar_rol_usuario(request.form.get('id'))):
+    #    estado = True
+    #else:
+    #    estado = usuarios.validar_estado(request.form.get("activo"))
     estado = usuarios.validar_estado(request.form.get("activo"))
     data_usuario = {
         "id": request.form.get("id"),

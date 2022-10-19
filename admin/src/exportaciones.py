@@ -19,6 +19,7 @@ class PDF(FPDF):
 
 
 def generarPDF(data_socios):
+    '''Esta funcion genera un PDF con los datos de todos los socios'''
     cant_socios = 0
     pdf = PDF()
     pdf.add_page()
@@ -57,6 +58,7 @@ def generarPDF(data_socios):
 
 
 def generarCSV(data_socios):
+    '''Esta funcion retorna un CSV con todos los datos de los socios'''
     headers = [
         "nro_socio",
         "apellido",
