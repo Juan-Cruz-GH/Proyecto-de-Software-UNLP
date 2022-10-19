@@ -1,6 +1,7 @@
 from src.core.db import db
 from src.core.usuarios.usuarios import Usuario
 from src.core import configuracion_sistema
+from src.core import socios
 from werkzeug.security import check_password_hash, generate_password_hash
 import re
 
@@ -142,15 +143,29 @@ def get_datos_diccionario(email):
     usuario = buscar_usuario_email(
         email
     )  # es un usuario logueado asi que siempre existe
-    diccionario = {
-        "user": usuario.username,
-        "email": usuario.email,
-        "number": usuario.id,
-        "document_type": "?",
-        "document_number": "?",
-        "gender": "?",
-        "gender_other": "?",
-        "address": "?",
-        "phone": "?",
-    }
+    socio = socios.buscar_socio_email(email)
+    if(socio is not None):
+        diccionario = {
+            "user": usuario.username,
+            "email": usuario.email,
+            "number": usuario.id,
+            "document_type": socio.tipo_documento,
+            "document_number": socio.dni,
+            "gender": socio.genero,
+            "gender_other": socio.genero,
+            "address": socio.direccion,
+            "phone": socio.telefono,
+        }
+    else:
+        diccionario = { 
+            "user": usuario.username,
+            "email": usuario.email,
+            "number": usuario.id,
+            "document_type": "?",
+            "document_number": "?",
+            "gender": "?",
+            "gender_other": "?",
+            "address": "?",
+            "phone": "?",
+        }
     return diccionario

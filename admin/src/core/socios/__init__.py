@@ -98,6 +98,11 @@ def buscar_socio(id):
     return socio
 
 
+def buscar_socio_email(email):
+    """Esta funcion busca un socio por su email"""
+    return Socio.query.filter_by(email=email).first()
+
+
 def modificar_socio(data):
     """Esta funcion realiza la modificacion de los datos de un socio"""
     socio = Socio.query.get(data["id"])
