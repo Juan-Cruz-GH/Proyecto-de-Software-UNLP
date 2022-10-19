@@ -7,32 +7,32 @@ from src.decoradores.login import login_requerido
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
 
-@api_blueprint.route("/club/info")
+@api_blueprint.route("/club/info", methods=["GET"])
 def obtener_info():
     """Obtiene el json con la informacion de contacto y lo retorna"""
     return configuracion_sistema.info_contacto_json()
 
 
-@api_blueprint.route("/club/disciplinas")
+@api_blueprint.route("/club/disciplinas", methods=["GET"])          
 def obtener_disciplinas():
     """Obtiene el json con todas las disciplinas y lo retorna"""
     return disciplinas.disciplina_json()
 
 
-@api_blueprint.route("/auth")
+@api_blueprint.route("/auth", methods=["POST"])
 def obtener_token():
     """"""
     pass
 
 
-@api_blueprint.route("/me/profile")
+@api_blueprint.route("/me/profile", methods=["GET"])
 @login_requerido
 def obtener_info_usuario():
     """Obtiene el json con todos los datos del usuario logueado en este momento y lo retorna"""
     return usuarios.info_usuario_logueado()
 
 
-@api_blueprint.route("/me/disciplinas")
+@api_blueprint.route("/me/disciplinas", methods=["GET"])
 @login_requerido
 def obtener_disciplinas_usuario():
     """Obtiene el json con todas las disciplinas del usuario logueado en este momento y lo retorna"""
