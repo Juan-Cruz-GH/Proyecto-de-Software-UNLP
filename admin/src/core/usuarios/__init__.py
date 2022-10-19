@@ -138,34 +138,28 @@ def buscar_usuario_email(email):
     return usuario
 
 
-def get_datos_diccionario(email):
-    """Retorna un diccionario con todos los datos del usuario logueado con el email enviado por parametro"""
-    usuario = buscar_usuario_email(
-        email
-    )  # es un usuario logueado asi que siempre existe
-    socio = socios.buscar_socio_email(email)
-    if(socio is not None):
-        diccionario = {
-            "user": usuario.username,
-            "email": usuario.email,
-            "number": usuario.id,
-            "document_type": socio.tipo_documento,
-            "document_number": socio.dni,
-            "gender": socio.genero,
-            "gender_other": socio.genero,
-            "address": socio.direccion,
-            "phone": socio.telefono,
-        }
-    else:
-        diccionario = { 
-            "user": usuario.username,
-            "email": usuario.email,
-            "number": usuario.id,
-            "document_type": "?",
-            "document_number": "?",
-            "gender": "?",
-            "gender_other": "?",
-            "address": "?",
-            "phone": "?",
-        }
+def get_datos_diccionario(id):
+    """Retorna un diccionario con todos los datos del usuario con el id enviado por parametro"""
+    usuario = buscar_usuario(id)
+    socio = socios.buscar_socio(id)  # probablemente erroneo, cuidado
+    if socio is None:
+        return {}
+    if usuario is None:
+        return {}
+    diccionario = {
+        "user": usuario.username,
+        "email": usuario.email,
+        "number": usuario.id,
+        "document_type": socio.tipo_documento,
+        "document_number": socio.dni,
+        "gender": socio.genero,
+        "gender_other": socio.genero,
+        "address": socio.direccion,
+        "phone": socio.telefono,
+    }
     return diccionario
+
+
+def get_disciplinas_diccionario(id):
+    """Retorna un diccionario con todas las disciplinas que realiza el usuario con el id enviado por parametro """
+    pass
