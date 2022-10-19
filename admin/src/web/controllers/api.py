@@ -1,4 +1,4 @@
-from flask import Blueprint, make_response
+from flask import Blueprint, make_response, request
 from src.web.controllers import disciplinas
 from src.web.controllers import configuracion_sistema
 from src.web.controllers import usuarios
@@ -16,9 +16,11 @@ def obtener_disciplinas():
 
 
 @api_blueprint.route("/me/disciplinas", methods=["GET"])  # 1er entrega
-def obtener_disciplinas_usuario(id):
+def obtener_disciplinas_usuario():
     """Obtiene el json con todas las disciplinas del usuario que se envia por parametro y lo retorna"""
-    pass
+    respuesta = make_response(usuarios.disciplinas_usuario(request.headers.get("id")), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
 
 
 @api_blueprint.route("/me/payments", methods=["GET"])  # 1er entrega
@@ -36,7 +38,7 @@ def registrar_pagos():
 @api_blueprint.route("/me/profile", methods=["GET"])  # 2da entrega
 def obtener_info_usuario(id):
     """Obtiene el json con todos los datos del usuario que se envia por parametro y lo retorna"""
-    return usuarios.info_usuario_logueado()
+    return usuarios.info_usuario(id)
 
 
 @api_blueprint.route("/auth", methods=["POST"])  # 2da entrega
