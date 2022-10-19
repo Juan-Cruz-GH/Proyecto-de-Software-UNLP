@@ -159,11 +159,10 @@ def get_datos_diccionario(email):
     return diccionario
 
 def has_permission(user, permission):
+    """Chequea si un usuario posee o no permisos para ingresar a una vista"""
     usuario = buscar_usuario_email(user)
     roles = usuario.roles
     permiso = permisos.buscar_permiso(permission)
-    print(roles)
-    print(permiso)
     for rol in roles:
         if (permiso in rol.permisos):
             return True

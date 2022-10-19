@@ -3,6 +3,7 @@ from src.core import usuarios
 from src.web.controllers import auth
 from src.web.helpers.permission import check_permission
 from src.decoradores.login import login_requerido
+from src.decoradores.permisos import permiso_requerido
 import json
 
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
@@ -14,11 +15,9 @@ def info_usuario_logueado(email):
 
 @usuario_blueprint.route("/")
 @login_requerido
+@permiso_requerido(session=session, tipo_permiso="usuario_index")
 def usuario_index():
     """Esta funcion llama al modulo correspondiente para obtener todos los usuarios paginados."""
-    if (not check_permission(session["user"],"usuario_index")):
-        abort(403)
-    
     page = request.args.get("page", 1, type=int)
     email = (
         request.args.get("busqueda", type=str)

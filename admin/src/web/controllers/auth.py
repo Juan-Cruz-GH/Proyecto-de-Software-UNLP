@@ -26,14 +26,6 @@ def authenticate():
     flash("Sesión iniciada correctamente")
     return redirect(url_for("home"))
 
-@auth_blueprint.post("/authenticated")
-def authenticated(session):
-    usuario = usuarios.buscar_usuario_email(session["user"])
-    if not usuario:
-        return None
-    else: 
-        return usuario
-
 @auth_blueprint.get("/logout")
 def logout():
     session.pop("user", None)
