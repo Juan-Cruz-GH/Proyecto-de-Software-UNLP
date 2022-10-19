@@ -72,18 +72,26 @@
         <td>
           <p class="fw-normal mb-1">No Pago</p>
         </td>
-        {% else %}
-        <td>
-            <p class="fw-normal mb-1">Pago</p>
-        </td>
-        {% endif %}
         <td>
           <a
-            href="#"
+            href="{{url_for('pagos.pagar_cuota',id=pago.id)}}"
             class="btn btn-success"
             >Pagar</a
           >
         </td>
+        {% else %}
+        <td>
+            <p class="fw-normal mb-1">Pago</p>
+        </td>
+        <td>
+          <a
+            href="{{url_for('pagos.generarRecibo',id=pago.id)}}"
+            class="btn btn-success"
+            >Recibo</a
+          >
+        </td>
+        {% endif %}
+        
         <td>
           <a
             href="#"

@@ -1,11 +1,11 @@
+import json
+from flask import Blueprint, render_template, session, request, redirect, flash
+
 from src.core.configuracion_sistema.configuracion_paginado import Configuracion_paginado
-from flask import Blueprint, render_template, session
 from src.core import configuracion_sistema
 from src.core.db import db
-from flask import request, redirect, flash
 from src.decoradores.login import login_requerido
 from src.core import usuarios
-import json
 
 
 configuracion_sistema_blueprint = Blueprint(
@@ -21,6 +21,11 @@ def info_contacto_json():
 @configuracion_sistema_blueprint.get("/")
 @login_requerido
 def configuracion_index():
+    """
+    muestra el modulo de configuracion del sistema con los valores actuales
+    almacenados en la base de datos. Si no existe la tupla en la base de datos
+    se crea automaticamente con una configuracion predeterminada
+    """
     paginado = {"paginado": configuracion_sistema.get_paginado()}
     config = {"config": configuracion_sistema.get_configuracion_general()}
     if config["config"] == None or paginado["paginado"] == None:
@@ -40,11 +45,16 @@ def configuracion_index():
 @configuracion_sistema_blueprint.route("/update", methods=["POST"])
 @login_requerido
 def configuracion_actualizar():
-
+    """
+    Recibe la informacion del formularlio de configuracion_sistema.html.
+    Luego se validan los datos recibidos y si son correctos se actualiza
+    la tupla de configuracion general y la tupla de configuracion
+    paginado
+    """
     paginado = {
         "elementos_pagina": request.form.get("elementos_pagina"),
     }
-    configuraciones = {
+    configuracion = {
         "activar_pagos": request.form.get("activar_pagos"),
         "encabezado_recibos": request.form.get("encabezado_recibos"),
         "informacion_contacto": request.form.get("informacion_contacto"),
@@ -53,10 +63,10 @@ def configuracion_actualizar():
     }
 
     # Sanitizar datos
-    if configuraciones["activar_pagos"] == "pagos activados":
-        configuraciones["activar_pagos"] = True
+    if configuracion["activar_pagos"] == "pagos activados":
+        configuracion["activar_pagos"] = True
     else:
-        configuraciones["activar_pagos"] = False
+        configuracion["activar_pagos"] = False
     validar = True
     hubo_error = False
     validar, mensaje = configuracion_sistema.validar_digito(
@@ -66,43 +76,41 @@ def configuracion_actualizar():
         flash("Elementos por página: " + mensaje)
         hubo_error = True
 
-    validar, mensaje = configuracion_sistema.validar_digito(
-        configuraciones["cuota_base"]
-    )
+    validar, mensaje = configuracion_sistema.validar_digito(configuracion["cuota_base"])
     if not validar:
         flash("El valor de la cuota " + mensaje)
         hubo_error = True
 
     validar, mensaje = configuracion_sistema.validar_digito(
-        configuraciones["porcentaje_recargo"]
+        configuracion["porcentaje_recargo"]
     )
     if not validar:
         flash("El valor de porcentaje de recargo " + mensaje)
         hubo_error = True
 
     validar, mensaje = configuracion_sistema.validar_positivo(
-        configuraciones["porcentaje_recargo"]
+        configuracion["porcentaje_recargo"]
     )
     if not validar:
         flash("El valor de porcentaje de recargo " + mensaje)
         hubo_error = True
 
     validar, mensaje = configuracion_sistema.validar_positivo(
-        configuraciones["cuota_base"]
+        configuracion["cuota_base"]
     )
     if not validar:
         flash("El valor de la cuota " + mensaje)
         hubo_error = True
 
     validar, mensaje = configuracion_sistema.validar_cadena(
-        configuraciones["informacion_contacto"]
+        configuracion["informacion_contacto"]
     )
     if not validar:
         flash("Informacion de contacto: " + mensaje)
         hubo_error = True
 
     validar, mensaje = configuracion_sistema.validar_cadena(
-        configuraciones["encabezado_recibos"]
+        configuracion["encabezado_recibos"]
     )
     if not validar:
         flash("Encabezado de los recibos: " + mensaje)
@@ -111,5 +119,5 @@ def configuracion_actualizar():
     if hubo_error:
         return redirect("/configuracion_del_sistema/")
 
-    config = configuracion_sistema.modificar_configuracion(configuraciones, paginado)
+    config = configuracion_sistema.modificar_configuracion(configuracion, paginado)
     return redirect("/configuracion_del_sistema/")

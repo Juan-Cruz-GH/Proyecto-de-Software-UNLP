@@ -37,10 +37,11 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(rol_blueprint)
     app.register_blueprint(permiso_blueprint)
     app.register_blueprint(auth_blueprint)
+    csrf.exempt(api_blueprint)
     app.register_blueprint(api_blueprint)
 
     Session(app)
-    
+
     with app.app_context():
         init_db(app)
 
