@@ -70,17 +70,6 @@ def find_user_by_mail_and_pass(email, password):
         return usuario
 
 
-def validar_inputs(email, password):
-    """Esta funcion valida que los inputs sean del tipo correcto. (falta comprobar password mediante hash)"""
-    regex_email = "^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$"
-    if not (email != "" and password != ""):
-        return False, "Todos los datos deben estar completos"
-    elif not (re.search(regex_email, email)):
-        return False, "El email debe ser valido"
-    else:
-        return True, "Credenciales validas"
-
-
 def validar_estado(estado):
     """Esta funcion valida el dato enviado al modificar el estado de un usuario"""
     return estado == "activo"
@@ -161,18 +150,15 @@ def get_datos_diccionario(id):
     return diccionario
 
 
-def get_disciplinas_diccionario(id):
-    """Retorna un diccionario con todas las disciplinas que realiza el usuario con el id enviado por parametro """
-    pass
-
 def agregar_roles(usuario, roles_usuario):
     for nombre_rol, valor in roles_usuario.items():
-        if valor == 'on':
+        if valor == "on":
             rol = roles.buscar_rol(nombre_rol)
             usuario.roles.append(rol)
     db.session.commit()
 
-#def verificar_rol_usuario(id):
+
+# def verificar_rol_usuario(id):
 #    usuario = buscar_usuario(id)
 #    rol_admin = roles.buscar_rol('Administrador')
 #    if(rol_admin in usuario.roles):

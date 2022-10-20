@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, session
 from src.core import usuarios
 from src.decoradores.login import login_requerido
+from src.web.controllers.validators import validator_usuario
 import json
 
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
@@ -71,6 +72,10 @@ def usuario_add():
         "ROL_ADMINISTRADOR": request.form.get("rol_administrador"),
         "ROL_OPERADOR": request.form.get("rol_operador")
     }
+    validacion_inputs, mensaje = validator_usuario.validar_inputs(data_usuario["email"], data_usuario["password"])
+    if validacion_inputs == False:
+        flash(mensaje)
+        return redirect("/usuarios/alta-usuario")
     validacion, mensaje = usuarios.validar_datos_existentes(
         data_usuario["email"], data_usuario["username"], "alta"
     )

@@ -2,7 +2,7 @@ import json
 from flask import Blueprint, render_template, request, redirect, flash, session
 from src.core import disciplinas
 from src.decoradores.login import login_requerido
-from validators import validator_disciplinas
+from src.web.controllers.validators import validator_disciplinas
 
 disciplina_blueprint = Blueprint("disciplinas", __name__, url_prefix="/disciplinas")
 
