@@ -1,5 +1,5 @@
-from src.core.socios import buscar_socio
 from src.core import configuracion_sistema
+from src.core.socios import buscar_socio
 from src.core.disciplinas.disciplinas import Disciplina
 from src.core.db import db
 

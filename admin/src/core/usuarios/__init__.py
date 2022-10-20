@@ -1,10 +1,9 @@
-from src.core.db import db
-from src.core.usuarios.usuarios import Usuario
 from src.core import configuracion_sistema
 from src.core import socios
 from src.core import roles
+from src.core.usuarios.usuarios import Usuario
+from src.core.db import db
 from werkzeug.security import check_password_hash, generate_password_hash
-import re
 
 
 def listar_usuarios(page, email=None, tipo=None):

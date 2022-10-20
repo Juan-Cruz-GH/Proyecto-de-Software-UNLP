@@ -1,13 +1,8 @@
-import json
-from flask import Blueprint, render_template, session, request, redirect, flash
-
-from src.core.configuracion_sistema.configuracion_paginado import Configuracion_paginado
+from flask import Blueprint, render_template, request, redirect, flash
 from src.core import configuracion_sistema
-from src.core.db import db
-from src.decoradores.login import login_requerido
-from src.core import usuarios
 from src.web.controllers.validators import validator_configuracion
-
+from src.decoradores.login import login_requerido
+import json
 
 configuracion_sistema_blueprint = Blueprint(
     "configuracion_sistema", __name__, url_prefix="/configuracion_del_sistema"

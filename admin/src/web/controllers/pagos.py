@@ -1,14 +1,10 @@
-import json
-
-from flask import Blueprint, render_template, request, session, Response
-
+from flask import Blueprint, render_template, request, Response
 from src.core import configuracion_sistema
 from src.core import socios
 from src.core import pagos
-from src.core import usuarios
 from src.exportaciones import generarReciboPDF
 from src.decoradores.login import login_requerido
-
+import json
 
 pago_blueprint = Blueprint("pagos", __name__, url_prefix="/pagos")
 

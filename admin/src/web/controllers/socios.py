@@ -1,9 +1,9 @@
 from flask import Blueprint, session, render_template, request, redirect, flash
 from src.core import socios
 from src.core import pagos
-from src import exportaciones
 from src.core import disciplinas
 from src.core import usuarios
+from src import exportaciones
 from src.web.controllers.validators import validator_socio
 from src.decoradores.login import login_requerido
 import json
@@ -13,9 +13,10 @@ socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
 def disciplinas_socio(id):
     """Devuelve un json con todas las disciplinas que realiza el socio con id pasado por parametro"""
-    if(socios.disciplinas_socio_diccionario(id) is None):
+    if socios.disciplinas_socio_diccionario(id) is None:
         return None
     return json.dumps(socios.disciplinas_socio_diccionario(id))
+
 
 @socio_blueprint.route("/")
 @login_requerido

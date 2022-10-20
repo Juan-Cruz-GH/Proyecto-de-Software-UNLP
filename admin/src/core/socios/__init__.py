@@ -1,7 +1,7 @@
+from src.core import configuracion_sistema
 from src.core.socios.socios import Socio
-from src.core import configuracion_sistema
 from src.core.db import db
-from src.core import configuracion_sistema
+
 
 def estaHabilitado(id):
     """Esta funcion devuelve si el socio esta habilitado o no"""
