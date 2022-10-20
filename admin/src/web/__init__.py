@@ -25,7 +25,6 @@ def create_app(env="development", static_folder="static"):
 
     @app.get("/")
     @login_requerido
-    #@permiso_requerido
     def home():
         return redirect("/socios/")
 
