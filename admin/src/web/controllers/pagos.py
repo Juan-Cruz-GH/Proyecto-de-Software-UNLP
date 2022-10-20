@@ -53,7 +53,6 @@ def pagos_index():
     """Esta funcion llama al modulo pagos para listar todos los socios"""
     kwargs = {
         "pagos": pagos.listar_pagos(),
-        "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
     return render_template("socios/pagos.html", **kwargs)
 
@@ -66,7 +65,6 @@ def pagos_socios(id):
     kwargs = {
         "pagos": pagos.listar_pagos_socio(id, page),
         "id_socio": id,
-        "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
     return render_template("pagos/pagos_socio.html", **kwargs)
 

@@ -27,6 +27,8 @@ def authenticate():
         flash("Usted no tiene permitido acceder al sistema", "error")
         return redirect(url_for("auth.login"))
     session["user"] = user.email
+    session["nombre"] = user.nombre
+    session["apellido"] = user.apellido
     flash("Sesión iniciada correctamente")
     return redirect(url_for("home"))
 
