@@ -15,35 +15,42 @@ def info_usuario_logueado(email):
 
 @usuario_blueprint.route("/")
 @login_requerido
-@permiso_requerido(session=session, tipo_permiso="usuario_index")
+#@permiso_requerido(session=session, tipo_permiso="usuario_index")
 def usuario_index():
     """Esta funcion llama al modulo correspondiente para obtener todos los usuarios paginados."""
-    page = request.args.get("page", 1, type=int)
-    email = (
-        request.args.get("busqueda", type=str)
-        if request.args.get("busqueda", type=str) != ""
-        else None
-    )
-    tipo = (
-        request.args.get("tipo", type=str)
-        if request.args.get("tipo", type=str) != ""
-        else None
-    )
-    kwargs = {
-        "usuarios": usuarios.listar_usuarios(page, email, tipo),
-        "email": email,
-        "tipo": tipo,
-        "usuario": usuarios.buscar_usuario_email(session["user"]),
-    }
-    return render_template("usuarios/index.html", **kwargs)
+
+    if (check_permission(session["user"], "usuario_index")):
+        page = request.args.get("page", 1, type=int)
+        email = (
+            request.args.get("busqueda", type=str)
+            if request.args.get("busqueda", type=str) != ""
+            else None
+        )
+        tipo = (
+            request.args.get("tipo", type=str)
+            if request.args.get("tipo", type=str) != ""
+            else None
+        )
+        kwargs = {
+            "usuarios": usuarios.listar_usuarios(page, email, tipo),
+            "email": email,
+            "tipo": tipo,
+            "usuario": usuarios.buscar_usuario_email(session["user"]),
+        }
+        return render_template("usuarios/index.html", **kwargs)
+    else:
+        return abort(403)
 
 
 @usuario_blueprint.route("/alta-usuario")
 @login_requerido
 def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
-    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
-    return render_template("usuarios/alta_usuarios.html", **kwargs)
+    if (check_permission(session["user"], "usuario_new")):
+        kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
+        return render_template("usuarios/alta_usuarios.html", **kwargs)
+    else:
+        return abort(403)
 
 
 @usuario_blueprint.route("/<id>")
@@ -67,6 +74,10 @@ def usuario_add():
         "username": request.form.get("username"),
         "password": request.form.get("password"),
     }
+    data_rol_usuario = {
+        "ROL_ADMINISTRADOR": request.form.get("rol_administrador"),
+        "ROL_OPERADOR": request.form.get("rol_operador")
+    }
     validacion, mensaje = usuarios.validar_datos_existentes(
         data_usuario["email"], data_usuario["username"], "alta"
     )
@@ -75,6 +86,7 @@ def usuario_add():
         return redirect("/usuarios/alta-usuario")
     else:
         usuario = usuarios.agregar_usuario(data_usuario)
+        usuarios.agregar_roles(usuario, data_rol_usuario)
     # generacion_pagos = pagos.generar_pagos(socio.id)
     return redirect("/usuarios")
 

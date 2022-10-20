@@ -3,6 +3,7 @@ from src.core.db import db
 from src.core.usuarios.usuarios import Usuario
 from src.core import permisos
 from src.core.roles.roles import Rol
+from src.core import roles
 from src.core import configuracion_sistema
 from werkzeug.security import check_password_hash, generate_password_hash
 import re
@@ -158,13 +159,10 @@ def get_datos_diccionario(email):
     }
     return diccionario
 
-def has_permission(user, permission):
-    """Chequea si un usuario posee o no permisos para ingresar a una vista"""
-    usuario = buscar_usuario_email(user)
-    roles = usuario.roles
-    permiso = permisos.buscar_permiso(permission)
-    for rol in roles:
-        if (permiso in rol.permisos):
-            return True
-    return False
-        
+
+def agregar_roles(usuario, roles_usuario):
+    for nombre_rol, valor in roles_usuario.items():
+        if valor == 'on':
+            rol = roles.buscar_rol(nombre_rol)
+            usuario.roles.append(rol)
+    db.session.commit()
