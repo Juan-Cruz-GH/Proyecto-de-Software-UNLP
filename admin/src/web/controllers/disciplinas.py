@@ -2,7 +2,7 @@ import json
 from flask import Blueprint, render_template, request, redirect, flash, session
 from src.core import disciplinas
 from src.decoradores.login import login_requerido
-from src.core import usuarios
+from validators import validator_disciplinas
 
 disciplina_blueprint = Blueprint("disciplinas", __name__, url_prefix="/disciplinas")
 
@@ -53,7 +53,7 @@ def disciplina_add():
         "costo": request.form.get("costo"),
         "habilitada": (request.form.get("habilitada") == "Si"),
     }
-    resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
+    resultado, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
     if resultado:
         resultado, mensaje = disciplinas.validar_disciplina_repetida(
             data_disciplina["nombre"], data_disciplina["categoria"], "alta"
@@ -82,7 +82,7 @@ def disciplina_update():
         "costo": request.form.get("costo"),
         "habilitada": (request.form.get("habilitada") == "Si"),
     }
-    resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
+    resultado, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
     if resultado:
         resultado, mensaje = disciplinas.validar_disciplina_repetida(
             data_disciplina["nombre"],
