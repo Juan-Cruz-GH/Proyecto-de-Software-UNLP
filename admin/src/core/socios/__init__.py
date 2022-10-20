@@ -6,8 +6,27 @@ from src.core import configuracion_sistema
 
 
 def estaHabilitado(id):
-    '''Esta funcion devuelve si el socio esta habilitado o no'''
+    """Esta funcion devuelve si el socio esta habilitado o no"""
     return Socio.query.get(id).activo
+
+
+def disciplinas_socio_diccionario(id):
+    """Devuelve una lista de diccionarios con todas las disciplinas que realiza el socio con id pasado por parametro"""
+    socio = buscar_socio(id)
+    if socio is None:
+        return [{}]
+    lista = []
+    for disciplina in socio.disciplinas:
+        fila = disciplina.__dict__
+        dias_horarios = fila["horarios"].split(" de ")
+        diccionario = {
+            "name": fila["nombre"],
+            "days": dias_horarios[0],
+            "time": dias_horarios[1],
+            "teacher": fila["instructores"],
+        }
+        lista.append(diccionario)
+    return lista
 
 
 def todos_los_socios(apellido=None, tipo=None):

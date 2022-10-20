@@ -5,9 +5,14 @@ from src import exportaciones
 from src.core import disciplinas
 from src.core import usuarios
 from src.decoradores.login import login_requerido
+import json
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
+
+def disciplinas_socio(id):
+    """Devuelve un json con todas las disciplinas que realiza el socio con id pasado por parametro"""
+    return json.dumps(socios.disciplinas_socio_diccionario(id))
 
 @socio_blueprint.route("/")
 @login_requerido

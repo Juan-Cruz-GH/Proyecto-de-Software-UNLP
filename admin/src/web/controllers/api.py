@@ -4,6 +4,7 @@ from src.web.controllers import disciplinas
 
 from src.web.controllers import configuracion_sistema
 from src.web.controllers import usuarios
+from src.web.controllers import socios
 from src.web.controllers import pagos
 from src.decoradores.login import login_requerido
 
@@ -22,7 +23,7 @@ def obtener_disciplinas():
 def obtener_disciplinas_usuario():
     """Obtiene el json con todas las disciplinas del usuario que se envia por parametro y lo retorna"""
     respuesta = make_response(
-        usuarios.disciplinas_usuario(request.headers.get("id")), 200
+        socios.disciplinas_socio(request.headers.get("id")), 200
     )
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
