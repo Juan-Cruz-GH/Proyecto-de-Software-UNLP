@@ -45,6 +45,8 @@ def create_app(env="development", static_folder="static"):
     with app.app_context():
         init_db(app)
 
+    app.register_error_handler(401, handlers.not_authenticated_error)
+    app.register_error_handler(403, handlers.not_authorized_error)
     app.register_error_handler(404, handlers.not_found_error)
 
     @app.teardown_appcontext

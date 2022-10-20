@@ -1,4 +1,4 @@
-from flask import session, redirect, url_for
+from flask import session, abort
 from functools import wraps
 
 
@@ -9,7 +9,7 @@ def login_requerido(f):
         try:
             session["user"]
         except KeyError:
-            return redirect(url_for("auth.login"))
+            abort(401)
         return f(*args, **kwargs)
 
     return decorated_function

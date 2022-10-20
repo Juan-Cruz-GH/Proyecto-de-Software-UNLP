@@ -7,21 +7,20 @@ auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
 @auth_blueprint.get("/")
 def login():
-    '''Esta funcion retorna el template para logearse'''
+    """Esta funcion retorna el template para logearse"""
     return render_template("auth/login.html")
 
 
 @auth_blueprint.post("/authenticate")
 def authenticate():
-    '''Esta funcion realiza la autenticacion de un usuario'''
+    """Esta funcion realiza la autenticacion de un usuario"""
     params = request.form
-    user = usuarios.find_user_by_mail_and_pass(params["email"], params["password"])
     validacion, mensaje = usuarios.validar_inputs(params["email"], params["password"])
-
     if not validacion:
         flash(mensaje, "error")
-        return redirect(url_for("auth.login"))
-    elif not user:
+        return redirect(url_for("auth.login"))    
+    user = usuarios.find_user_by_mail_and_pass(params["email"], params["password"])
+    if user is None:
         flash("Credenciales invalidas", "error")
         return redirect(url_for("auth.login"))
     elif user.activo == False:
@@ -36,7 +35,7 @@ def authenticate():
 
 @auth_blueprint.get("/logout")
 def logout():
-    '''Esta funcion realiza el logout de un usuario'''
+    """Esta funcion realiza el logout de un usuario"""
     session.pop("user", None)
     flash("Sesión cerrada correctamente")
     return redirect(url_for("home"))
