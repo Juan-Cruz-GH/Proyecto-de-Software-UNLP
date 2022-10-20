@@ -165,6 +165,13 @@ def get_disciplinas_diccionario(id):
     """Retorna un diccionario con todas las disciplinas que realiza el usuario con el id enviado por parametro """
     pass
 
+def agregar_roles(usuario, roles_usuario):
+    for nombre_rol, valor in roles_usuario.items():
+        if valor == 'on':
+            rol = roles.buscar_rol(nombre_rol)
+            usuario.roles.append(rol)
+    db.session.commit()
+
 #def verificar_rol_usuario(id):
 #    usuario = buscar_usuario(id)
 #    rol_admin = roles.buscar_rol('Administrador')

@@ -35,7 +35,6 @@ def usuario_index():
         "usuarios": usuarios.listar_usuarios(page, email, tipo),
         "email": email,
         "tipo": tipo,
-        "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
     return render_template("usuarios/index.html", **kwargs)
 
@@ -44,8 +43,7 @@ def usuario_index():
 @login_requerido
 def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
-    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
-    return render_template("usuarios/alta_usuarios.html", **kwargs)
+    return render_template("usuarios/alta_usuarios.html")
 
 
 @usuario_blueprint.route("/<id>")
@@ -69,6 +67,10 @@ def usuario_add():
         "username": request.form.get("username"),
         "password": request.form.get("password"),
     }
+    data_rol_usuario = {
+        "ROL_ADMINISTRADOR": request.form.get("rol_administrador"),
+        "ROL_OPERADOR": request.form.get("rol_operador")
+    }
     validacion, mensaje = usuarios.validar_datos_existentes(
         data_usuario["email"], data_usuario["username"], "alta"
     )
@@ -77,6 +79,7 @@ def usuario_add():
         return redirect("/usuarios/alta-usuario")
     else:
         usuario = usuarios.agregar_usuario(data_usuario)
+        usuarios.agregar_roles(usuario, data_rol_usuario)
     # generacion_pagos = pagos.generar_pagos(socio.id)
     return redirect("/usuarios")
 
