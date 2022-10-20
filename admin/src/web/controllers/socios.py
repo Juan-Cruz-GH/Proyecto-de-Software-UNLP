@@ -4,6 +4,7 @@ from src.core import pagos
 from src import exportaciones
 from src.core import disciplinas
 from src.core import usuarios
+from src.web.controllers.validators import validator_socio
 from src.decoradores.login import login_requerido
 import json
 
@@ -78,7 +79,7 @@ def socio_add():
     if validacion == False:
         flash(mensaje)
         return redirect("/socios/alta-socio")
-    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
+    validacion_inputs, mensaje = validator_socio.validar_inputs(data_socio)
     if not validacion_inputs:
         flash(mensaje)
         return redirect("/socios/alta-socio")
@@ -109,7 +110,7 @@ def socio_update():
     if not validacion_datos_existentes:
         flash(mensaje)
         return redirect("/socios/" + data_socio["id"])
-    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
+    validacion_inputs, mensaje = validator_socio.validar_inputs(data_socio)
     if not validacion_inputs:
         flash(mensaje)
         return redirect("/socios/" + data_socio["id"])
