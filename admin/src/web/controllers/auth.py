@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, flash, url_for, session, redirect
 from src.core import usuarios
+from src.web.controllers.validators import validator_usuario
 
 
 auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")
@@ -15,7 +16,7 @@ def login():
 def authenticate():
     """Esta funcion realiza la autenticacion de un usuario"""
     params = request.form
-    validacion, mensaje = usuarios.validar_inputs(params["email"], params["password"])
+    validacion, mensaje = validator_usuario.validar_inputs(params["email"], params["password"])
     if not validacion:
         flash(mensaje, "error")
         return redirect(url_for("auth.login"))    
@@ -38,4 +39,4 @@ def logout():
     """Esta funcion realiza el logout de un usuario"""
     session.pop("user", None)
     flash("Sesión cerrada correctamente")
-    return redirect(url_for("home"))
+    return redirect(url_for("auth.login"))
