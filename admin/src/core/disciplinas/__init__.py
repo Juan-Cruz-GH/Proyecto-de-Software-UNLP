@@ -11,7 +11,7 @@ def relacionar_socio_disciplina(idDisciplina, idSocio):
     db.session.commit()
 
 
-def estaHabilitada(id):
+def esta_habilitada(id):
     return buscar_disciplina(id).habilitada
 
 

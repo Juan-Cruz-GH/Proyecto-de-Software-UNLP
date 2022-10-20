@@ -3,7 +3,7 @@ from src.core.socios.socios import Socio
 from src.core.db import db
 
 
-def estaHabilitado(id):
+def esta_habilitado(id):
     """Esta funcion devuelve si el socio esta habilitado o no"""
     return Socio.query.get(id).activo
 
