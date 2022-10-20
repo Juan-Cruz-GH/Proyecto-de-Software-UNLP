@@ -22,6 +22,8 @@ def obtener_disciplinas():
 @api_blueprint.route("/me/disciplinas", methods=["GET"])  # 1er entrega
 def obtener_disciplinas_usuario():
     """Obtiene el json con todas las disciplinas del usuario que se envia por parametro y lo retorna"""
+    if(socios.disciplinas_socio(request.headers.get("id")) is None):
+        return make_response({"Error": "El usuario no existe"}, 400)
     respuesta = make_response(
         socios.disciplinas_socio(request.headers.get("id")), 200
     )

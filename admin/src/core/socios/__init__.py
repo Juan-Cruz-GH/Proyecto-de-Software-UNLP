@@ -14,7 +14,7 @@ def disciplinas_socio_diccionario(id):
     """Devuelve una lista de diccionarios con todas las disciplinas que realiza el socio con id pasado por parametro"""
     socio = buscar_socio(id)
     if socio is None:
-        return [{}]
+        return None
     lista = []
     for disciplina in socio.disciplinas:
         fila = disciplina.__dict__
