@@ -4,6 +4,38 @@ from src.core.disciplinas.disciplinas import Disciplina
 from src.core.db import db
 
 
+def agregar_disciplina(data):
+    """Dar de alta una disciplina en la BD"""
+    disciplina = Disciplina(**data)
+    db.session.add(disciplina)
+    db.session.commit()
+    return disciplina
+
+
+def buscar_disciplina(id):
+    """Devuelve la disciplina con el id indicado"""
+    return Disciplina.query.get(id)
+
+
+def modificar_disciplina(data):
+    """Modificar datos de una disciplina en la BD"""
+    disciplina = Disciplina.query.get(data["id"])
+    disciplina.nombre = data["nombre"]
+    disciplina.categoria = data["categoria"]
+    disciplina.instructores = data["instructores"]
+    disciplina.horarios = data["horarios"]
+    disciplina.costo = data["costo"]
+    disciplina.habilitada = data["habilitada"]
+    db.session.commit()
+    return disciplina
+
+
+def eliminar_disciplina(id):
+    """Dar de baja una disciplina en la BD buscandola por su id que seguro existe"""
+    db.session.delete(Disciplina.query.get(id))
+    db.session.commit()
+
+
 def relacionar_socio_disciplina(idDisciplina, idSocio):
     disciplina = buscar_disciplina(idDisciplina)
     socio = buscar_socio(idSocio)
@@ -33,11 +65,12 @@ def listar_disciplinas_diccionario():
 
 
 def todas_las_disciplinas():
-    nombres = db.session.query(Disciplina.nombre.distinct()).all()
-    return nombres
+    """Devuelve los nombres de todas las disciplinas"""
+    return db.session.query(Disciplina.nombre.distinct()).all()
 
 
 def categorias_de_cada_disciplina():
+    """Devuelve todas las categorias entre todas las disciplinas"""
     disciplinas = todas_las_disciplinas()
     todas_las_categorias = {}
     for disciplina in disciplinas:
@@ -56,38 +89,6 @@ def listar_disciplinas(page):
     return Disciplina.query.paginate(
         page, per_page=configuracion_sistema.get_paginado().elementos_pagina
     )
-
-
-def buscar_disciplina(id):
-    """Devuelve la disciplina con el id indicado"""
-    return Disciplina.query.get(id)
-
-
-def agregar_disciplina(data):
-    """Dar de alta una disciplina en la BD"""
-    disciplina = Disciplina(**data)
-    db.session.add(disciplina)
-    db.session.commit()
-    return disciplina
-
-
-def eliminar_disciplina(id):
-    """Dar de baja una disciplina en la BD buscandola por su id que seguro existe"""
-    db.session.delete(Disciplina.query.get(id))
-    db.session.commit()
-
-
-def modificar_disciplina(data):
-    """Modificar datos de una disciplina en la BD"""
-    disciplina = Disciplina.query.get(data["id"])
-    disciplina.nombre = data["nombre"]
-    disciplina.categoria = data["categoria"]
-    disciplina.instructores = data["instructores"]
-    disciplina.horarios = data["horarios"]
-    disciplina.costo = data["costo"]
-    disciplina.habilitada = data["habilitada"]
-    db.session.commit()
-    return disciplina
 
 
 def validar_disciplina_repetida(nombre, categoria, accion, id=None):
