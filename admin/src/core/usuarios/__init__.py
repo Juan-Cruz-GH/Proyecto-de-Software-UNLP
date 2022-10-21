@@ -1,12 +1,5 @@
-<<<<<<< HEAD
-from src.core.roles.roles import Usuario_Rol
-from src.core.db import db
-from src.core.usuarios.usuarios import Usuario
+from src.core.roles.roles import Usuario_Rol, Rol
 from src.core import permisos
-from src.core.roles.roles import Rol
-from src.core import roles
-=======
->>>>>>> development
 from src.core import configuracion_sistema
 from src.core import socios
 from src.core import roles
@@ -158,12 +151,6 @@ def get_datos_diccionario(id):
 
 def agregar_roles(usuario, roles_usuario):
     for nombre_rol, valor in roles_usuario.items():
-<<<<<<< HEAD
-        if valor == 'on':
-            rol = roles.buscar_rol(nombre_rol)
-            usuario.roles.append(rol)
-    db.session.commit()
-=======
         if valor == "on":
             rol = roles.buscar_rol(nombre_rol)
             usuario.roles.append(rol)
@@ -177,4 +164,3 @@ def agregar_roles(usuario, roles_usuario):
 #        return True
 #    else:
 #        return False
->>>>>>> development
