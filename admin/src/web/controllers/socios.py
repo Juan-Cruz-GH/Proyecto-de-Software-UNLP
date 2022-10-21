@@ -85,7 +85,7 @@ def socio_add():
         flash(mensaje)
         return redirect("/socios/alta-socio")
     socio = socios.agregar_socio(data_socio)
-    generacion_pagos = pagos.generar_pagos(socio.id)
+    pagos.generar_pagos(socio.id)
     return redirect("/socios")
 
 
@@ -115,7 +115,7 @@ def socio_update():
     if not validacion_inputs:
         flash(mensaje)
         return redirect("/socios/" + data_socio["id"])
-    socio = socios.modificar_socio(data_socio)
+    socios.modificar_socio(data_socio)
     return redirect("/socios")
 
 
@@ -123,7 +123,7 @@ def socio_update():
 @login_requerido
 def socio_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un socio."""
-    socio = socios.eliminar_socio(id)
+    socios.eliminar_socio(id)
     return redirect("/socios")
 
 
@@ -169,7 +169,6 @@ def exportar_pdf():
 @login_requerido
 def inscripcion_socio(id):
     """Esta funcion retorna el formulario para la inscripcion del socio a una disciplina"""
-    disciplinas2 = ["futbol", "basquet"]
     kwargs = {
         "id_socio": id,
         "disciplinas": disciplinas.todas_las_disciplinas(),
@@ -185,10 +184,9 @@ def add_inscripcion():
     """Esta funcion realiza la inscripcion de un socio a una disciplina"""
     id_socio = request.form.get("id_socio")
     id_disciplina = request.form.get("categoria")
-    socioActivo = socios.esta_habilitado(id_socio)
-    disciplinaActiva = disciplinas.esta_habilitada(id_disciplina)
-    if socioActivo and disciplinaActiva:
+    if socios.esta_habilitado(id_socio) and disciplinas.esta_habilitada(id_disciplina):
         disciplinas.relacionar_socio_disciplina(id_disciplina, id_socio)
+        flash("Socio inscripto correctamente.")
         return redirect("/socios/")
     else:
         flash("La disciplina o el socio no están habilitados.")
