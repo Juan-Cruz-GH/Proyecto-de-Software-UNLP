@@ -20,14 +20,9 @@ def listar_pagos_diccionario(id):
 
 def pagar_con_api(diccionario, id):
     socio = socios.buscar_socio(id)
-    print(socio)
-
     if socio == None:
         return False, "El socio no existe"
-
     for pago in socio.pagos:
-        print(calcular_cuota(pago.id, pago.socio.id))
-        print(diccionario["amount"])
         if (
             pago.nro_cuota == diccionario["month"]
             and pago.año_cuota == datetime.now().year

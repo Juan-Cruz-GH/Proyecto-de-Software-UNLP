@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, Response
 from src.core import configuracion_sistema
 from src.core import socios
 from src.core import pagos
-from src.web.controllers.validators.validators_genericos import validar_entero
+from src.web.controllers.validators.validator_configuracion import es_entero
 from src.exportaciones import generarReciboPDF
 from src.decoradores.login import login_requerido
 import json
@@ -14,7 +14,7 @@ pago_blueprint = Blueprint("pagos", __name__, url_prefix="/pagos")
 def pagos_json():
     """Retorna el json con todos los pagos del socio logeado"""
     id = request.headers.get("id")
-    if validar_entero(id):
+    if es_entero(id):
         return json.dumps(pagos.listar_pagos_diccionario(id))
     return generar_respuesta(
         "{'error': el id enviado en el header debe ser un entero}", 400, "text"
@@ -31,7 +31,7 @@ def pagar_json(json):
         )
 
     id = request.headers.get("id")
-    if not validar_entero(id):
+    if not es_entero(id):
         return generar_respuesta(
             "{'error': el id enviado en el header debe ser un entero}", 400, "text"
         )
