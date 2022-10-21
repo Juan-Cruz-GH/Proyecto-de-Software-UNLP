@@ -6,6 +6,46 @@ from src.core.db import db
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
+def agregar_usuario(data):
+    """Esta funcion se utiliza para dar de alta un usuario"""
+    usuario = Usuario(**data)
+    usuario.password = generate_password_hash(usuario.password, method="sha256")
+    db.session.add(usuario)
+    db.session.commit()
+    return usuario
+
+
+def buscar_usuario(id):
+    """Esta funcion busca un usuario por su id"""
+    usuario = Usuario.query.get(id)
+    return usuario
+
+
+def buscar_usuario_email(email):
+    """Esta funcion retorna a un usuario buscado por su email"""
+    usuario = Usuario.query.filter_by(email=email).first()
+    return usuario
+
+
+def modificar_usuario(data):
+    """Esta funcion realiza la modificacion de los datos de un usuario"""
+    usuario = Usuario.query.get(data["id"])
+    usuario.nombre = data["nombre"]
+    usuario.apellido = data["apellido"]
+    usuario.email = data["email"]
+    usuario.activo = data["activo"]
+    usuario.username = data["username"]
+    db.session.commit()
+    return usuario
+
+
+def eliminar_usuario(id):
+    """Esta funcion realiza la eliminacion de un usuario de la BD"""
+    usuario = Usuario.query.get(id)
+    db.session.delete(usuario)
+    db.session.commit()
+
+
 def listar_usuarios(page, email=None, tipo=None):
     """Esta funcion devuelve todos los usuarios de forma paginada segun la configuracion, y segun si se esta realizando una busqueda."""
     if (email is not None) and (tipo is not None):
@@ -45,21 +85,6 @@ def listar_usuarios(page, email=None, tipo=None):
     return usuarios
 
 
-def agregar_usuario(data):
-    """Esta funcion se utiliza para dar de alta un usuario"""
-    usuario = Usuario(**data)
-    usuario.password = generate_password_hash(usuario.password, method="sha256")
-    db.session.add(usuario)
-    db.session.commit()
-    return usuario
-
-
-def buscar_usuario(id):
-    """Esta funcion busca un usuario por su id"""
-    usuario = Usuario.query.get(id)
-    return usuario
-
-
 def find_user_by_mail_and_pass(email, password):
     """esta funcion verifica que el usuario ingresado en login exista"""
     usuario = Usuario.query.filter(Usuario.email == email).first()
@@ -75,9 +100,7 @@ def validar_estado(estado):
 
 
 def validar_datos_existentes(email, username, accion, id=None):
-    """Esta funcion valida que el dni o el email ingresados para dar de alta o modificar un usuario no existan.
-    Si el dni existe se devuelve 1, si el email existe se devuelve 2, en caso de que no exista ningun se
-    devuelve 3."""
+    """Esta funcion valida que el dni o el email ingresados para dar de alta o modificar un usuario no existan."""
     if accion == "alta":
         email_existente = Usuario.query.filter_by(email=email).first()
         username_existente = Usuario.query.filter_by(username=username).first()
@@ -100,31 +123,6 @@ def validar_datos_existentes(email, username, accion, id=None):
             return False, "El Nombre de Usuario ya esta cargado en el sistema."
         else:
             return True, "Ambos son validos"
-
-
-def modificar_usuario(data):
-    """Esta funcion realiza la modificacion de los datos de un usuario"""
-    usuario = Usuario.query.get(data["id"])
-    usuario.nombre = data["nombre"]
-    usuario.apellido = data["apellido"]
-    usuario.email = data["email"]
-    usuario.activo = data["activo"]
-    usuario.username = data["username"]
-    db.session.commit()
-    return usuario
-
-
-def eliminar_usuario(id):
-    """Esta funcion realiza la eliminacion de un usuario de la BD"""
-    usuario = Usuario.query.get(id)
-    db.session.delete(usuario)
-    db.session.commit()
-
-
-def buscar_usuario_email(email):
-    """Esta funcion retorna a un usuario buscado por su email"""
-    usuario = Usuario.query.filter_by(email=email).first()
-    return usuario
 
 
 def get_datos_diccionario(id):
