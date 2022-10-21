@@ -1,12 +1,8 @@
-import json
-from flask import Blueprint, render_template, session, request, redirect, flash
-
-from src.core.configuracion_sistema.configuracion_paginado import Configuracion_paginado
+from flask import Blueprint, render_template, request, redirect, flash
 from src.core import configuracion_sistema
-from src.core.db import db
+from src.web.controllers.validators import validator_configuracion
 from src.decoradores.login import login_requerido
-from src.core import usuarios
-
+import json
 
 configuracion_sistema_blueprint = Blueprint(
     "configuracion_sistema", __name__, url_prefix="/configuracion_del_sistema"
@@ -69,47 +65,49 @@ def configuracion_actualizar():
         configuracion["activar_pagos"] = False
     validar = True
     hubo_error = False
-    validar, mensaje = configuracion_sistema.validar_digito(
+    validar, mensaje = validator_configuracion.validar_digito(
         paginado["elementos_pagina"]
     )
     if not validar:
         flash("Elementos por página: " + mensaje)
         hubo_error = True
 
-    validar, mensaje = configuracion_sistema.validar_digito(configuracion["cuota_base"])
-    if not validar:
-        flash("El valor de la cuota " + mensaje)
-        hubo_error = True
-
-    validar, mensaje = configuracion_sistema.validar_digito(
-        configuracion["porcentaje_recargo"]
-    )
-    if not validar:
-        flash("El valor de porcentaje de recargo " + mensaje)
-        hubo_error = True
-
-    validar, mensaje = configuracion_sistema.validar_positivo(
-        configuracion["porcentaje_recargo"]
-    )
-    if not validar:
-        flash("El valor de porcentaje de recargo " + mensaje)
-        hubo_error = True
-
-    validar, mensaje = configuracion_sistema.validar_positivo(
+    validar, mensaje = validator_configuracion.validar_digito(
         configuracion["cuota_base"]
     )
     if not validar:
         flash("El valor de la cuota " + mensaje)
         hubo_error = True
 
-    validar, mensaje = configuracion_sistema.validar_cadena(
+    validar, mensaje = validator_configuracion.validar_digito(
+        configuracion["porcentaje_recargo"]
+    )
+    if not validar:
+        flash("El valor de porcentaje de recargo " + mensaje)
+        hubo_error = True
+
+    validar, mensaje = validator_configuracion.validar_positivo(
+        configuracion["porcentaje_recargo"]
+    )
+    if not validar:
+        flash("El valor de porcentaje de recargo " + mensaje)
+        hubo_error = True
+
+    validar, mensaje = validator_configuracion.validar_positivo(
+        configuracion["cuota_base"]
+    )
+    if not validar:
+        flash("El valor de la cuota " + mensaje)
+        hubo_error = True
+
+    validar, mensaje = validator_configuracion.validar_cadena(
         configuracion["informacion_contacto"]
     )
     if not validar:
         flash("Informacion de contacto: " + mensaje)
         hubo_error = True
 
-    validar, mensaje = configuracion_sistema.validar_cadena(
+    validar, mensaje = validator_configuracion.validar_cadena(
         configuracion["encabezado_recibos"]
     )
     if not validar:

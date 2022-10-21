@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request, flash, redirect, session
+from flask import Blueprint, render_template, request, flash, redirect
 from src.core import usuarios
+from src.web.controllers.validators import validator_usuario
 from src.decoradores.login import login_requerido
 import json
 
@@ -7,13 +8,8 @@ usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
 
 
 def info_usuario(id):
-    '''Esta funcion retorna un JSON con informacion del usuario'''
+    """Esta funcion retorna un JSON con informacion del usuario"""
     return json.dumps(usuarios.get_datos_diccionario(id))
-
-
-def disciplinas_usuario(id):
-    '''Esta funcion retorna un JSON con las disciplinas del usuario'''
-    return json.dumps(usuarios.get_disciplinas_diccionario(id))
 
 
 @usuario_blueprint.route("/")
@@ -69,8 +65,14 @@ def usuario_add():
     }
     data_rol_usuario = {
         "ROL_ADMINISTRADOR": request.form.get("rol_administrador"),
-        "ROL_OPERADOR": request.form.get("rol_operador")
+        "ROL_OPERADOR": request.form.get("rol_operador"),
     }
+    validacion_inputs, mensaje = validator_usuario.validar_inputs(
+        data_usuario["email"], data_usuario["password"]
+    )
+    if validacion_inputs == False:
+        flash(mensaje)
+        return redirect("/usuarios/alta-usuario")
     validacion, mensaje = usuarios.validar_datos_existentes(
         data_usuario["email"], data_usuario["username"], "alta"
     )
@@ -88,9 +90,9 @@ def usuario_add():
 @login_requerido
 def usuario_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un usuario."""
-    #if(usuarios.verificar_rol_usuario(request.form.get('id'))):
+    # if(usuarios.verificar_rol_usuario(request.form.get('id'))):
     #    estado = True
-    #else:
+    # else:
     #    estado = usuarios.validar_estado(request.form.get("activo"))
     estado = usuarios.validar_estado(request.form.get("activo"))
     data_usuario = {

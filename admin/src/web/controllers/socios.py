@@ -1,9 +1,9 @@
 from flask import Blueprint, session, render_template, request, redirect, flash
 from src.core import socios
 from src.core import pagos
-from src import exportaciones
 from src.core import disciplinas
 from src.core import usuarios
+from src import exportaciones
 from src.web.controllers.validators import validator_socio
 from src.decoradores.login import login_requerido
 import json
@@ -13,9 +13,10 @@ socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
 def disciplinas_socio(id):
     """Devuelve un json con todas las disciplinas que realiza el socio con id pasado por parametro"""
-    if(socios.disciplinas_socio_diccionario(id) is None):
+    if socios.disciplinas_socio_diccionario(id) is None:
         return None
     return json.dumps(socios.disciplinas_socio_diccionario(id))
+
 
 @socio_blueprint.route("/")
 @login_requerido
@@ -84,7 +85,7 @@ def socio_add():
         flash(mensaje)
         return redirect("/socios/alta-socio")
     socio = socios.agregar_socio(data_socio)
-    generacion_pagos = pagos.generar_pagos(socio.id)
+    pagos.generar_pagos(socio.id)
     return redirect("/socios")
 
 
@@ -114,7 +115,7 @@ def socio_update():
     if not validacion_inputs:
         flash(mensaje)
         return redirect("/socios/" + data_socio["id"])
-    socio = socios.modificar_socio(data_socio)
+    socios.modificar_socio(data_socio)
     return redirect("/socios")
 
 
@@ -122,7 +123,7 @@ def socio_update():
 @login_requerido
 def socio_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un socio."""
-    socio = socios.eliminar_socio(id)
+    socios.eliminar_socio(id)
     return redirect("/socios")
 
 
@@ -168,7 +169,6 @@ def exportar_pdf():
 @login_requerido
 def inscripcion_socio(id):
     """Esta funcion retorna el formulario para la inscripcion del socio a una disciplina"""
-    disciplinas2 = ["futbol", "basquet"]
     kwargs = {
         "id_socio": id,
         "disciplinas": disciplinas.todas_las_disciplinas(),
@@ -184,10 +184,9 @@ def add_inscripcion():
     """Esta funcion realiza la inscripcion de un socio a una disciplina"""
     id_socio = request.form.get("id_socio")
     id_disciplina = request.form.get("categoria")
-    socioActivo = socios.estaHabilitado(id_socio)
-    disciplinaActiva = disciplinas.estaHabilitada(id_disciplina)
-    if socioActivo and disciplinaActiva:
+    if socios.esta_habilitado(id_socio) and disciplinas.esta_habilitada(id_disciplina):
         disciplinas.relacionar_socio_disciplina(id_disciplina, id_socio)
+        flash("Socio inscripto correctamente.")
         return redirect("/socios/")
     else:
         flash("La disciplina o el socio no están habilitados.")

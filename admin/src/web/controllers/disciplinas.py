@@ -1,13 +1,12 @@
-import json
-from flask import Blueprint, render_template, request, redirect, flash, session
+from flask import Blueprint, render_template, request, redirect, flash
 from src.core import disciplinas
+from src.web.controllers.validators import validator_disciplinas
 from src.decoradores.login import login_requerido
-from src.core import usuarios
+import json
 
 disciplina_blueprint = Blueprint("disciplinas", __name__, url_prefix="/disciplinas")
 
 
-@disciplina_blueprint.route("/api")
 def disciplina_json():
     """Retorna el json con todas las disciplinas"""
     return json.dumps(disciplinas.listar_disciplinas_diccionario())
@@ -53,7 +52,7 @@ def disciplina_add():
         "costo": request.form.get("costo"),
         "habilitada": (request.form.get("habilitada") == "Si"),
     }
-    resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
+    resultado, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
     if resultado:
         resultado, mensaje = disciplinas.validar_disciplina_repetida(
             data_disciplina["nombre"], data_disciplina["categoria"], "alta"
@@ -82,7 +81,7 @@ def disciplina_update():
         "costo": request.form.get("costo"),
         "habilitada": (request.form.get("habilitada") == "Si"),
     }
-    resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
+    resultado, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
     if resultado:
         resultado, mensaje = disciplinas.validar_disciplina_repetida(
             data_disciplina["nombre"],
