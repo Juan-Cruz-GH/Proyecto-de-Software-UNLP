@@ -24,7 +24,8 @@ def buscar_usuario(id):
 
 def buscar_usuario_email(email):
     """Esta funcion retorna a un usuario buscado por su email"""
-    usuario = Usuario.query.filter_by(email=email).first()
+    with db.session.no_autoflush:
+        usuario = Usuario.query.filter_by(email=email).first()
     return usuario
 
 
