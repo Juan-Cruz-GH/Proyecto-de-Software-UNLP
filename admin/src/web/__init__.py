@@ -1,3 +1,4 @@
+from src.web.helpers.permission import check_permission
 from flask import Flask, render_template, redirect
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
@@ -30,7 +31,6 @@ def create_app(env="development", static_folder="static"):
     def home():
         return redirect("/socios/")
 
-    
     app.register_blueprint(usuario_blueprint)
     app.register_blueprint(configuracion_sistema_blueprint)
     app.register_blueprint(disciplina_blueprint)
@@ -50,6 +50,8 @@ def create_app(env="development", static_folder="static"):
     app.register_error_handler(401, handlers.not_authenticated_error)
     app.register_error_handler(403, handlers.not_authorized_error)
     app.register_error_handler(404, handlers.not_found_error)
+
+    app.jinja_env.globals.update(permiso=check_permission)
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):

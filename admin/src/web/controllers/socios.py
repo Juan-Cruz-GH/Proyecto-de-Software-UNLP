@@ -122,7 +122,7 @@ def socio_update():
         if not validacion_datos_existentes:
             flash(mensaje)
             return redirect("/socios/" + data_socio["id"])
-        validacion_inputs, mensaje = socios.validar_inputs(data_socio)
+        validacion_inputs, mensaje = validator_socio.validar_inputs(data_socio)
         if not validacion_inputs:
             flash(mensaje)
             return redirect("/socios/" + data_socio["id"])
