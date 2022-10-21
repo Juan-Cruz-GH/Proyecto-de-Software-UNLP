@@ -23,7 +23,7 @@ class Disciplina(db.Model):
     )  
     habilitada = db.Column(db.Boolean, nullable=False)
     inserted_at = db.Column(db.DateTime, default=datetime.now)
-    socios = db.relationship("Socio", secondary=Socio_Disciplina)
+    socios = db.relationship("Socio", secondary=Socio_Disciplina, backref="disciplinas")
 
     def __init__(self, nombre, categoria, instructores, horarios, costo, habilitada):
         self.nombre = nombre
