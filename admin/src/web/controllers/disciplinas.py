@@ -93,7 +93,7 @@ def disciplina_update():
             "costo": request.form.get("costo"),
             "habilitada": (request.form.get("habilitada") == "Si"),
         }
-        resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
+        resultado, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
         if resultado:
             resultado, mensaje = disciplinas.validar_disciplina_repetida(
                 data_disciplina["nombre"],
