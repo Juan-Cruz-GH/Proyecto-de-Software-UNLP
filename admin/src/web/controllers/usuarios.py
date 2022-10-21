@@ -102,7 +102,10 @@ def usuario_add():
 def usuario_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un usuario."""
     if check_permission(session["user"], "usuario_update"):
-        estado = usuarios.validar_estado(request.form.get("activo"))
+        if(usuarios.verificar_rol_usuario(request.form.get('id'))):
+            estado = True
+        else:
+            estado = usuarios.validar_estado(request.form.get("activo"))
         data_usuario = {
             "id": request.form.get("id"),
             "nombre": request.form.get("nombre").capitalize(),

@@ -157,10 +157,10 @@ def agregar_roles(usuario, roles_usuario):
     db.session.commit()
 
 
-# def verificar_rol_usuario(id):
-#    usuario = buscar_usuario(id)
-#    rol_admin = roles.buscar_rol('Administrador')
-#    if(rol_admin in usuario.roles):
-#        return True
-#    else:
-#        return False
+def verificar_rol_usuario(id):
+    usuario = buscar_usuario(id)
+    rol_admin = roles.buscar_rol('ROL_ADMINISTRADOR')
+    if(rol_admin in usuario.roles):
+        return True
+    else:
+        return False
