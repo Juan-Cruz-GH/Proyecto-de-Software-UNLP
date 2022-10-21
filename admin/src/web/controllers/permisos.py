@@ -1,10 +1,8 @@
-from flask import Blueprint
-from flask import render_template
-from flask import request
-
-from src.core import permisos
+from flask import Blueprint, render_template
+from src.core import permisos  # ?
 
 permiso_blueprint = Blueprint("permisos", __name__, url_prefix="/consultas")
+
 
 @permiso_blueprint.get("/")
 def permiso_index():

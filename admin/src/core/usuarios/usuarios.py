@@ -1,6 +1,6 @@
-from email.policy import default
 from src.core.db import db
 from datetime import datetime
+
 
 class Usuario(db.Model):
     __tablename__ = "Usuarios"
@@ -13,6 +13,7 @@ class Usuario(db.Model):
     password = db.Column(db.String, nullable=False)
     inserted_at = db.Column(db.DateTime, default=datetime.now)
 
+
 def __init__(self, nombre, apellido, email, activo, username, password):
     self.nombre = nombre
     self.apellido = apellido
@@ -21,6 +22,8 @@ def __init__(self, nombre, apellido, email, activo, username, password):
     self.username = username
     self.password = password
 
-def __repr__(self):
-    return f"Usuario(id={self.id!r}, nombre={self.nombre!r}, apellido={self.apellido!r})"
 
+def __repr__(self):
+    return (
+        f"Usuario(id={self.id!r}, nombre={self.nombre!r}, apellido={self.apellido!r})"
+    )

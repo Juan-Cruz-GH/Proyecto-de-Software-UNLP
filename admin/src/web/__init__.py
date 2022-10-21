@@ -1,5 +1,8 @@
+from src.web.helpers.permission import check_permission
 from flask import Flask, render_template, redirect
 from flask_wtf.csrf import CSRFProtect
+from flask_session import Session
+
 from src.web.helpers import handlers
 
 from src.web.controllers.usuarios import usuario_blueprint
@@ -11,6 +14,8 @@ from src.web.controllers.pagos import pago_blueprint
 from src.web.controllers.roles import rol_blueprint
 from src.web.controllers.permisos import permiso_blueprint
 from src.web.controllers.auth import auth_blueprint
+from src.decoradores.login import login_requerido
+from src.decoradores.permisos import permiso_requerido
 
 from src.web.config import config
 from src.core.db import db, init_db
@@ -22,9 +27,9 @@ def create_app(env="development", static_folder="static"):
     csrf = CSRFProtect(app)
 
     @app.get("/")
+    @login_requerido
     def home():
         return redirect("/socios/")
-        
 
     app.register_blueprint(usuario_blueprint)
     app.register_blueprint(configuracion_sistema_blueprint)
@@ -34,13 +39,19 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(rol_blueprint)
     app.register_blueprint(permiso_blueprint)
     app.register_blueprint(auth_blueprint)
+    csrf.exempt(api_blueprint)
     app.register_blueprint(api_blueprint)
-    
+
+    Session(app)
 
     with app.app_context():
         init_db(app)
 
+    app.register_error_handler(401, handlers.not_authenticated_error)
+    app.register_error_handler(403, handlers.not_authorized_error)
     app.register_error_handler(404, handlers.not_found_error)
+
+    app.jinja_env.globals.update(permiso=check_permission)
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):
