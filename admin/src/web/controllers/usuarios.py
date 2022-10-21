@@ -2,14 +2,16 @@ from flask import Blueprint, render_template, request, flash, redirect, session,
 from src.core import usuarios
 from src.web.controllers import auth
 from src.web.helpers.permission import check_permission
+from src.web.controllers.validators import validator_usuario
 from src.decoradores.login import login_requerido
 import json
 
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
 
 
-def info_usuario_logueado(email):
-    return json.dumps(usuarios.get_datos_diccionario(email))
+def info_usuario(id):
+    """Esta funcion retorna un JSON con informacion del usuario"""
+    return json.dumps(usuarios.get_datos_diccionario(id))
 
 
 @usuario_blueprint.route("/")
@@ -17,7 +19,7 @@ def info_usuario_logueado(email):
 def usuario_index():
     """Esta funcion llama al modulo correspondiente para obtener todos los usuarios paginados."""
 
-    if (check_permission(session["user"], "usuario_index")):
+    if check_permission(session["user"], "usuario_index"):
         page = request.args.get("page", 1, type=int)
         email = (
             request.args.get("busqueda", type=str)
@@ -44,7 +46,7 @@ def usuario_index():
 @login_requerido
 def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
-    if (check_permission(session["user"], "usuario_new")):
+    if check_permission(session["user"], "usuario_new"):
         kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
         return render_template("usuarios/alta_usuarios.html", **kwargs)
     else:
@@ -74,8 +76,14 @@ def usuario_add():
     }
     data_rol_usuario = {
         "ROL_ADMINISTRADOR": request.form.get("rol_administrador"),
-        "ROL_OPERADOR": request.form.get("rol_operador")
+        "ROL_OPERADOR": request.form.get("rol_operador"),
     }
+    validacion_inputs, mensaje = validator_usuario.validar_inputs(
+        data_usuario["email"], data_usuario["password"]
+    )
+    if validacion_inputs == False:
+        flash(mensaje)
+        return redirect("/usuarios/alta-usuario")
     validacion, mensaje = usuarios.validar_datos_existentes(
         data_usuario["email"], data_usuario["username"], "alta"
     )
@@ -93,7 +101,7 @@ def usuario_add():
 @login_requerido
 def usuario_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un usuario."""
-    if (check_permission(session["user"], "usuario_update")):
+    if check_permission(session["user"], "usuario_update"):
         estado = usuarios.validar_estado(request.form.get("activo"))
         data_usuario = {
             "id": request.form.get("id"),
@@ -123,7 +131,7 @@ def usuario_update():
 @login_requerido
 def usuario_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un usuario."""
-    if (check_permission(session["user"], "usuario_destroy")):
+    if check_permission(session["user"], "usuario_destroy"):
         usuario = usuarios.eliminar_usuario(id)
         return redirect("/usuarios")
     else:

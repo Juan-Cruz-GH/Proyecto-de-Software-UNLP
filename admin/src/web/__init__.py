@@ -1,5 +1,7 @@
 from flask import Flask, render_template, redirect
 from flask_wtf.csrf import CSRFProtect
+from flask_session import Session
+
 from src.web.helpers import handlers
 
 from src.web.controllers.usuarios import usuario_blueprint
@@ -37,11 +39,16 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(rol_blueprint)
     app.register_blueprint(permiso_blueprint)
     app.register_blueprint(auth_blueprint)
+    csrf.exempt(api_blueprint)
     app.register_blueprint(api_blueprint)
+
+    Session(app)
 
     with app.app_context():
         init_db(app)
 
+    app.register_error_handler(401, handlers.not_authenticated_error)
+    app.register_error_handler(403, handlers.not_authorized_error)
     app.register_error_handler(404, handlers.not_found_error)
 
     @app.teardown_appcontext

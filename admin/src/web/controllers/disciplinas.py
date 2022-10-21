@@ -1,14 +1,13 @@
-import json
 from flask import Blueprint, render_template, request, redirect, flash, session, abort
 from src.core import disciplinas
+from src.web.controllers.validators import validator_disciplinas
 from src.web.helpers.permission import check_permission
 from src.decoradores.login import login_requerido
-from src.core import usuarios
+import json
 
 disciplina_blueprint = Blueprint("disciplinas", __name__, url_prefix="/disciplinas")
 
 
-@disciplina_blueprint.route("/api")
 def disciplina_json():
     """Retorna el json con todas las disciplinas"""
     return json.dumps(disciplinas.listar_disciplinas_diccionario())
@@ -18,7 +17,7 @@ def disciplina_json():
 @login_requerido
 def disciplina_index():
     """Muestra las disciplinas de la página indicada en el request. Si no hay request, la página será la primera"""
-    if (check_permission(session["user"], "disciplina_index")):
+    if check_permission(session["user"], "disciplina_index"):
         page = request.args.get("page", 1, type=int)
         kwargs = {
             "disciplinas": disciplinas.listar_disciplinas(page),
@@ -33,7 +32,7 @@ def disciplina_index():
 @login_requerido
 def form_disciplina():
     """Devuelve el template con el formulario para agregar una disciplina"""
-    if (check_permission(session["user"], "disciplina_new")):
+    if check_permission(session["user"], "disciplina_new"):
         kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
         return render_template("disciplinas/alta_disciplinas.html", **kwargs)
     else:
@@ -63,7 +62,7 @@ def disciplina_add():
         "costo": request.form.get("costo"),
         "habilitada": (request.form.get("habilitada") == "Si"),
     }
-    resultado, mensaje = disciplinas.validar_inputs(data_disciplina)
+    resultado, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
     if resultado:
         resultado, mensaje = disciplinas.validar_disciplina_repetida(
             data_disciplina["nombre"], data_disciplina["categoria"], "alta"
@@ -83,7 +82,7 @@ def disciplina_add():
 @login_requerido
 def disciplina_update():
     """Llama a las funciones del modelo para validar los inputs del formulario para modificar una disciplina. Si los inputs son validos, le dice al modelo que la modifique"""
-    if (check_permission(session["user"], "disciplina_update")):
+    if check_permission(session["user"], "disciplina_update"):
         data_disciplina = {
             "id": request.form.get("id"),
             "nombre": request.form.get("nombre").capitalize(),
@@ -118,7 +117,7 @@ def disciplina_update():
 @login_requerido
 def disciplina_delete(id):
     """Le dice al modelo que borre la disciplina enviada"""
-    if (check_permission(session["user"], "disciplina_destroy")):
+    if check_permission(session["user"], "disciplina_destroy"):
         disciplinas.eliminar_disciplina(id)
         return redirect("/disciplinas")
     else:

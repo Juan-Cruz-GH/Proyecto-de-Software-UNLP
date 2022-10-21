@@ -1,12 +1,58 @@
+<<<<<<< HEAD
 from src.core.roles.roles import Usuario_Rol
 from src.core.db import db
 from src.core.usuarios.usuarios import Usuario
 from src.core import permisos
 from src.core.roles.roles import Rol
 from src.core import roles
+=======
+>>>>>>> development
 from src.core import configuracion_sistema
+from src.core import socios
+from src.core import roles
+from src.core.usuarios.usuarios import Usuario
+from src.core.db import db
 from werkzeug.security import check_password_hash, generate_password_hash
-import re
+
+
+def agregar_usuario(data):
+    """Esta funcion se utiliza para dar de alta un usuario"""
+    usuario = Usuario(**data)
+    usuario.password = generate_password_hash(usuario.password, method="sha256")
+    db.session.add(usuario)
+    db.session.commit()
+    return usuario
+
+
+def buscar_usuario(id):
+    """Esta funcion busca un usuario por su id"""
+    usuario = Usuario.query.get(id)
+    return usuario
+
+
+def buscar_usuario_email(email):
+    """Esta funcion retorna a un usuario buscado por su email"""
+    usuario = Usuario.query.filter_by(email=email).first()
+    return usuario
+
+
+def modificar_usuario(data):
+    """Esta funcion realiza la modificacion de los datos de un usuario"""
+    usuario = Usuario.query.get(data["id"])
+    usuario.nombre = data["nombre"]
+    usuario.apellido = data["apellido"]
+    usuario.email = data["email"]
+    usuario.activo = data["activo"]
+    usuario.username = data["username"]
+    db.session.commit()
+    return usuario
+
+
+def eliminar_usuario(id):
+    """Esta funcion realiza la eliminacion de un usuario de la BD"""
+    usuario = Usuario.query.get(id)
+    db.session.delete(usuario)
+    db.session.commit()
 
 
 def listar_usuarios(page, email=None, tipo=None):
@@ -48,21 +94,6 @@ def listar_usuarios(page, email=None, tipo=None):
     return usuarios
 
 
-def agregar_usuario(data):
-    """Esta funcion se utiliza para dar de alta un usuario"""
-    usuario = Usuario(**data)
-    usuario.password = generate_password_hash(usuario.password, method="sha256")
-    db.session.add(usuario)
-    db.session.commit()
-    return usuario
-
-
-def buscar_usuario(id):
-    """Esta funcion busca un usuario por su id"""
-    usuario = Usuario.query.get(id)
-    return usuario
-
-
 def find_user_by_mail_and_pass(email, password):
     """esta funcion verifica que el usuario ingresado en login exista"""
     usuario = Usuario.query.filter(Usuario.email == email).first()
@@ -72,26 +103,13 @@ def find_user_by_mail_and_pass(email, password):
         return usuario
 
 
-def validar_inputs(email, password):
-    """Esta funcion valida que los inputs sean del tipo correcto. (falta comprobar password mediante hash)"""
-    regex_email = "^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$"
-    if not (email != "" and password != ""):
-        return False, "Todos los datos deben estar completos"
-    elif not (re.search(regex_email, email)):
-        return False, "El email debe ser valido"
-    else:
-        return True, "Credenciales validas"
-
-
 def validar_estado(estado):
     """Esta funcion valida el dato enviado al modificar el estado de un usuario"""
     return estado == "activo"
 
 
 def validar_datos_existentes(email, username, accion, id=None):
-    """Esta funcion valida que el dni o el email ingresados para dar de alta o modificar un usuario no existan.
-    Si el dni existe se devuelve 1, si el email existe se devuelve 2, en caso de que no exista ningun se
-    devuelve 3."""
+    """Esta funcion valida que el dni o el email ingresados para dar de alta o modificar un usuario no existan."""
     if accion == "alta":
         email_existente = Usuario.query.filter_by(email=email).first()
         username_existente = Usuario.query.filter_by(username=username).first()
@@ -116,53 +134,47 @@ def validar_datos_existentes(email, username, accion, id=None):
             return True, "Ambos son validos"
 
 
-def modificar_usuario(data):
-    """Esta funcion realiza la modificacion de los datos de un usuario"""
-    usuario = Usuario.query.get(data["id"])
-    usuario.nombre = data["nombre"]
-    usuario.apellido = data["apellido"]
-    usuario.email = data["email"]
-    usuario.activo = data["activo"]
-    usuario.username = data["username"]
-    db.session.commit()
-    return usuario
-
-
-def eliminar_usuario(id):
-    """Esta funcion realiza la eliminacion de un usuario de la BD"""
-    usuario = Usuario.query.get(id)
-    db.session.delete(usuario)
-    db.session.commit()
-
-
-def buscar_usuario_email(email):
-    """Esta funcion retorna a un usuario buscado por su email"""
-    usuario = Usuario.query.filter_by(email=email).first()
-    return usuario
-
-
-def get_datos_diccionario(email):
-    """Retorna un diccionario con todos los datos del usuario logueado con el email enviado por parametro"""
-    usuario = buscar_usuario_email(
-        email
-    )  # es un usuario logueado asi que siempre existe
+def get_datos_diccionario(id):
+    """Retorna un diccionario con todos los datos del usuario con el id enviado por parametro"""
+    usuario = buscar_usuario(id)
+    socio = socios.buscar_socio(id)  # probablemente erroneo, cuidado
+    if socio is None:
+        return {}
+    if usuario is None:
+        return {}
     diccionario = {
         "user": usuario.username,
         "email": usuario.email,
         "number": usuario.id,
-        "document_type": "?",
-        "document_number": "?",
-        "gender": "?",
-        "gender_other": "?",
-        "address": "?",
-        "phone": "?",
+        "document_type": socio.tipo_documento,
+        "document_number": socio.dni,
+        "gender": socio.genero,
+        "gender_other": socio.genero,
+        "address": socio.direccion,
+        "phone": socio.telefono,
     }
     return diccionario
 
 
 def agregar_roles(usuario, roles_usuario):
     for nombre_rol, valor in roles_usuario.items():
+<<<<<<< HEAD
         if valor == 'on':
             rol = roles.buscar_rol(nombre_rol)
             usuario.roles.append(rol)
     db.session.commit()
+=======
+        if valor == "on":
+            rol = roles.buscar_rol(nombre_rol)
+            usuario.roles.append(rol)
+    db.session.commit()
+
+
+# def verificar_rol_usuario(id):
+#    usuario = buscar_usuario(id)
+#    rol_admin = roles.buscar_rol('Administrador')
+#    if(rol_admin in usuario.roles):
+#        return True
+#    else:
+#        return False
+>>>>>>> development
