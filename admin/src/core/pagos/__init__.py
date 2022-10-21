@@ -26,7 +26,7 @@ def pagar_con_api(diccionario, id):
     print(socio)
 
     if socio == None:
-        return False
+        return False, "El socio no existe"
 
     for pago in socio.pagos:
         print(calcular_cuota(pago.id, pago.socio.id))
@@ -42,8 +42,8 @@ def pagar_con_api(diccionario, id):
             pago.fecha_pago = datetime.now()
             pago.estado = True
             db.session.commit()
-            return True
-    return False
+            return True, "El pago se realizo con exito"
+    return False, "No se pudo realizar el pago"
 
 
 def get_cuota(id):
