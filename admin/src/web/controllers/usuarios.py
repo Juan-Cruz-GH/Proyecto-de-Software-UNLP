@@ -3,7 +3,6 @@ from src.core import usuarios
 from src.web.controllers import auth
 from src.web.helpers.permission import check_permission
 from src.decoradores.login import login_requerido
-from src.decoradores.permisos import permiso_requerido
 import json
 
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
@@ -15,7 +14,6 @@ def info_usuario_logueado(email):
 
 @usuario_blueprint.route("/")
 @login_requerido
-#@permiso_requerido(session=session, tipo_permiso="usuario_index")
 def usuario_index():
     """Esta funcion llama al modulo correspondiente para obtener todos los usuarios paginados."""
 
@@ -95,32 +93,38 @@ def usuario_add():
 @login_requerido
 def usuario_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un usuario."""
-    estado = usuarios.validar_estado(request.form.get("activo"))
-    data_usuario = {
-        "id": request.form.get("id"),
-        "nombre": request.form.get("nombre").capitalize(),
-        "apellido": request.form.get("apellido").capitalize(),
-        "email": request.form.get("email"),
-        "activo": estado,
-        "username": request.form.get("username"),
-    }
-    validacion, mensaje = usuarios.validar_datos_existentes(
-        data_usuario["email"],
-        data_usuario["username"],
-        "modificacion",
-        data_usuario["id"],
-    )
-    if validacion == False:
-        flash(mensaje)
-        return redirect("/usuarios/" + data_usuario["id"])
+    if (check_permission(session["user"], "usuario_update")):
+        estado = usuarios.validar_estado(request.form.get("activo"))
+        data_usuario = {
+            "id": request.form.get("id"),
+            "nombre": request.form.get("nombre").capitalize(),
+            "apellido": request.form.get("apellido").capitalize(),
+            "email": request.form.get("email"),
+            "activo": estado,
+            "username": request.form.get("username"),
+        }
+        validacion, mensaje = usuarios.validar_datos_existentes(
+            data_usuario["email"],
+            data_usuario["username"],
+            "modificacion",
+            data_usuario["id"],
+        )
+        if validacion == False:
+            flash(mensaje)
+            return redirect("/usuarios/" + data_usuario["id"])
+        else:
+            usuario = usuarios.modificar_usuario(data_usuario)
+        return redirect("/usuarios")
     else:
-        usuario = usuarios.modificar_usuario(data_usuario)
-    return redirect("/usuarios")
+        return abort(403)
 
 
 @usuario_blueprint.route("/eliminar/<id>", methods=["POST", "GET"])
 @login_requerido
 def usuario_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un usuario."""
-    usuario = usuarios.eliminar_usuario(id)
-    return redirect("/usuarios")
+    if (check_permission(session["user"], "usuario_destroy")):
+        usuario = usuarios.eliminar_usuario(id)
+        return redirect("/usuarios")
+    else:
+        abort(403)
