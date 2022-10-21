@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash, session, abort
 from src.core import disciplinas
+from src.core import usuarios
 from src.web.controllers.validators import validator_disciplinas
 from src.web.helpers.permission import check_permission
 from src.decoradores.login import login_requerido
