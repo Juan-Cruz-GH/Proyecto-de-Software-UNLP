@@ -38,7 +38,7 @@ configuracion: index, update
 
 
 Tabla "Roles":
-Rol que represente a un administrador, ejemplo: "rol_administrador"
+Rol que represente a un administrador, DEBE llamarse: "ROL_ADMINISTRADOR"
 Rol que represente a un operador: "rol operador"
 
 
