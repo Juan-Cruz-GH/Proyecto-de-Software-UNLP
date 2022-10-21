@@ -1,4 +1,5 @@
 admin/__pycache__/
+admin/src/__pycache__/
 admin/src/core/board/__pycache__/
 admin/src/web/__pycache__/
 admin/src/web/controllers/__pycache__/

@@ -1,44 +1,60 @@
-from flask import Blueprint, session, render_template, request, redirect, flash
+from flask import Blueprint, session, render_template, request, redirect, flash, abort
 from src.core import socios
 from src.core import pagos
-from src import exportaciones
 from src.core import disciplinas
 from src.core import usuarios
+from src.web.helpers.permission import check_permission
+from src import exportaciones
+from src.web.controllers.validators import validator_socio
 from src.decoradores.login import login_requerido
+import json
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
+
+
+def disciplinas_socio(id):
+    """Devuelve un json con todas las disciplinas que realiza el socio con id pasado por parametro"""
+    if socios.disciplinas_socio_diccionario(id) is None:
+        return None
+    return json.dumps(socios.disciplinas_socio_diccionario(id))
 
 
 @socio_blueprint.route("/")
 @login_requerido
 def socio_index():
     """Esta funcion llama al modulo correspondiente para obtener todos los socios paginados."""
-    page = request.args.get("page", 1, type=int)
-    apellido = (
-        request.args.get("busqueda", type=str)
-        if request.args.get("busqueda", type=str) != ""
-        else None
-    )
-    tipo = (
-        request.args.get("tipo", type=str)
-        if request.args.get("tipo", type=str) != ""
-        else None
-    )
-    kwargs = {
-        "socios": socios.listar_socios(page, apellido, tipo),
-        "apellido": apellido,
-        "tipo": tipo,
-        "usuario": usuarios.buscar_usuario_email(session["user"]),
-    }
-    return render_template("socios/index.html", **kwargs)
+    if check_permission(session["user"], "socio_index"):
+        page = request.args.get("page", 1, type=int)
+        apellido = (
+            request.args.get("busqueda", type=str)
+            if request.args.get("busqueda", type=str) != ""
+            else None
+        )
+        tipo = (
+            request.args.get("tipo", type=str)
+            if request.args.get("tipo", type=str) != ""
+            else None
+        )
+        kwargs = {
+            "socios": socios.listar_socios(page, apellido, tipo),
+            "apellido": apellido,
+            "tipo": tipo,
+            "usuario": usuarios.buscar_usuario_email(session["user"]),
+        }
+        return render_template("socios/index.html", **kwargs)
+    else:
+        return abort(403)
 
 
 @socio_blueprint.route("/alta-socio")
 @login_requerido
 def form_socio():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
-    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
-    return render_template("socios/alta_socios.html", **kwargs)
+    if check_permission(session["user"], "socio_new"):
+        kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
+        return render_template("socios/alta_socios.html", **kwargs)
+    else:
+        return abort(403)
 
 
 @socio_blueprint.route("/<id>")
@@ -74,12 +90,12 @@ def socio_add():
     if validacion == False:
         flash(mensaje)
         return redirect("/socios/alta-socio")
-    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
+    validacion_inputs, mensaje = validator_socio.validar_inputs(data_socio)
     if not validacion_inputs:
         flash(mensaje)
         return redirect("/socios/alta-socio")
     socio = socios.agregar_socio(data_socio)
-    generacion_pagos = pagos.generar_pagos(socio.id)
+    pagos.generar_pagos(socio.id)
     return redirect("/socios")
 
 
@@ -87,38 +103,44 @@ def socio_add():
 @login_requerido
 def socio_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un socio."""
-    data_socio = {
-        "id": request.form.get("id"),
-        "nombre": request.form.get("nombre").capitalize(),
-        "apellido": request.form.get("apellido").capitalize(),
-        "email": request.form.get("email"),
-        "activo": True,
-        "tipo_documento": request.form.get("tipo_documento"),
-        "dni": request.form.get("documento"),
-        "genero": request.form.get("genero"),
-        "direccion": request.form.get("direccion"),
-        "telefono": request.form.get("telefono"),
-    }
-    validacion_datos_existentes, mensaje = socios.validar_datos_existentes(
-        data_socio["dni"], data_socio["email"], "modificacion", data_socio["id"]
-    )
-    if not validacion_datos_existentes:
-        flash(mensaje)
-        return redirect("/socios/" + data_socio["id"])
-    validacion_inputs, mensaje = socios.validar_inputs(data_socio)
-    if not validacion_inputs:
-        flash(mensaje)
-        return redirect("/socios/" + data_socio["id"])
-    socio = socios.modificar_socio(data_socio)
-    return redirect("/socios")
+    if check_permission(session["user"], "socio_update"):
+        data_socio = {
+            "id": request.form.get("id"),
+            "nombre": request.form.get("nombre").capitalize(),
+            "apellido": request.form.get("apellido").capitalize(),
+            "email": request.form.get("email"),
+            "activo": True,
+            "tipo_documento": request.form.get("tipo_documento"),
+            "dni": request.form.get("documento"),
+            "genero": request.form.get("genero"),
+            "direccion": request.form.get("direccion"),
+            "telefono": request.form.get("telefono"),
+        }
+        validacion_datos_existentes, mensaje = socios.validar_datos_existentes(
+            data_socio["dni"], data_socio["email"], "modificacion", data_socio["id"]
+        )
+        if not validacion_datos_existentes:
+            flash(mensaje)
+            return redirect("/socios/" + data_socio["id"])
+        validacion_inputs, mensaje = validator_socio.validar_inputs(data_socio)
+        if not validacion_inputs:
+            flash(mensaje)
+            return redirect("/socios/" + data_socio["id"])
+        socio = socios.modificar_socio(data_socio)
+        return redirect("/socios")
+    else:
+        return abort(403)
 
 
 @socio_blueprint.route("/eliminar/<id>", methods=["DELETE", "GET"])
 @login_requerido
 def socio_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un socio."""
-    socio = socios.eliminar_socio(id)
-    return redirect("/socios")
+    if check_permission(session["user"], "socio_destroy"):
+        socio = socios.eliminar_socio(id)
+        return redirect("/socios")
+    else:
+        return abort(403)
 
 
 @socio_blueprint.route("/exportar-csv")
@@ -163,14 +185,17 @@ def exportar_pdf():
 @login_requerido
 def inscripcion_socio(id):
     """Esta funcion retorna el formulario para la inscripcion del socio a una disciplina"""
-    disciplinas2 = ["futbol", "basquet"]
-    kwargs = {
-        "id_socio": id,
-        "disciplinas": disciplinas.todas_las_disciplinas(),
-        "categorias": disciplinas.categorias_de_cada_disciplina(),
-        "usuario": usuarios.buscar_socio_email(session["user"]),
-    }
-    return render_template("/socios/inscripcion_socios.html", **kwargs)
+    if check_permission(session["user"], "socio_new"):
+        disciplinas2 = ["futbol", "basquet"]
+        kwargs = {
+            "id_socio": id,
+            "disciplinas": disciplinas.todas_las_disciplinas(),
+            "categorias": disciplinas.categorias_de_cada_disciplina(),
+            "usuario": usuarios.buscar_usuario_email(session["user"]),
+        }
+        return render_template("/socios/inscripcion_socios.html", **kwargs)
+    else:
+        return abort(403)
 
 
 @socio_blueprint.route("/inscripcion", methods=["POST"])
@@ -179,10 +204,9 @@ def add_inscripcion():
     """Esta funcion realiza la inscripcion de un socio a una disciplina"""
     id_socio = request.form.get("id_socio")
     id_disciplina = request.form.get("categoria")
-    socioActivo = socios.estaHabilitado(id_socio)
-    disciplinaActiva = disciplinas.estaHabilitada(id_disciplina)
-    if socioActivo and disciplinaActiva:
+    if socios.esta_habilitado(id_socio) and disciplinas.esta_habilitada(id_disciplina):
         disciplinas.relacionar_socio_disciplina(id_disciplina, id_socio)
+        flash("Socio inscripto correctamente.")
         return redirect("/socios/")
     else:
         flash("La disciplina o el socio no están habilitados.")

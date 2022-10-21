@@ -1,12 +1,70 @@
-import re
+from src.core import configuracion_sistema
 from src.core.socios.socios import Socio
-from src.core import configuracion_sistema
 from src.core.db import db
-from src.core import configuracion_sistema
 
 
-def estaHabilitado(id):
+def agregar_socio(data):
+    """Esta funcion se utiliza para dar de alta un socio"""
+    socio = Socio(**data)
+    db.session.add(socio)
+    db.session.commit()
+    return socio
+
+
+def buscar_socio(id):
+    """Esta funcion busca un socio por su id"""
+    return Socio.query.get(id)
+
+
+def buscar_socio_email(email):
+    """Esta funcion busca un socio por su email"""
+    return Socio.query.filter_by(email=email).first()
+
+
+def modificar_socio(data):
+    """Esta funcion realiza la modificacion de los datos de un socio"""
+    socio = Socio.query.get(data["id"])
+    socio.nombre = data["nombre"]
+    socio.apellido = data["apellido"]
+    socio.email = data["email"]
+    socio.tipo_documento = data["tipo_documento"]
+    socio.dni = data["dni"]
+    socio.genero = data["genero"]
+    socio.direccion = data["direccion"]
+    socio.telefono = data["telefono"]
+    db.session.commit()
+    return socio
+
+
+def eliminar_socio(id):
+    """Esta funcion realiza la eliminacion de un socio de la BD"""
+    socio = Socio.query.get(id)
+    db.session.delete(socio)
+    db.session.commit()
+
+
+def esta_habilitado(id):
+    """Esta funcion devuelve si el socio esta habilitado o no"""
     return Socio.query.get(id).activo
+
+
+def disciplinas_socio_diccionario(id):
+    """Devuelve una lista de diccionarios con todas las disciplinas que realiza el socio con id pasado por parametro"""
+    socio = buscar_socio(id)
+    if socio is None:
+        return None
+    lista = []
+    for disciplina in socio.disciplinas:
+        fila = disciplina.__dict__
+        dias_horarios = fila["horarios"].split(" de ")
+        diccionario = {
+            "name": fila["nombre"],
+            "days": dias_horarios[0],
+            "time": dias_horarios[1],
+            "teacher": fila["instructores"],
+        }
+        lista.append(diccionario)
+    return lista
 
 
 def todos_los_socios(apellido=None, tipo=None):
@@ -84,46 +142,8 @@ def listar_socios(page, apellido=None, tipo=None):
     return socios
 
 
-def agregar_socio(data):
-    """Esta funcion se utiliza para dar de alta un socio"""
-    socio = Socio(**data)
-    db.session.add(socio)
-    db.session.commit()
-    return socio
-
-
-def buscar_socio(id):
-    """Esta funcion busca un socio por su id"""
-    socio = Socio.query.get(id)
-    return socio
-
-
-def modificar_socio(data):
-    """Esta funcion realiza la modificacion de los datos de un socio"""
-    socio = Socio.query.get(data["id"])
-    socio.nombre = data["nombre"]
-    socio.apellido = data["apellido"]
-    socio.email = data["email"]
-    socio.tipo_documento = data["tipo_documento"]
-    socio.dni = data["dni"]
-    socio.genero = data["genero"]
-    socio.direccion = data["direccion"]
-    socio.telefono = data["telefono"]
-    db.session.commit()
-    return socio
-
-
-def eliminar_socio(id):
-    """Esta funcion realiza la eliminacion de un socio de la BD"""
-    socio = Socio.query.get(id)
-    db.session.delete(socio)
-    db.session.commit()
-
-
 def validar_datos_existentes(dni, email, accion, id=None):
-    """Esta funcion valida que el dni o el email ingresados para dar de alta o modificar un socio no existan.
-    Si el dni existe se devuelve 1, si el email existe se devuelve 2, en caso de que no exista ningun se
-    devuelve 3."""
+    """Esta funcion valida que el dni o el email ingresados para dar de alta o modificar un socio no existan."""
     if accion == "alta":
         dni_existente = Socio.query.filter_by(dni=dni).first()
         email_existente = Socio.query.filter_by(email=email).first()
@@ -144,51 +164,3 @@ def validar_datos_existentes(dni, email, accion, id=None):
             return False, "El Email ya esta cargado en el sistema."
         else:
             return True, "Ambos son validos"
-
-
-def validar_inputs(data):
-    """Esta funcion valida que los inputs sean del tipo correcto."""
-    regex_email = "^[A-Za-z0-9]+[\._]?[A-Za-z0-9]+[@]\w+[.]\w{2,3}$"
-    if not (
-        data["nombre"] != ""
-        and data["apellido"] != ""
-        and data["email"] != ""
-        and data["tipo_documento"] != ""
-        and data["dni"] != ""
-        and data["genero"] != ""
-        and data["direccion"] != ""
-        and data["genero"] != ""
-        and data["telefono"] != ""
-    ):
-        return False, "Todos los datos deben estar completos"
-    elif not (data["dni"].isdigit() and data["telefono"].isdigit()):
-        return False, "El telefono y dni deben ser solo numeros, sin guiones ni puntos."
-    elif not (
-        re.fullmatch(r"[A-Za-z ]{1,50}", data["nombre"])
-        and re.fullmatch(r"[A-Za-z ]{1,50}", data["apellido"])
-    ):
-        return False, "El nombre o apellido son incorrectos."
-    elif not (re.search(regex_email, data["email"])):
-        return False, "El email debe ser valido"
-    elif len(data["dni"]) != 8:
-        return False, "El dni debe contener 8 numeros"
-    elif len(data["telefono"]) != 10 and len(data["telefono"]) != 7:
-        return (
-            False,
-            "El numero de telefono debe tener 10 numeros si es celular y 7 si es de casa.",
-        )
-    elif (
-        data["genero"] != "masculino"
-        and data["genero"] != "femenino"
-        and data["genero"] != "otro"
-    ):
-        return False, "El genero debe estar dentro de las opciones."
-    elif (
-        data["tipo_documento"] != "DNI"
-        and data["tipo_documento"] != "LE"
-        and data["tipo_documento"] != "LC"
-        and data["tipo_documento"] != "DE"
-    ):
-        return False, "El tipo de documento debe estar dentro de las opciones."
-    else:
-        return True, "Inputs Validos"

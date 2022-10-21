@@ -1,4 +1,3 @@
-from email.policy import default
 from src.core.db import db
 from datetime import datetime
 

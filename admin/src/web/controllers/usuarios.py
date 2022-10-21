@@ -1,45 +1,56 @@
-from flask import Blueprint, render_template, request, flash, redirect, session
+from flask import Blueprint, render_template, request, flash, redirect, session, abort
 from src.core import usuarios
+from src.web.controllers import auth
+from src.web.helpers.permission import check_permission
+from src.web.controllers.validators import validator_usuario
 from src.decoradores.login import login_requerido
 import json
 
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
 
 
-def info_usuario_logueado(email):
-    return json.dumps(usuarios.get_datos_diccionario(email))
+def info_usuario(id):
+    """Esta funcion retorna un JSON con informacion del usuario"""
+    return json.dumps(usuarios.get_datos_diccionario(id))
 
 
 @usuario_blueprint.route("/")
 @login_requerido
 def usuario_index():
     """Esta funcion llama al modulo correspondiente para obtener todos los usuarios paginados."""
-    page = request.args.get("page", 1, type=int)
-    email = (
-        request.args.get("busqueda", type=str)
-        if request.args.get("busqueda", type=str) != ""
-        else None
-    )
-    tipo = (
-        request.args.get("tipo", type=str)
-        if request.args.get("tipo", type=str) != ""
-        else None
-    )
-    kwargs = {
-        "usuarios": usuarios.listar_usuarios(page, email, tipo),
-        "email": email,
-        "tipo": tipo,
-        "usuario": usuarios.buscar_usuario_email(session["user"]),
-    }
-    return render_template("usuarios/index.html", **kwargs)
+
+    if check_permission(session["user"], "usuario_index"):
+        page = request.args.get("page", 1, type=int)
+        email = (
+            request.args.get("busqueda", type=str)
+            if request.args.get("busqueda", type=str) != ""
+            else None
+        )
+        tipo = (
+            request.args.get("tipo", type=str)
+            if request.args.get("tipo", type=str) != ""
+            else None
+        )
+        kwargs = {
+            "usuarios": usuarios.listar_usuarios(page, email, tipo),
+            "email": email,
+            "tipo": tipo,
+            "usuario": usuarios.buscar_usuario_email(session["user"]),
+        }
+        return render_template("usuarios/index.html", **kwargs)
+    else:
+        return abort(403)
 
 
 @usuario_blueprint.route("/alta-usuario")
 @login_requerido
 def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
-    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
-    return render_template("usuarios/alta_usuarios.html", **kwargs)
+    if check_permission(session["user"], "usuario_new"):
+        kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
+        return render_template("usuarios/alta_usuarios.html", **kwargs)
+    else:
+        return abort(403)
 
 
 @usuario_blueprint.route("/<id>")
@@ -63,6 +74,16 @@ def usuario_add():
         "username": request.form.get("username"),
         "password": request.form.get("password"),
     }
+    data_rol_usuario = {
+        "ROL_ADMINISTRADOR": request.form.get("rol_administrador"),
+        "ROL_OPERADOR": request.form.get("rol_operador"),
+    }
+    validacion_inputs, mensaje = validator_usuario.validar_inputs(
+        data_usuario["email"], data_usuario["password"]
+    )
+    if validacion_inputs == False:
+        flash(mensaje)
+        return redirect("/usuarios/alta-usuario")
     validacion, mensaje = usuarios.validar_datos_existentes(
         data_usuario["email"], data_usuario["username"], "alta"
     )
@@ -71,6 +92,7 @@ def usuario_add():
         return redirect("/usuarios/alta-usuario")
     else:
         usuario = usuarios.agregar_usuario(data_usuario)
+        usuarios.agregar_roles(usuario, data_rol_usuario)
     # generacion_pagos = pagos.generar_pagos(socio.id)
     return redirect("/usuarios")
 
@@ -79,32 +101,38 @@ def usuario_add():
 @login_requerido
 def usuario_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un usuario."""
-    estado = usuarios.validar_estado(request.form.get("activo"))
-    data_usuario = {
-        "id": request.form.get("id"),
-        "nombre": request.form.get("nombre").capitalize(),
-        "apellido": request.form.get("apellido").capitalize(),
-        "email": request.form.get("email"),
-        "activo": estado,
-        "username": request.form.get("username"),
-    }
-    validacion, mensaje = usuarios.validar_datos_existentes(
-        data_usuario["email"],
-        data_usuario["username"],
-        "modificacion",
-        data_usuario["id"],
-    )
-    if validacion == False:
-        flash(mensaje)
-        return redirect("/usuarios/" + data_usuario["id"])
+    if check_permission(session["user"], "usuario_update"):
+        estado = usuarios.validar_estado(request.form.get("activo"))
+        data_usuario = {
+            "id": request.form.get("id"),
+            "nombre": request.form.get("nombre").capitalize(),
+            "apellido": request.form.get("apellido").capitalize(),
+            "email": request.form.get("email"),
+            "activo": estado,
+            "username": request.form.get("username"),
+        }
+        validacion, mensaje = usuarios.validar_datos_existentes(
+            data_usuario["email"],
+            data_usuario["username"],
+            "modificacion",
+            data_usuario["id"],
+        )
+        if validacion == False:
+            flash(mensaje)
+            return redirect("/usuarios/" + data_usuario["id"])
+        else:
+            usuario = usuarios.modificar_usuario(data_usuario)
+        return redirect("/usuarios")
     else:
-        usuario = usuarios.modificar_usuario(data_usuario)
-    return redirect("/usuarios")
+        return abort(403)
 
 
 @usuario_blueprint.route("/eliminar/<id>", methods=["POST", "GET"])
 @login_requerido
 def usuario_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un usuario."""
-    usuario = usuarios.eliminar_usuario(id)
-    return redirect("/usuarios")
+    if check_permission(session["user"], "usuario_destroy"):
+        usuario = usuarios.eliminar_usuario(id)
+        return redirect("/usuarios")
+    else:
+        abort(403)
