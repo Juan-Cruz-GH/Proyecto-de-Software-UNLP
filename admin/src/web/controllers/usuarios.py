@@ -12,11 +12,6 @@ def info_usuario(id):
     return json.dumps(usuarios.get_datos_diccionario(id))
 
 
-def disciplinas_usuario(id):
-    """Esta funcion retorna un JSON con las disciplinas del usuario"""
-    return json.dumps(usuarios.get_disciplinas_diccionario(id))
-
-
 @usuario_blueprint.route("/")
 @login_requerido
 def usuario_index():
