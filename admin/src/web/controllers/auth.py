@@ -33,7 +33,6 @@ def authenticate():
     flash("Sesión iniciada correctamente")
     return redirect(url_for("home"))
 
-
 @auth_blueprint.get("/logout")
 def logout():
     """Esta funcion realiza el logout de un usuario"""

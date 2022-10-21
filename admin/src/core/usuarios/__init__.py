@@ -1,3 +1,5 @@
+from src.core.roles.roles import Usuario_Rol, Rol
+from src.core import permisos
 from src.core import configuracion_sistema
 from src.core import socios
 from src.core import roles

@@ -28,4 +28,4 @@ class Permiso(db.Model):
     nombre = db.Column(db.String(100), nullable=False)
 
     # relacion
-    roles = db.relationship("Rol", secondary=Permiso_Rol)
+    roles = db.relationship("Rol", secondary=Permiso_Rol, backref="permisos")

@@ -14,6 +14,7 @@ from src.web.controllers.roles import rol_blueprint
 from src.web.controllers.permisos import permiso_blueprint
 from src.web.controllers.auth import auth_blueprint
 from src.decoradores.login import login_requerido
+from src.decoradores.permisos import permiso_requerido
 
 from src.web.config import config
 from src.core.db import db, init_db
@@ -29,6 +30,7 @@ def create_app(env="development", static_folder="static"):
     def home():
         return redirect("/socios/")
 
+    
     app.register_blueprint(usuario_blueprint)
     app.register_blueprint(configuracion_sistema_blueprint)
     app.register_blueprint(disciplina_blueprint)
