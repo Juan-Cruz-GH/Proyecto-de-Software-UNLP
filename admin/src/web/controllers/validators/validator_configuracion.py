@@ -9,11 +9,17 @@ def validar_digito(dato):
 
 def validad_entero(dato):
     """Valida que un dato sea un entero. El return devuelve dos objetos: booleano, mensaje"""
+    if not es_entero(dato):
+        return False, "Ingrese un número valido"
+    return True, "Número valido"
+
+
+def es_entero(dato):
     try:
         n = int(dato)
     except ValueError:
-        return False, "Ingrese un número valido"
-    return True, "Número valido"
+        return False
+    return True
 
 
 def validar_positivo(dato):

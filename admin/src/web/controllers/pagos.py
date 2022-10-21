@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, Response
 from src.core import configuracion_sistema
 from src.core import socios
 from src.core import pagos
+from src.web.controllers.validators.validator_configuracion import es_entero
 from src.exportaciones import generarReciboPDF
 from src.decoradores.login import login_requerido
 import json
@@ -13,34 +14,47 @@ pago_blueprint = Blueprint("pagos", __name__, url_prefix="/pagos")
 def pagos_json():
     """Retorna el json con todos los pagos del socio logeado"""
     id = request.headers.get("id")
-    return json.dumps(pagos.listar_pagos_diccionario(id))
+    if es_entero(id):
+        return json.dumps(pagos.listar_pagos_diccionario(id))
+    return generar_respuesta(
+        "{'error': el id enviado en el header debe ser un entero}", 400, "text"
+    )
 
 
 @pago_blueprint.route("/api")
 def pagar_json(json):
     """Recibe un json que es una lista con un solo elemento que tendria datos del pago
     los datos son "month" y "amount"."""
+    if not configuracion_sistema.get_configuracion_general().activar_pagos:
+        return generar_respuesta(
+            "{'error':'Los pagos no estan activados'}", 400, "text"
+        )
+
     id = request.headers.get("id")
+    if not es_entero(id):
+        return generar_respuesta(
+            "{'error': el id enviado en el header debe ser un entero}", 400, "text"
+        )
     diccionario = json[0]
-    if pagos.pagar_con_api(diccionario, id):
-        return Response(
+    pudo_pagar, mensaje = pagos.pagar_con_api(diccionario, id)
+    if pudo_pagar:  # pagos.pagar_con_api(diccionario, id):
+        return generar_respuesta(
             "{'month':'"
             + str(diccionario["month"])
             + "', 'amount':'"
             + str(diccionario["amount"])
             + "'}",
-            status=201,
-            mimetype="application/json",
+            201,
+            "application/json",
         )
-    return Response(
-        "{'month':'"
-        + str(diccionario["month"])
-        + "', 'amount':'"
-        + str(diccionario["amount"])
-        + "'}",
-        status=200,
-        mimetype="application/json",
-    )
+
+    return generar_respuesta("{'error':'" + mensaje + "'}", 400, "text")
+
+
+def generar_respuesta(respuesta_json, codigo, tipo_respuesta):
+    """Genera una respuesta a los pedidos a la api POST de pagos, recibe un json,
+    el codigo que devuelve el servidor y el tipo de respuesta que envia"""
+    return Response(respuesta_json, status=codigo, mimetype=tipo_respuesta)
 
 
 @pago_blueprint.route("/")
