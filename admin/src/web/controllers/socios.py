@@ -1,13 +1,16 @@
+import json
+
 from flask import Blueprint, session, render_template, request, redirect, flash, abort
+
+from src import exportaciones
 from src.core import socios
 from src.core import pagos
 from src.core import disciplinas
 from src.core import usuarios
 from src.web.helpers.permission import check_permission
-from src import exportaciones
 from src.web.controllers.validators import validator_socio
 from src.decoradores.login import login_requerido
-import json
+
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 

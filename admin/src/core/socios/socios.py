@@ -1,5 +1,6 @@
-from src.core.db import db
 from datetime import datetime
+
+from src.core.db import db
 
 
 class Socio(db.Model):

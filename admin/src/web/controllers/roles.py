@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from src.core import roles  # ?
+
 
 rol_blueprint = Blueprint("roles", __name__, url_prefix="/consultas")
 

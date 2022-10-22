@@ -1,9 +1,12 @@
-from src.web.helpers.permission import check_permission
+import json
+
 from flask import Blueprint, render_template, request, redirect, flash, session, abort
+
+from src.web.helpers.permission import check_permission
 from src.core import configuracion_sistema
 from src.web.controllers.validators import validator_configuracion
 from src.decoradores.login import login_requerido
-import json
+
 
 configuracion_sistema_blueprint = Blueprint(
     "configuracion_sistema", __name__, url_prefix="/configuracion_del_sistema"
