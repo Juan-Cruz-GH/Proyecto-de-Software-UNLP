@@ -3,7 +3,6 @@ import json
 from flask import Blueprint, render_template, request, flash, redirect, session, abort
 
 from src.core import usuarios
-from src.web.controllers import auth
 from src.web.helpers.permission import check_permission
 from src.web.controllers.validators import validator_usuario
 from src.decoradores.login import login_requerido
