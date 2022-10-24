@@ -8,6 +8,14 @@ Manuel Trotta 17395/4
 
 Leiva Hernán Adrián 15495/8
 
+# Usuarios en main
+    usuario administrador:
+        admin@gmail.com
+        admin123
+    usuario operador:
+        operador@gmail.com
+        operador123
+        
 # Base de datos
 
 ## Conexion:

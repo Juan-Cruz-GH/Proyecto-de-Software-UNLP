@@ -2,6 +2,7 @@ import csv
 from io import StringIO
 from fpdf import FPDF
 from datetime import datetime
+
 from flask import make_response
 
 
@@ -32,7 +33,7 @@ class PDFRecibo(FPDF):
 
 
 def generarPDF(data_socios):
-    '''Esta funcion genera un PDF con los datos de todos los socios'''
+    """Esta funcion genera un PDF con los datos de todos los socios"""
     cant_socios = 0
     pdf = PDF()
     pdf.add_page()
@@ -71,7 +72,7 @@ def generarPDF(data_socios):
 
 
 def generarCSV(data_socios):
-    '''Esta funcion retorna un CSV con todos los datos de los socios'''
+    """Esta funcion retorna un CSV con todos los datos de los socios"""
     headers = [
         "nro_socio",
         "apellido",

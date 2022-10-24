@@ -1,7 +1,8 @@
-from flask import abort
-from src.web.helpers.permission import check_permission
 from functools import wraps
 
+from flask import abort
+
+from src.web.helpers.permission import check_permission
 
 
 def permiso_requerido(session, tipo_permiso):
@@ -15,6 +16,7 @@ def permiso_requerido(session, tipo_permiso):
             except KeyError:
                 abort(403)
             return f(*args, **kwargs)
+
         return decorated_function
+
     return permiso_decorador
-        

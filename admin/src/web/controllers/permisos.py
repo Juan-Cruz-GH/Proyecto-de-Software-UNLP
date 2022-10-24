@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from src.core import permisos  # ?
+
 
 permiso_blueprint = Blueprint("permisos", __name__, url_prefix="/consultas")
 
