@@ -189,7 +189,6 @@ def exportar_pdf():
 def inscripcion_socio(id):
     """Esta funcion retorna el formulario para la inscripcion del socio a una disciplina"""
     if check_permission(session["user"], "socio_new"):
-        disciplinas2 = ["futbol", "basquet"]
         kwargs = {
             "id_socio": id,
             "disciplinas": disciplinas.todas_las_disciplinas(),
