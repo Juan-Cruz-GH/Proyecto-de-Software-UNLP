@@ -92,22 +92,24 @@ def listar_disciplinas(page):
     )
 
 
-def validar_disciplina_repetida(nombre, categoria, accion, id=None):
+def validar_disciplina_repetida_alta(nombre, categoria):
     """Chequea que no haya ya una disciplina con mismo nombre y misma categoria"""
-    if accion == "alta":
-        nombre_existente = (
-            Disciplina.query.filter_by(nombre=nombre)
-            .filter(Disciplina.categoria == categoria)
-            .first()
-        )
-    elif accion == "modificacion":
-        nombre_existente = (
-            Disciplina.query.filter_by(nombre=nombre)
-            .filter(Disciplina.categoria == categoria)
-            .filter(Disciplina.id != id)
-            .first()
-        )
-    if nombre_existente is None:
+    if (
+        Disciplina.query.filter_by(nombre=nombre)
+        .filter(Disciplina.categoria == categoria)
+        .first()
+    ) is None:
         return True, "La disciplina no existe aún"
-    else:
-        return False, "La disciplina ya existe"
+    return False, "La disciplina ya existe"
+
+
+def validar_disciplina_repetida_modificacion(nombre, categoria, id):
+    """Chequea que no haya ya una disciplina con mismo nombre y misma categoria, pero distinto id ya que si fuera igual sería la misma disciplina que se está queriendo modificar"""
+    if (
+        Disciplina.query.filter_by(nombre=nombre)
+        .filter(Disciplina.categoria == categoria)
+        .filter(Disciplina.id != id)
+        .first()
+    ) is None:
+        return True, "La disciplina no existe aún"
+    return False, "La disciplina ya existe"

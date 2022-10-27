@@ -70,8 +70,8 @@ def disciplina_add():
     if not inputs_validos:
         flash(mensaje)
         return redirect("/disciplinas/alta-disciplina")
-    no_existe, mensaje = disciplinas.validar_disciplina_repetida(
-        data_disciplina["nombre"], data_disciplina["categoria"], "alta"
+    no_existe, mensaje = disciplinas.validar_disciplina_repetida_alta(
+        data_disciplina["nombre"], data_disciplina["categoria"]
     )
     if not no_existe:
         flash(mensaje)
@@ -99,10 +99,9 @@ def disciplina_update():
     if not inputs_validos:
         flash(mensaje)
         return redirect("/disciplinas/" + data_disciplina["id"])
-    no_existe, mensaje = disciplinas.validar_disciplina_repetida(
+    no_existe, mensaje = disciplinas.validar_disciplina_repetida_modificacion(
         data_disciplina["nombre"],
         data_disciplina["categoria"],
-        "modificacion",
         data_disciplina["id"],
     )
     if not no_existe:
