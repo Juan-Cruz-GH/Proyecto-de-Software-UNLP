@@ -206,14 +206,15 @@ def add_inscripcion():
     """Esta funcion realiza la inscripcion de un socio a una disciplina"""
     id_socio = request.form.get("id_socio")
     id_disciplina = request.form.get("categoria")
-    if(validator_socio.validar_inscripcion(id_socio, id_disciplina)):
+    validacion_inputs, message = validator_socio.validar_inscripcion(id_socio, id_disciplina)
+    if(validacion_inputs):
         if socios.esta_habilitado(id_socio) and disciplinas.esta_habilitada(id_disciplina):
             disciplinas.relacionar_socio_disciplina(id_disciplina, id_socio)
             flash("Socio inscripto correctamente.")
             return redirect("/socios/")
         else:
-            flash("La disciplina o el socio no se seleccionaron o no están habilitados.")
+            flash("La disciplina o el socio no están habilitados.")
             return redirect("/socios/inscripcion-socio/" + id_socio)
     else:
-        flash("La disciplina o el socio no se seleccionaron.")
+        flash(message)
         return redirect("/socios/inscripcion-socio/" + id_socio)
