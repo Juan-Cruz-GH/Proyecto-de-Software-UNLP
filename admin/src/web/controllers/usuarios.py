@@ -3,7 +3,7 @@ import json
 from flask import Blueprint, render_template, request, flash, redirect, session, abort
 
 from src.core import usuarios
-from src.web.helpers.permission import check_permission
+from src.web.helpers.permission import has_permission
 from src.web.controllers.validators import validator_usuario
 from src.decoradores.login import login_requerido
 
@@ -21,7 +21,7 @@ def info_usuario(id):
 def usuario_index():
     """Esta funcion llama al modulo correspondiente para obtener todos los usuarios paginados."""
 
-    if check_permission(session["user"], "usuario_index"):
+    if has_permission(session["user"], "usuario_index"):
         page = request.args.get("page", 1, type=int)
         email = (
             request.args.get("busqueda", type=str)
@@ -48,7 +48,7 @@ def usuario_index():
 @login_requerido
 def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
-    if check_permission(session["user"], "usuario_new"):
+    if has_permission(session["user"], "usuario_new"):
         kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
         return render_template("usuarios/alta_usuarios.html", **kwargs)
     else:
@@ -103,7 +103,7 @@ def usuario_add():
 @login_requerido
 def usuario_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un usuario."""
-    if check_permission(session["user"], "usuario_update"):
+    if has_permission(session["user"], "usuario_update"):
         if usuarios.verificar_rol_usuario(request.form.get("id")):
             estado = True
         else:
@@ -136,7 +136,7 @@ def usuario_update():
 @login_requerido
 def usuario_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un usuario."""
-    if check_permission(session["user"], "usuario_destroy"):
+    if has_permission(session["user"], "usuario_destroy"):
         usuario = usuarios.eliminar_usuario(id)
         return redirect("/usuarios")
     else:

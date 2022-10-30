@@ -7,7 +7,7 @@ from src.core import socios
 from src.core import pagos
 from src.core import disciplinas
 from src.core import usuarios
-from src.web.helpers.permission import check_permission
+from src.web.helpers.permission import has_permission
 from src.web.controllers.validators import validator_socio
 from src.decoradores.login import login_requerido
 
@@ -26,7 +26,7 @@ def disciplinas_socio(id):
 @login_requerido
 def socio_index():
     """Esta funcion llama al modulo correspondiente para obtener todos los socios paginados."""
-    if check_permission(session["user"], "socio_index"):
+    if has_permission(session["user"], "socio_index"):
         page = request.args.get("page", 1, type=int)
         apellido = (
             request.args.get("busqueda", type=str)
@@ -53,7 +53,7 @@ def socio_index():
 @login_requerido
 def form_socio():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
-    if check_permission(session["user"], "socio_new"):
+    if has_permission(session["user"], "socio_new"):
         kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
         return render_template("socios/alta_socios.html", **kwargs)
     else:
@@ -106,7 +106,7 @@ def socio_add():
 @login_requerido
 def socio_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un socio."""
-    if check_permission(session["user"], "socio_update"):
+    if has_permission(session["user"], "socio_update"):
         data_socio = {
             "id": request.form.get("id"),
             "nombre": request.form.get("nombre").capitalize(),
@@ -139,7 +139,7 @@ def socio_update():
 @login_requerido
 def socio_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un socio."""
-    if check_permission(session["user"], "socio_destroy"):
+    if has_permission(session["user"], "socio_destroy"):
         socios.eliminar_socio(id)
         return redirect("/socios")
     else:
@@ -188,7 +188,7 @@ def exportar_pdf():
 @login_requerido
 def inscripcion_socio(id):
     """Esta funcion retorna el formulario para la inscripcion del socio a una disciplina"""
-    if check_permission(session["user"], "socio_new"):
+    if has_permission(session["user"], "socio_new"):
         kwargs = {
             "id_socio": id,
             "disciplinas": disciplinas.todas_las_disciplinas(),
@@ -206,9 +206,13 @@ def add_inscripcion():
     """Esta funcion realiza la inscripcion de un socio a una disciplina"""
     id_socio = request.form.get("id_socio")
     id_disciplina = request.form.get("categoria")
-    validacion_inputs, message = validator_socio.validar_inscripcion(id_socio, id_disciplina)
-    if(validacion_inputs):
-        if socios.esta_habilitado(id_socio) and disciplinas.esta_habilitada(id_disciplina):
+    validacion_inputs, message = validator_socio.validar_inscripcion(
+        id_socio, id_disciplina
+    )
+    if validacion_inputs:
+        if socios.esta_habilitado(id_socio) and disciplinas.esta_habilitada(
+            id_disciplina
+        ):
             disciplinas.relacionar_socio_disciplina(id_disciplina, id_socio)
             flash("Socio inscripto correctamente.")
             return redirect("/socios/")

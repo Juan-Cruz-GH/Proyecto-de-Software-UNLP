@@ -2,7 +2,7 @@ from functools import wraps
 
 from flask import abort
 
-from src.web.helpers.permission import check_permission
+from src.web.helpers.permission import has_permission
 
 
 def permiso_requerido(session, tipo_permiso):
@@ -12,7 +12,7 @@ def permiso_requerido(session, tipo_permiso):
             try:
                 print(session["user"])
                 print(tipo_permiso)
-                check_permission(session["user"], tipo_permiso)
+                has_permission(session["user"], tipo_permiso)
             except KeyError:
                 abort(403)
             return f(*args, **kwargs)

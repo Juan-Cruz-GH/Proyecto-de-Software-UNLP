@@ -2,7 +2,7 @@ import json
 
 from flask import Blueprint, render_template, request, redirect, flash, session, abort
 
-from src.web.helpers.permission import check_permission
+from src.web.helpers.permission import has_permission
 from src.core import configuracion_sistema
 from src.web.controllers.validators import validator_configuracion
 from src.decoradores.login import login_requerido
@@ -26,7 +26,7 @@ def configuracion_index():
     almacenados en la base de datos. Si no existe la tupla en la base de datos
     se crea automaticamente con una configuracion predeterminada
     """
-    if not check_permission(session["user"], "config_index"):
+    if not has_permission(session["user"], "config_index"):
         return abort(403)
     paginado = {"paginado": configuracion_sistema.get_paginado()}
     config = {"config": configuracion_sistema.get_configuracion_general()}
@@ -53,7 +53,7 @@ def configuracion_actualizar():
     la tupla de configuracion general y la tupla de configuracion
     paginado
     """
-    if not check_permission(session["user"], "config_update"):
+    if not has_permission(session["user"], "config_update"):
         return abort(403)
     paginado = {
         "elementos_pagina": request.form.get("elementos_pagina"),

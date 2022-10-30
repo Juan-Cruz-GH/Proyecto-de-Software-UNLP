@@ -13,7 +13,7 @@ from src.web.controllers.permisos import permiso_blueprint
 from src.web.controllers.auth import auth_blueprint
 from src.decoradores.login import login_requerido
 from src.web.helpers import handlers
-from src.web.helpers.permission import check_permission
+from src.web.helpers.permission import has_permission
 from src.web.config import config
 from src.core.db import db, init_db
 
@@ -48,7 +48,7 @@ def create_app(env="development", static_folder="static"):
     app.register_error_handler(403, handlers.not_authorized_error)
     app.register_error_handler(404, handlers.not_found_error)
 
-    app.jinja_env.globals.update(permiso=check_permission)
+    app.jinja_env.globals.update(permiso=has_permission)
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):

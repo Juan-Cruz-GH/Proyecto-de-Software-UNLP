@@ -6,7 +6,7 @@ from src.core import configuracion_sistema
 from src.core import socios
 from src.core import pagos
 from src.web.controllers.validators.validator_configuracion import es_entero
-from src.web.helpers.permission import check_permission
+from src.web.helpers.permission import has_permission
 from src.exportaciones import generarReciboPDF
 from src.decoradores.login import login_requerido
 
@@ -75,7 +75,7 @@ def pagos_index():
 @login_requerido
 def pagos_socios(id):
     """Esta funcion retorna todos los pagos asociados al socio solicitado"""
-    if (check_permission(session["user"], "pago_index")):
+    if has_permission(session["user"], "pago_index"):
         page = request.args.get("page", 1, type=int)
         kwargs = {
             "pagos": pagos.listar_pagos_socio(id, page),
@@ -89,7 +89,7 @@ def pagos_socios(id):
 @pago_blueprint.route("/pago_de_cuota/<id>")
 def pagar_cuota(id):
     """Paso de confirmacion antes de cambiar el estado de una cuota impaga a pagada"""
-    if (check_permission(session["user"], "pago_pay")):
+    if has_permission(session["user"], "pago_pay"):
         pago = pagos.get_cuota(id)
         if pago.estado == True:
             return pagos_socios(pago.socio.id)
@@ -107,7 +107,7 @@ def pagar_cuota(id):
 @pago_blueprint.route("/pago_confirmado/<id>")
 def confirmar_pago(id):
     """Cambia el estado de una cuota de impaga a pagada. Persiste la fecha y monto de pago en la base de datos"""
-    if (check_permission(session["user"], "pago_pay")):
+    if has_permission(session["user"], "pago_pay"):
         pago = pagos.get_cuota(id)
         if pago.estado == False:
             pagos.pagar_cuota(id, pago.socio.id)
