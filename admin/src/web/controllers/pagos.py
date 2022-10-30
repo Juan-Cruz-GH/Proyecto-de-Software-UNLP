@@ -41,7 +41,7 @@ def pagar_json(json):
         )
     diccionario = json[0]
     pudo_pagar, mensaje = pagos.pagar_con_api(diccionario, id)
-    if pudo_pagar:  # pagos.pagar_con_api(diccionario, id):
+    if pudo_pagar:
         return generar_respuesta(
             "{'month':'"
             + str(diccionario["month"])

@@ -92,7 +92,6 @@ def usuario_add():
     else:
         usuario = usuarios.agregar_usuario(data_usuario)
         usuarios.agregar_roles(usuario, data_rol_usuario)
-    # generacion_pagos = pagos.generar_pagos(socio.id)
     return redirect("/usuarios")
 
 
@@ -124,7 +123,7 @@ def usuario_update():
         flash(mensaje)
         return redirect("/usuarios/" + data_usuario["id"])
     else:
-        usuario = usuarios.modificar_usuario(data_usuario)
+        usuarios.modificar_usuario(data_usuario)
     return redirect("/usuarios")
 
 
@@ -134,5 +133,5 @@ def usuario_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un usuario."""
     if not (has_permission(session["user"], "usuario_destroy")):
         return abort(403)
-    usuario = usuarios.eliminar_usuario(id)
+    usuarios.eliminar_usuario(id)
     return redirect("/usuarios")

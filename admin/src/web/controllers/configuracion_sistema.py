@@ -125,5 +125,5 @@ def configuracion_actualizar():
     if hubo_error:
         return redirect("/configuracion_del_sistema/")
 
-    config = configuracion_sistema.modificar_configuracion(configuracion, paginado)
+    configuracion_sistema.modificar_configuracion(configuracion, paginado)
     return redirect("/configuracion_del_sistema/")
