@@ -75,45 +75,42 @@ def pagos_index():
 @login_requerido
 def pagos_socios(id):
     """Esta funcion retorna todos los pagos asociados al socio solicitado"""
-    if has_permission(session["user"], "pago_index"):
-        page = request.args.get("page", 1, type=int)
-        kwargs = {
-            "pagos": pagos.listar_pagos_socio(id, page),
-            "id_socio": id,
-        }
-        return render_template("pagos/pagos_socio.html", **kwargs)
-    else:
+    if not (has_permission(session["user"], "pago_index")):
         return abort(403)
+    page = request.args.get("page", 1, type=int)
+    kwargs = {
+        "pagos": pagos.listar_pagos_socio(id, page),
+        "id_socio": id,
+    }
+    return render_template("pagos/pagos_socio.html", **kwargs)
 
 
 @pago_blueprint.route("/pago_de_cuota/<id>")
 def pagar_cuota(id):
     """Paso de confirmacion antes de cambiar el estado de una cuota impaga a pagada"""
-    if has_permission(session["user"], "pago_pay"):
-        pago = pagos.get_cuota(id)
-        if pago.estado == True:
-            return pagos_socios(pago.socio.id)
-        socio = socios.buscar_socio(pago.socio.id)
-        if pago.total == 0:
-            total = pagos.calcular_cuota(pago.id, pago.socio.id)
-        else:
-            total = pago.total
-        kwargs = {"pago": pago, "total": total}
-        return render_template("pagos/pago_de_cuota.html", **kwargs)
-    else:
+    if not (has_permission(session["user"], "pago_pay")):
         return abort(403)
+    pago = pagos.get_cuota(id)
+    if pago.estado == True:
+        return pagos_socios(pago.socio.id)
+    socio = socios.buscar_socio(pago.socio.id)
+    if pago.total == 0:
+        total = pagos.calcular_cuota(pago.id, pago.socio.id)
+    else:
+        total = pago.total
+    kwargs = {"pago": pago, "total": total}
+    return render_template("pagos/pago_de_cuota.html", **kwargs)
 
 
 @pago_blueprint.route("/pago_confirmado/<id>")
 def confirmar_pago(id):
     """Cambia el estado de una cuota de impaga a pagada. Persiste la fecha y monto de pago en la base de datos"""
-    if has_permission(session["user"], "pago_pay"):
-        pago = pagos.get_cuota(id)
-        if pago.estado == False:
-            pagos.pagar_cuota(id, pago.socio.id)
-        return pagos_socios(pago.socio.id)
-    else:
+    if not (has_permission(session["user"], "pago_pay")):
         return abort(403)
+    pago = pagos.get_cuota(id)
+    if pago.estado == False:
+        pagos.pagar_cuota(id, pago.socio.id)
+    return pagos_socios(pago.socio.id)
 
 
 @pago_blueprint.route("/descargar_pdf_recibo/<id>")
