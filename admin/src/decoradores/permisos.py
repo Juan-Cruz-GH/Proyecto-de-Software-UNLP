@@ -10,8 +10,6 @@ def permiso_requerido(session, tipo_permiso):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             try:
-                print(session["user"])
-                print(tipo_permiso)
                 has_permission(session["user"], tipo_permiso)
             except KeyError:
                 abort(403)
