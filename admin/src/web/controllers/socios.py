@@ -1,13 +1,16 @@
+import json
+
 from flask import Blueprint, session, render_template, request, redirect, flash, abort
+
+from src import exportaciones
 from src.core import socios
 from src.core import pagos
 from src.core import disciplinas
 from src.core import usuarios
 from src.web.helpers.permission import check_permission
-from src import exportaciones
 from src.web.controllers.validators import validator_socio
 from src.decoradores.login import login_requerido
-import json
+
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
@@ -87,7 +90,7 @@ def socio_add():
     validacion, mensaje = socios.validar_datos_existentes(
         data_socio["dni"], data_socio["email"], "alta"
     )
-    if validacion == False:
+    if not validacion:
         flash(mensaje)
         return redirect("/socios/alta-socio")
     validacion_inputs, mensaje = validator_socio.validar_inputs(data_socio)
@@ -126,7 +129,7 @@ def socio_update():
         if not validacion_inputs:
             flash(mensaje)
             return redirect("/socios/" + data_socio["id"])
-        socio = socios.modificar_socio(data_socio)
+        socios.modificar_socio(data_socio)
         return redirect("/socios")
     else:
         return abort(403)
@@ -137,7 +140,7 @@ def socio_update():
 def socio_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un socio."""
     if check_permission(session["user"], "socio_destroy"):
-        socio = socios.eliminar_socio(id)
+        socios.eliminar_socio(id)
         return redirect("/socios")
     else:
         return abort(403)
@@ -186,7 +189,6 @@ def exportar_pdf():
 def inscripcion_socio(id):
     """Esta funcion retorna el formulario para la inscripcion del socio a una disciplina"""
     if check_permission(session["user"], "socio_new"):
-        disciplinas2 = ["futbol", "basquet"]
         kwargs = {
             "id_socio": id,
             "disciplinas": disciplinas.todas_las_disciplinas(),
@@ -204,10 +206,15 @@ def add_inscripcion():
     """Esta funcion realiza la inscripcion de un socio a una disciplina"""
     id_socio = request.form.get("id_socio")
     id_disciplina = request.form.get("categoria")
-    if socios.esta_habilitado(id_socio) and disciplinas.esta_habilitada(id_disciplina):
-        disciplinas.relacionar_socio_disciplina(id_disciplina, id_socio)
-        flash("Socio inscripto correctamente.")
-        return redirect("/socios/")
+    validacion_inputs, message = validator_socio.validar_inscripcion(id_socio, id_disciplina)
+    if(validacion_inputs):
+        if socios.esta_habilitado(id_socio) and disciplinas.esta_habilitada(id_disciplina):
+            disciplinas.relacionar_socio_disciplina(id_disciplina, id_socio)
+            flash("Socio inscripto correctamente.")
+            return redirect("/socios/")
+        else:
+            flash("La disciplina o el socio no están habilitados.")
+            return redirect("/socios/inscripcion-socio/" + id_socio)
     else:
-        flash("La disciplina o el socio no están habilitados.")
+        flash(message)
         return redirect("/socios/inscripcion-socio/" + id_socio)

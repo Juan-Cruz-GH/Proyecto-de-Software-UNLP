@@ -1,9 +1,7 @@
-from src.web.helpers.permission import check_permission
-from flask import Flask, render_template, redirect
+from flask import Flask, redirect
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
-
-from src.web.helpers import handlers
+from flask_cors import CORS
 
 from src.web.controllers.usuarios import usuario_blueprint
 from src.web.controllers.configuracion_sistema import configuracion_sistema_blueprint
@@ -15,8 +13,8 @@ from src.web.controllers.roles import rol_blueprint
 from src.web.controllers.permisos import permiso_blueprint
 from src.web.controllers.auth import auth_blueprint
 from src.decoradores.login import login_requerido
-from src.decoradores.permisos import permiso_requerido
-
+from src.web.helpers import handlers
+from src.web.helpers.permission import check_permission
 from src.web.config import config
 from src.core.db import db, init_db
 
@@ -25,6 +23,7 @@ def create_app(env="development", static_folder="static"):
     app = Flask(__name__, static_folder=static_folder)
     app.config.from_object(config[env])
     csrf = CSRFProtect(app)
+    CORS(app)
 
     @app.get("/")
     @login_requerido

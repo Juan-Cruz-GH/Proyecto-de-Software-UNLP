@@ -1,7 +1,8 @@
+from datetime import datetime, date
+
 from src.core import socios
 from src.core import configuracion_sistema
 from src.core.pagos.pagos import Pago
-from datetime import datetime, date
 from src.core.db import db
 
 
