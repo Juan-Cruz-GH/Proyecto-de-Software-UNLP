@@ -147,20 +147,14 @@ def validar_datos_existentes(dni, email, accion, id=None):
     if accion == "alta":
         dni_existente = Socio.query.filter_by(dni=dni).first()
         email_existente = Socio.query.filter_by(email=email).first()
-        if dni_existente is not None:
-            return False, "El Dni ya esta cargado en el sistema."
-        elif email_existente is not None:
-            return False, "El Email ya esta cargado en el sistema."
-        else:
-            return True, "Ambos son validos"
     elif accion == "modificacion":
         dni_existente = Socio.query.filter_by(dni=dni).filter(Socio.id != id).first()
         email_existente = (
             Socio.query.filter_by(email=email).filter(Socio.id != id).first()
         )
-        if dni_existente is not None:
-            return False, "El Dni ya esta cargado en el sistema."
-        elif email_existente is not None:
-            return False, "El Email ya esta cargado en el sistema."
-        else:
-            return True, "Ambos son validos"
+    if dni_existente is not None:
+        return False, "El Dni ya esta cargado en el sistema."
+    elif email_existente is not None:
+        return False, "El Email ya esta cargado en el sistema."
+    else:
+        return True, "Ambos son validos"

@@ -87,7 +87,7 @@ def categorias_de_cada_disciplina():
 
 def listar_disciplinas(page):
     """Listado de las disciplinas según el paginado definido en el módulo de configuración"""
-    return Disciplina.query.paginate(
+    return Disciplina.query.order_by(Disciplina.nombre).paginate(
         page, per_page=configuracion_sistema.get_paginado().elementos_pagina
     )
 

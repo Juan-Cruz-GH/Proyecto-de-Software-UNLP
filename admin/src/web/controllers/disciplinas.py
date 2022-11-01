@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, flash, session,
 from src.core import disciplinas
 from src.core import usuarios
 from src.web.controllers.validators import validator_disciplinas
-from src.web.helpers.permission import check_permission
+from src.web.helpers.permission import has_permission
 from src.decoradores.login import login_requerido
 
 
@@ -21,7 +21,7 @@ def disciplina_json():
 @login_requerido
 def disciplina_index():
     """Muestra las disciplinas de la página indicada en el request. Si no hay request, la página será la primera"""
-    if not (check_permission(session["user"], "disciplina_index")):
+    if not (has_permission(session["user"], "disciplina_index")):
         return abort(403)
     page = request.args.get("page", 1, type=int)
     kwargs = {
@@ -35,7 +35,7 @@ def disciplina_index():
 @login_requerido
 def form_disciplina():
     """Devuelve el template con el formulario para agregar una disciplina"""
-    if not (check_permission(session["user"], "disciplina_new")):
+    if not (has_permission(session["user"], "disciplina_new")):
         return abort(403)
     kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
     return render_template("disciplinas/alta_disciplinas.html", **kwargs)
@@ -56,7 +56,7 @@ def disciplina_profile(id):
 @login_requerido
 def disciplina_add():
     """Llama al validador de inputs para validar los inputs del formulario para agregar una disciplina. Si los inputs son validos, valida que la disciplina no exista ya. Si no existe, se la agrega."""
-    if not (check_permission(session["user"], "disciplina_new")):
+    if not (has_permission(session["user"], "disciplina_new")):
         return abort(403)
     data_disciplina = {
         "nombre": request.form.get("nombre").capitalize(),
@@ -84,7 +84,7 @@ def disciplina_add():
 @login_requerido
 def disciplina_update():
     """Llama al validador de inputs para validar los inputs del formulario para modificar una disciplina. Si los inputs son validos, valida que la disciplina no exista ya. Si no existe, se la modifica."""
-    if not (check_permission(session["user"], "disciplina_update")):
+    if not (has_permission(session["user"], "disciplina_update")):
         return abort(403)
     data_disciplina = {
         "id": request.form.get("id"),
@@ -115,7 +115,7 @@ def disciplina_update():
 @login_requerido
 def disciplina_delete(id):
     """Le dice al modelo que borre la disciplina enviada"""
-    if not (check_permission(session["user"], "disciplina_destroy")):
+    if not (has_permission(session["user"], "disciplina_destroy")):
         return abort(403)
     disciplinas.eliminar_disciplina(id)
     return redirect("/disciplinas")

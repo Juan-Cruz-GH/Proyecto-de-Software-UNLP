@@ -59,9 +59,12 @@
                 <li><a class="dropdown-item" href="{{ url_for('usuarios.form_usuario') }}">Agregar Usuario</a></li>
               </ul>
             </li>
+
             <li class="nav-item">
+              {% if permiso(session["user"], "usuario_index")%}
               <a class="nav-link mx-2" aria-current="page"
                 href="{{ url_for('configuracion_sistema.configuracion_index') }}">Configuración</a>
+              {% endif %}
             </li>
 
           </ul>
