@@ -1,10 +1,13 @@
+import json
+
 from flask import Blueprint, render_template, request, redirect, flash, session, abort
+
 from src.core import disciplinas
 from src.core import usuarios
 from src.web.controllers.validators import validator_disciplinas
 from src.web.helpers.permission import check_permission
 from src.decoradores.login import login_requerido
-import json
+
 
 disciplina_blueprint = Blueprint("disciplinas", __name__, url_prefix="/disciplinas")
 
@@ -18,26 +21,24 @@ def disciplina_json():
 @login_requerido
 def disciplina_index():
     """Muestra las disciplinas de la página indicada en el request. Si no hay request, la página será la primera"""
-    if check_permission(session["user"], "disciplina_index"):
-        page = request.args.get("page", 1, type=int)
-        kwargs = {
-            "disciplinas": disciplinas.listar_disciplinas(page),
-            "usuario": usuarios.buscar_usuario_email(session["user"]),
-        }
-        return render_template("disciplinas/index.html", **kwargs)
-    else:
+    if not (check_permission(session["user"], "disciplina_index")):
         return abort(403)
+    page = request.args.get("page", 1, type=int)
+    kwargs = {
+        "disciplinas": disciplinas.listar_disciplinas(page),
+        "usuario": usuarios.buscar_usuario_email(session["user"]),
+    }
+    return render_template("disciplinas/index.html", **kwargs)
 
 
 @disciplina_blueprint.route("/alta-disciplina")
 @login_requerido
 def form_disciplina():
     """Devuelve el template con el formulario para agregar una disciplina"""
-    if check_permission(session["user"], "disciplina_new"):
-        kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
-        return render_template("disciplinas/alta_disciplinas.html", **kwargs)
-    else:
+    if not (check_permission(session["user"], "disciplina_new")):
         return abort(403)
+    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
+    return render_template("disciplinas/alta_disciplinas.html", **kwargs)
 
 
 @disciplina_blueprint.route("/<id>")
@@ -54,7 +55,9 @@ def disciplina_profile(id):
 @disciplina_blueprint.route("/alta", methods=["POST"])
 @login_requerido
 def disciplina_add():
-    """Llama a las funciones del modelo para validar los inputs del formulario para agregar una disciplina. Si los inputs son validos, le dice al modelo que la agregue"""
+    """Llama al validador de inputs para validar los inputs del formulario para agregar una disciplina. Si los inputs son validos, valida que la disciplina no exista ya. Si no existe, se la agrega."""
+    if not (check_permission(session["user"], "disciplina_new")):
+        return abort(403)
     data_disciplina = {
         "nombre": request.form.get("nombre").capitalize(),
         "categoria": request.form.get("categoria").capitalize(),
@@ -63,63 +66,56 @@ def disciplina_add():
         "costo": request.form.get("costo"),
         "habilitada": (request.form.get("habilitada") == "Si"),
     }
-    resultado, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
-    if resultado:
-        resultado, mensaje = disciplinas.validar_disciplina_repetida(
-            data_disciplina["nombre"], data_disciplina["categoria"], "alta"
-        )
-        if resultado:
-            disciplinas.agregar_disciplina(data_disciplina)
-            return redirect("/disciplinas")
-        else:
-            flash(mensaje)
-            return redirect("/disciplinas/alta-disciplina")
-    else:
+    inputs_validos, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
+    if not inputs_validos:
         flash(mensaje)
         return redirect("/disciplinas/alta-disciplina")
+    no_existe, mensaje = disciplinas.validar_disciplina_repetida_alta(
+        data_disciplina["nombre"], data_disciplina["categoria"]
+    )
+    if not no_existe:
+        flash(mensaje)
+        return redirect("/disciplinas/alta-disciplina")
+    disciplinas.agregar_disciplina(data_disciplina)
+    return redirect("/disciplinas")
 
 
 @disciplina_blueprint.route("/modificacion", methods=["POST"])
 @login_requerido
 def disciplina_update():
-    """Llama a las funciones del modelo para validar los inputs del formulario para modificar una disciplina. Si los inputs son validos, le dice al modelo que la modifique"""
-    if check_permission(session["user"], "disciplina_update"):
-        data_disciplina = {
-            "id": request.form.get("id"),
-            "nombre": request.form.get("nombre").capitalize(),
-            "categoria": request.form.get("categoria").capitalize(),
-            "instructores": request.form.get("instructores"),
-            "horarios": request.form.get("horarios"),
-            "costo": request.form.get("costo"),
-            "habilitada": (request.form.get("habilitada") == "Si"),
-        }
-        resultado, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
-        if resultado:
-            resultado, mensaje = disciplinas.validar_disciplina_repetida(
-                data_disciplina["nombre"],
-                data_disciplina["categoria"],
-                "modificacion",
-                data_disciplina["id"],
-            )
-            if resultado:
-                disciplinas.modificar_disciplina(data_disciplina)
-                return redirect("/disciplinas")
-            else:
-                flash(mensaje)
-                return redirect("/disciplinas/" + data_disciplina["id"])
-        else:
-            flash(mensaje)
-            return redirect("/disciplinas/" + data_disciplina["id"])
-    else:
+    """Llama al validador de inputs para validar los inputs del formulario para modificar una disciplina. Si los inputs son validos, valida que la disciplina no exista ya. Si no existe, se la modifica."""
+    if not (check_permission(session["user"], "disciplina_update")):
         return abort(403)
+    data_disciplina = {
+        "id": request.form.get("id"),
+        "nombre": request.form.get("nombre").capitalize(),
+        "categoria": request.form.get("categoria").capitalize(),
+        "instructores": request.form.get("instructores"),
+        "horarios": request.form.get("horarios"),
+        "costo": request.form.get("costo"),
+        "habilitada": (request.form.get("habilitada") == "Si"),
+    }
+    inputs_validos, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
+    if not inputs_validos:
+        flash(mensaje)
+        return redirect("/disciplinas/" + data_disciplina["id"])
+    no_existe, mensaje = disciplinas.validar_disciplina_repetida_modificacion(
+        data_disciplina["nombre"],
+        data_disciplina["categoria"],
+        data_disciplina["id"],
+    )
+    if not no_existe:
+        flash(mensaje)
+        return redirect("/disciplinas/" + data_disciplina["id"])
+    disciplinas.modificar_disciplina(data_disciplina)
+    return redirect("/disciplinas")
 
 
 @disciplina_blueprint.route("/eliminar/<id>", methods=["DELETE", "GET"])
 @login_requerido
 def disciplina_delete(id):
     """Le dice al modelo que borre la disciplina enviada"""
-    if check_permission(session["user"], "disciplina_destroy"):
-        disciplinas.eliminar_disciplina(id)
-        return redirect("/disciplinas")
-    else:
+    if not (check_permission(session["user"], "disciplina_destroy")):
         return abort(403)
+    disciplinas.eliminar_disciplina(id)
+    return redirect("/disciplinas")

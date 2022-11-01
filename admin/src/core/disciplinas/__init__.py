@@ -19,7 +19,7 @@ def buscar_disciplina(id):
 
 def modificar_disciplina(data):
     """Modificar datos de una disciplina en la BD"""
-    disciplina = Disciplina.query.get(data["id"])
+    disciplina = buscar_disciplina(data["id"])
     disciplina.nombre = data["nombre"]
     disciplina.categoria = data["categoria"]
     disciplina.instructores = data["instructores"]
@@ -32,7 +32,7 @@ def modificar_disciplina(data):
 
 def eliminar_disciplina(id):
     """Dar de baja una disciplina en la BD buscandola por su id que seguro existe"""
-    db.session.delete(Disciplina.query.get(id))
+    db.session.delete(buscar_disciplina(id))
     db.session.commit()
 
 
@@ -70,7 +70,8 @@ def todas_las_disciplinas():
 
 
 def categorias_de_cada_disciplina():
-    """Devuelve todas las categorias entre todas las disciplinas"""
+    """Devuelve un diccionario donde cada clave es una disciplina y su valor es una lista de todas las categorias
+    que tiene esa disciplina"""
     disciplinas = todas_las_disciplinas()
     todas_las_categorias = {}
     for disciplina in disciplinas:
@@ -91,26 +92,24 @@ def listar_disciplinas(page):
     )
 
 
-def validar_disciplina_repetida(nombre, categoria, accion, id=None):
+def validar_disciplina_repetida_alta(nombre, categoria):
     """Chequea que no haya ya una disciplina con mismo nombre y misma categoria"""
-    if accion == "alta":
-        nombre_existente = (
-            Disciplina.query.filter_by(nombre=nombre)
-            .filter(Disciplina.categoria == categoria)
-            .first()
-        )
-        if nombre_existente is None:
-            return True, "La disciplina no existe aún"
-        else:
-            return False, "La disciplina ya existe"
-    elif accion == "modificacion":
-        nombre_existente = (
-            Disciplina.query.filter_by(nombre=nombre)
-            .filter(Disciplina.categoria == categoria)
-            .filter(Disciplina.id != id)
-            .first()
-        )
-        if nombre_existente is None:
-            return True, "La disciplina no existe aún"
-        else:
-            return False, "La disciplina ya existe"
+    if (
+        Disciplina.query.filter_by(nombre=nombre)
+        .filter(Disciplina.categoria == categoria)
+        .first()
+    ) is None:
+        return True, "La disciplina no existe aún"
+    return False, "La disciplina ya existe"
+
+
+def validar_disciplina_repetida_modificacion(nombre, categoria, id):
+    """Chequea que no haya ya una disciplina con mismo nombre y misma categoria, pero distinto id ya que si fuera igual sería la misma disciplina que se está queriendo modificar"""
+    if (
+        Disciplina.query.filter_by(nombre=nombre)
+        .filter(Disciplina.categoria == categoria)
+        .filter(Disciplina.id != id)
+        .first()
+    ) is None:
+        return True, "La disciplina no existe aún"
+    return False, "La disciplina ya existe"

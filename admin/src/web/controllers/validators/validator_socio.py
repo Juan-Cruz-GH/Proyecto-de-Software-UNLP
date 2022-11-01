@@ -46,3 +46,9 @@ def validar_inputs(data):
         return False, "El tipo de documento debe estar dentro de las opciones."
     else:
         return True, "Inputs Validos"
+
+def validar_inscripcion(id_socio, id_disciplina):
+    if not (id_socio.isdigit() and id_disciplina.isdigit()):
+        return False, "No se ha seleccionado ninguna opcion"
+    else:
+        return True, "Seleccion valida"

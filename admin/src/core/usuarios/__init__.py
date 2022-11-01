@@ -1,11 +1,10 @@
-from src.core.roles.roles import Usuario_Rol, Rol
-from src.core import permisos
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from src.core import configuracion_sistema
 from src.core import socios
 from src.core import roles
 from src.core.usuarios.usuarios import Usuario
 from src.core.db import db
-from werkzeug.security import check_password_hash, generate_password_hash
 
 
 def agregar_usuario(data):
@@ -159,8 +158,8 @@ def agregar_roles(usuario, roles_usuario):
 
 def verificar_rol_usuario(id):
     usuario = buscar_usuario(id)
-    rol_admin = roles.buscar_rol('ROL_ADMINISTRADOR')
-    if(rol_admin in usuario.roles):
+    rol_admin = roles.buscar_rol("ROL_ADMINISTRADOR")
+    if rol_admin in usuario.roles:
         return True
     else:
         return False

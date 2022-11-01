@@ -1,10 +1,12 @@
+import json
+
 from flask import Blueprint, render_template, request, flash, redirect, session, abort
+
 from src.core import usuarios
-from src.web.controllers import auth
 from src.web.helpers.permission import check_permission
 from src.web.controllers.validators import validator_usuario
 from src.decoradores.login import login_requerido
-import json
+
 
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
 
@@ -102,7 +104,7 @@ def usuario_add():
 def usuario_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un usuario."""
     if check_permission(session["user"], "usuario_update"):
-        if(usuarios.verificar_rol_usuario(request.form.get('id'))):
+        if usuarios.verificar_rol_usuario(request.form.get("id")):
             estado = True
         else:
             estado = usuarios.validar_estado(request.form.get("activo"))
