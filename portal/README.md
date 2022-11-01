@@ -1,3 +1,12 @@
+# ToDo a la fecha 1 de noviembre:
+1. Carnet digital       -> Hernán
+2. Home                 -> Manuel
+3. Listado disciplinas  -> Juan
+4. Autenticación        -> Nico
+5. Pagos                -> Más adelante
+6. API Carnet           -> Más adelante
+7. Estadísticas         -> Más adelante
+8. API Login            -> Más adelante
 # .
 
 This template should help get you started developing with Vue 3 in Vite.
