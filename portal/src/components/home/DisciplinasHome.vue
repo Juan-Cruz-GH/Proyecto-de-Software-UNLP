@@ -1,16 +1,23 @@
 <template>
   <div class="row" v-if="disciplines && disciplines.length">
-    <div class="col-sm-9 col-md-7 col-lg-6 mx-auto">
+    <div class="col-sm-9 col-md-9 col-lg-6 mx-auto">
       <div class="card border-0 shadow rounded-3 my-5">
         <div class="card-body p-4 p-sm-5">
           <h5 class="card-title text-center mb-5 fw-light fs-5">Disciplinas</h5>
-          <div v-for="i in Array(rows).keys()"
-            :key="i">
-            <div class="row mb-3">
-              <div v-for="(discipline, index) in disciplines_row[i]" 
-                  :key="index" 
-                  class="col-sm-9 col-md-7 col-lg-6">
-                <div class="card text-center">
+          <div class="row mb-4">
+            <div class="col-6">
+              <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Buscar disciplina por nombre..."
+                aria-label="Buscar por nombre"
+                v-model="search"
+                />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-9 col-md-9 col-lg-6" v-for="(discipline, index) in filterList" :key="index">
+              <div class="card text-center">
                 <div class="card-header"></div>
                 <div class="card-body">
                   <h5 class="card-title">{{discipline.name}}</h5>
@@ -28,7 +35,6 @@
               </div>
             </div>
           </div>
-          </div>
         </div>
       </div>
     </div>
@@ -40,10 +46,16 @@ export default {
   data() {
     return {
       disciplines: [],
-      disciplines_row: [],
       errors: [],
-      rows: 0,
+      search: '',
     };
+  },
+  computed: {
+    filterList(){
+      return this.disciplines.filter(discipline => {
+        return discipline.name.toLowerCase().includes(this.search.toLowerCase())
+      })
+    }
   },
   // Fetches posts when the component is created.
   created() {
@@ -52,13 +64,6 @@ export default {
       .then((response) => {
         // JSON responses are automatically parsed.
         this.disciplines = response.data;
-        this.rows = this.disciplines.length % 2 == 0 ? this.disciplines.length / 2 : Math.floor((this.disciplines.length / 2) + 1);
-        this.disciplines.forEach((value, index) => {
-          if ((index != 0) && (index % 2 != 0)) {
-            return;
-          }
-          this.disciplines_row.push(this.disciplines.slice(index, index+2))
-        });
       })
       .catch((e) => {
         this.errors.push(e);
