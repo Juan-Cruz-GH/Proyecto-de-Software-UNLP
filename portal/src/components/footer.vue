@@ -22,7 +22,9 @@
     <!-- Section: Social media -->
   </div>
   <!-- Grid container -->
-
+  <div class="row">
+      <p class="text-white"><strong>Email: </strong>{{info_club["email"]}} | <strong>Telefono: </strong> {{info_club["phone"]}}</p>
+  </div>
   <!-- Copyright -->
   <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
     © 2022 Copyright:
@@ -31,3 +33,26 @@
   <!-- Copyright -->
 </footer>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      info_club: [],
+      errors: [],
+    };
+  },
+  // Fetches posts when the component is created.
+  created() {
+    axios
+      .get("http://127.0.0.1:5000/api/club/info")
+      .then((response) => {
+        // JSON responses are automatically parsed.
+        this.info_club = response.data;
+      })
+      .catch((e) => {
+        this.errors.push(e);
+      });
+  },
+};
+</script>
