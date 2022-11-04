@@ -1,9 +1,13 @@
 <script setup>
-import Home from "../components/Home.vue";
+import Disciplinas from "../components/home/DisciplinasHome.vue";
+import Informacion from "../components/home/InformacionHome.vue"
+import Footer from "../components/footer.vue"
 </script>
 
 <template>
   <main>
-    <Home />
+    <Informacion />
+    <Disciplinas />
+    <Footer />
   </main>
 </template>

@@ -56,7 +56,6 @@ import { RouterLink, RouterView } from "vue-router";
                     aria-labelledby="navbarDropdownMenuLink"
                   >
                     <li><a class="dropdown-item" href="#">Perfil</a></li>
-                    <li><a class="dropdown-item" href="#">Configuracion</a></li>
                     <li><a class="dropdown-item" href="#">Cerrar Sesion</a></li>
                   </ul>
                 </li>

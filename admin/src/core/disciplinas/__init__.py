@@ -59,6 +59,8 @@ def listar_disciplinas_diccionario():
             "days": dias_horarios[0],  # hay que consultar con el ayudante
             "time": dias_horarios[1],  #
             "teacher": fila["instructores"],
+            "price": fila["costo"],
+            "category": fila["categoria"],
         }
         lista.append(diccionario)
     return lista
