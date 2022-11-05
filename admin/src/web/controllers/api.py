@@ -50,8 +50,12 @@ def obtener_token():
 
 @api_blueprint.route("/me/license", methods=["GET"])  # 2da entrega
 def obtener_info_credencial():
-    """Obtiene la información personal y el estado de credencial del usuario logueado en este momento y lo retorna"""
-    pass
+    """Obtiene la información personal y el estado de credencial del socio enviado en el request y lo retorna"""
+    if not socios.existe_socio(request.headers.get("id")):
+        return make_response({"Error": "El socio no existe"}, 400)
+    respuesta = make_response(socios.json_estado_socio(request.headers.get("id")), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
 
 
 @api_blueprint.route("/club/info", methods=["GET"])  # 2da entrega
