@@ -7,7 +7,7 @@ from src.core import socios
 from src.core import pagos
 from src.web.controllers.validators.validator_configuracion import es_entero
 from src.web.helpers.permission import has_permission
-from src.exportaciones import generarReciboPDF
+from src.web.exportaciones import recibo_PDF
 from src.decoradores.login import login_requerido
 
 
@@ -30,9 +30,7 @@ def pagar_json(json):
     """Recibe un json que es una lista con un solo elemento que tendria datos del pago
     los datos son "month" y "amount"."""
     if not configuracion_sistema.get_configuracion_general().activar_pagos:
-        return generar_respuesta(
-            "{'error':'Los pagos no estan activados'}", 400, "text"
-        )
+        return generar_respuesta("{'error':'Los pagos no estan activados'}", 400, "text")
 
     id = request.headers.get("id")
     if not es_entero(id):
@@ -124,7 +122,7 @@ def generarRecibo(id):
         "pago": pagos.get_cuota(id),
     }
     if data_pago["pago"].estado == True:
-        output = generarReciboPDF(data_pago)
+        output = recibo_PDF.generar_recibo_PDF(data_pago)
         return output
     else:
         return pagos_socios(data_pago["pago"].socio.id)
