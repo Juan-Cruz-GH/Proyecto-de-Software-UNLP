@@ -5,11 +5,9 @@ from src.web.controllers import configuracion_sistema
 from src.web.controllers import usuarios
 from src.web.controllers import socios
 from src.web.controllers import pagos
-from flask_cors import cross_origin
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
-@cross_origin
 @api_blueprint.route("/club/disciplinas", methods=["GET"])  # 1er entrega
 def obtener_disciplinas():
     """Obtiene el json con todas las disciplinas y lo retorna"""
@@ -17,7 +15,6 @@ def obtener_disciplinas():
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
-@cross_origin
 @api_blueprint.route("/me/disciplinas", methods=["GET"])  # 1er entrega
 def obtener_disciplinas_usuario():
     """Obtiene el json con todas las disciplinas del usuario que se envia por parametro y lo retorna"""
@@ -27,13 +24,11 @@ def obtener_disciplinas_usuario():
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
-@cross_origin
 @api_blueprint.route("/me/payments", methods=["GET"])  # 1er entrega
 def obtener_pagos():
     """Obtiene la lista de pagos registrados del usuario logueado en este momento y lo retorna"""
     return pagos.pagos_json()
 
-@cross_origin
 @api_blueprint.route("/me/payments", methods=["POST"])  # 1er entrega
 def registrar_pagos():
     """Registra un nuevo pago para el usuario logueado en este momento"""

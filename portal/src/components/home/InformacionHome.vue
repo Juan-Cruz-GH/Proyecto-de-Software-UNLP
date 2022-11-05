@@ -11,7 +11,13 @@
         />
       </div>
       <div class="col-sm-4 col-md-4 col-lg-4">
-        <button class="btn btn-outline-success" type="submit">Buscar</button>
+        <button v-on:click="swapMostrar" class="btn btn-outline-success" type="submit">Buscar</button>
+      </div>
+    </div>
+    <div class="row justify-content-center" v-if="mostrar_estado">
+      <div class="col-6">
+        <p v-if="socio[0]['estado']">Socio al dia</p>
+        <p v-else>Socio moroso</p>
       </div>
     </div>
     <div class="row">
@@ -106,12 +112,28 @@
 export default {
   data() {
     return {
-      nro_socio: '',
+      info_socios: [],
+      mostrar_estado: false,
+      nro_socio: ''
     };
+  },
+  methods: {
+    swapMostrar() {
+      let search_socio;
+      this.mostrar_estado = true;
+    }
   },
   // Fetches posts when the component is created.
   created() {
-
+    axios
+      .get("#")
+      .then((response) => {
+        // JSON responses are automatically parsed.
+        this.info_socios = response.data;
+      })
+      .catch((e) => {
+        this.errors.push(e);
+      });
   },
 };
 </script>
