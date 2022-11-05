@@ -50,7 +50,7 @@ def esta_habilitada(id):
 def listar_disciplinas_diccionario():
     """Devuelve una lista de diccionarios con todas las disciplinas."""
     lista = []
-    disciplinas = Disciplina.query.all()
+    disciplinas = Disciplina.query.order_by(Disciplina.nombre).all()
     for disciplina in disciplinas:
         fila = disciplina.__dict__
         dias_horarios = fila["horarios"].split(" de ")
