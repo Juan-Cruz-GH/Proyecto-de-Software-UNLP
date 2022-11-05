@@ -16,6 +16,16 @@ from src.decoradores.login import login_requerido
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
 
+def json_estado_socio(id):
+    return json.dumps(socios.estado_socio(id))
+
+
+def existe_socio(id):
+    if socios.buscar_socio(id) is None:
+        return False
+    return True
+
+
 def disciplinas_socio(id):
     """Devuelve un json con todas las disciplinas que realiza el socio con id pasado por parametro"""
     if socios.disciplinas_socio_diccionario(id) is None:

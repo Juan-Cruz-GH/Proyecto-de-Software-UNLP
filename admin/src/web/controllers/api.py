@@ -9,6 +9,7 @@ from flask_cors import cross_origin
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
+
 @cross_origin
 @api_blueprint.route("/club/disciplinas", methods=["GET"])  # 1er entrega
 def obtener_disciplinas():
@@ -16,6 +17,7 @@ def obtener_disciplinas():
     respuesta = make_response(disciplinas.disciplina_json(), 200)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
+
 
 @cross_origin
 @api_blueprint.route("/me/disciplinas", methods=["GET"])  # 1er entrega
@@ -27,11 +29,13 @@ def obtener_disciplinas_usuario():
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
+
 @cross_origin
 @api_blueprint.route("/me/payments", methods=["GET"])  # 1er entrega
 def obtener_pagos():
     """Obtiene la lista de pagos registrados del usuario logueado en este momento y lo retorna"""
     return pagos.pagos_json()
+
 
 @cross_origin
 @api_blueprint.route("/me/payments", methods=["POST"])  # 1er entrega
@@ -53,10 +57,15 @@ def obtener_token():
     pass
 
 
+@cross_origin
 @api_blueprint.route("/me/license", methods=["GET"])  # 2da entrega
 def obtener_info_credencial():
-    """Obtiene la información personal y el estado de credencial del usuario logueado en este momento y lo retorna"""
-    pass
+    """Obtiene la información personal y el estado de credencial del socio enviado en el request y lo retorna"""
+    if not socios.existe_socio(request.headers.get("id")):
+        return make_response({"Error": "El socio no existe"}, 400)
+    respuesta = make_response(socios.json_estado_socio(request.headers.get("id")), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
 
 
 @api_blueprint.route("/club/info", methods=["GET"])  # 2da entrega
