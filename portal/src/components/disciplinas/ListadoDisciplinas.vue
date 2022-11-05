@@ -17,6 +17,8 @@
             </tr>
         </tbody>
     </table>
+    <div id="pre-footer" style="min-height: 40vh;">
+    </div>
 </template>
   
 <script>
