@@ -28,8 +28,6 @@ def existe_socio(id):
 
 def disciplinas_socio(id):
     """Devuelve un json con todas las disciplinas que realiza el socio con id pasado por parametro"""
-    if socios.disciplinas_socio_diccionario(id) is None:
-        return None
     return json.dumps(socios.disciplinas_socio_diccionario(id))
 
 
