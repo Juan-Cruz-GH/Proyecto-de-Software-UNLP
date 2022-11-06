@@ -14,10 +14,19 @@
         <button v-on:click="swapMostrar" class="btn btn-outline-success" type="submit">Buscar</button>
       </div>
     </div>
-    <div class="row justify-content-center" v-if="mostrar_estado">
+    <!--<div class="row justify-content-center" v-if="mostrar_estado">
       <div class="col-6">
-        <p v-if="socio[0]['estado']">Socio al dia</p>
-        <p v-else>Socio moroso</p>
+        <p v-if="info_socio['status']=='OK'">Usted esta al dia</p>
+        <p v-else>Usted debe cuotas</p>
+      </div>
+    </div>-->
+    <div class="row mt-2 justify-content-center" v-if="mostrar_estado">
+      <div class="col-6">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <p v-if="info_socio['status']=='OK'">Usted esta al dia</p>
+          <p v-else>Usted debe cuotas</p>
+        <button v-on:click="swapEsconder" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
       </div>
     </div>
     <div class="row">
@@ -112,28 +121,33 @@
 export default {
   data() {
     return {
-      info_socios: [],
+      info_socio: [],
       mostrar_estado: false,
       nro_socio: ''
     };
   },
   methods: {
     swapMostrar() {
-      let search_socio;
-      this.mostrar_estado = true;
-    }
-  },
-  // Fetches posts when the component is created.
-  created() {
-    axios
-      .get("#")
+      const config = {
+        headers:{
+          id: this.nro_socio
+        }
+      }
+      axios
+      .get("http://127.0.0.1:5000/api/me/license", config)
       .then((response) => {
         // JSON responses are automatically parsed.
-        this.info_socios = response.data;
+        this.info_socio = response.data;
       })
       .catch((e) => {
         this.errors.push(e);
       });
+      this.mostrar_estado = true;
+    },
+    swapEsconder(){
+      this.mostrar_estado = false;
+    }
   },
+  // Fetches posts when the component is created.
 };
 </script>
