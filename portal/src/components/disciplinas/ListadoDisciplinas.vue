@@ -1,18 +1,19 @@
 <template>
-    <table id="tableComponent" class="table table-bordered table-striped">
+    <table id="tableComponent" class="table table-bordered table-hover">
         <thead>
             <tr>
                 <!-- Listar los campos para la tabla -->
-                <th v-for="campo in campos">
-                    {{ campo }} <i class="bi bi-sort-alpha-down" aria-label='Sort Icon'></i>
+                <th style="text-align: center" v-for="campo in campos">
+                    {{ campo }}
                 </th>
             </tr>
         </thead>
         <tbody>
-            <!-- Listar data de cada fila -->
+            <!-- Listar data de cada fila, si la llave es precio le agrego el signo $ -->
             <tr v-for="item in disciplines" :key='item'>
-                <td v-for="key in keys" :key='key'>
-                    {{ item[key] }}
+                <td style="text-align: center" v-for="key in keys" :key='key'>
+                    <span v-if="esPrecio(key)">$ {{ item[key] }}</span>
+                    <span v-else>{{ item[key] }}</span>
                 </td>
             </tr>
         </tbody>
@@ -31,12 +32,12 @@ export default {
             keys: ["name", "category", "days", "time", "teacher", "price"],
         };
     },
-    computed: {
-        filterList() {
-            return this.disciplines.filter(discipline => {
-                return discipline.name.toLowerCase().includes(this.search.toLowerCase())
-            })
+    methods: {
+        esPrecio(key) {
+            return (key === "price")
         }
+    },
+    computed: {
     },
     // Fetches posts when the component is created.
     created() {
