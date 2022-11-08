@@ -53,7 +53,7 @@ def listar_usuarios(page, email=None, tipo=None):
     if (email is not None) and (tipo is not None):
         if tipo == "true":
             usuarios = (
-                Usuario.query.filter_by(email=email)
+                Usuario.query.filter(Usuario.email.contains(email))
                 .filter(Usuario.activo.is_(True))
                 .paginate(
                     page, per_page=configuracion_sistema.get_paginado().elementos_pagina
@@ -61,14 +61,14 @@ def listar_usuarios(page, email=None, tipo=None):
             )
         else:
             usuarios = (
-                Usuario.query.filter_by(email=email)
+                Usuario.query.filter(Usuario.email.contains(email))
                 .filter(Usuario.activo.is_(False))
                 .paginate(
                     page, per_page=configuracion_sistema.get_paginado().elementos_pagina
                 )
             )
     elif email is not None:
-        usuarios = Usuario.query.filter_by(email=email).paginate(
+        usuarios = Usuario.query.filter(Usuario.email.contains(email)).paginate(
             page, per_page=configuracion_sistema.get_paginado().elementos_pagina
         )
     elif tipo is not None:
