@@ -16,7 +16,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-9 col-md-9 col-lg-6" v-for="(discipline, index) in filterList" :key="index">
+            <div class="col-sm-9 col-md-9 col-lg-6 mb-3" v-for="(discipline, index) in filterList" :key="index">
               <div class="card text-center">
                 <div class="card-header"></div>
                 <div class="card-body">
