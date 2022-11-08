@@ -14,17 +14,10 @@
         <button v-on:click="swapMostrar" class="btn btn-outline-success" type="submit">Buscar</button>
       </div>
     </div>
-    <!--<div class="row justify-content-center" v-if="mostrar_estado">
-      <div class="col-6">
-        <p v-if="info_socio['status']=='OK'">Usted esta al dia</p>
-        <p v-else>Usted debe cuotas</p>
-      </div>
-    </div>-->
     <div class="row mt-2 justify-content-center" v-if="mostrar_estado">
       <div class="col-6">
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          <p v-if="info_socio['status']=='OK'">{{info_socio["description"]}}</p>
-          <p v-else>{{info_socio["description"]}}</p>
+          <p>{{info_socio["description"]}}</p>
         <button v-on:click="swapEsconder" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
       </div>
