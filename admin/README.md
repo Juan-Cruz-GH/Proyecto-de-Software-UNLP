@@ -1,4 +1,4 @@
-## ToDo a la fecha 5 de noviembre:
+## ToDo a la fecha 8 de noviembre:
 
 ### Todos
  - **Lineas de código deben tener length 79 como máximo**
