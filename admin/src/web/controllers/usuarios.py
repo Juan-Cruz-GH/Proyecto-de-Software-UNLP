@@ -11,11 +11,6 @@ from src.decoradores.login import login_requerido
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
 
 
-def info_usuario(id):
-    """Esta funcion retorna un JSON con informacion del usuario"""
-    return json.dumps(usuarios.get_datos_diccionario(id))
-
-
 @usuario_blueprint.route("/")
 @login_requerido
 def usuario_index():
