@@ -61,7 +61,7 @@
             </li>
 
             <li class="nav-item">
-              {% if permiso(session["user"], "usuario_index")%}
+              {% if permiso(session["user"], "config_index")%}
               <a class="nav-link mx-2" aria-current="page"
                 href="{{ url_for('configuracion_sistema.configuracion_index') }}">Configuración</a>
               {% endif %}

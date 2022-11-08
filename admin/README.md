@@ -4,7 +4,6 @@
  - **Lineas de código deben tener length 79 como máximo**
 
 ### Hernán
- - **Ocultar el botón "Configuración" si el usuario logueado es Operador**
  - **Módulo pagos tira error 502 cuando el ayudante creó un usuario nuevo y quiso pagarle una cuota**
 
 ### Nico
