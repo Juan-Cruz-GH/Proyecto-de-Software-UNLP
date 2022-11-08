@@ -23,8 +23,8 @@
     <div class="row mt-2 justify-content-center" v-if="mostrar_estado">
       <div class="col-6">
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          <p v-if="info_socio['status']=='OK'">Usted esta al dia</p>
-          <p v-else>Usted debe cuotas</p>
+          <p v-if="info_socio['status']=='OK'">{{info_socio["description"]}}</p>
+          <p v-else>{{info_socio["description"]}}</p>
         <button v-on:click="swapEsconder" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
       </div>
@@ -128,21 +128,25 @@ export default {
   },
   methods: {
     swapMostrar() {
-      const config = {
-        headers:{
-          id: this.nro_socio
+      if(this.nro_socio == ''){
+        
+      }else{
+        const config = {
+          headers:{
+            id: this.nro_socio
+          }
         }
+        axios
+        .get("http://127.0.0.1:5000/api/me/license", config)
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          this.info_socio = response.data;
+        })
+        .catch((e) => {
+          this.errors.push(e);
+        });
+        this.mostrar_estado = true;    
       }
-      axios
-      .get("http://127.0.0.1:5000/api/me/license", config)
-      .then((response) => {
-        // JSON responses are automatically parsed.
-        this.info_socio = response.data;
-      })
-      .catch((e) => {
-        this.errors.push(e);
-      });
-      this.mostrar_estado = true;
     },
     swapEsconder(){
       this.mostrar_estado = false;
