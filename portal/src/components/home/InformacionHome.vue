@@ -2,13 +2,8 @@
   <div>
     <div class="row justify-content-center mt-3">
       <div class="col-sm-2 col-md-2 col-lg-2">
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Verificar cuota con NroSocio..."
-          aria-label="Buscar por nombre"
-          v-model="nro_socio"
-        />
+        <input class="form-control me-2" type="search" placeholder="Verificar cuota con NroSocio..."
+          aria-label="Buscar por nombre" v-model="nro_socio" />
       </div>
       <div class="col-sm-4 col-md-4 col-lg-4">
         <button v-on:click="swapMostrar" class="btn btn-outline-success" type="submit">Buscar</button>
@@ -27,11 +22,7 @@
         <div class="card mb-3">
           <div class="row g-0">
             <div class="col-md-4">
-              <img
-                src="../../../public/imagen_club.jpg"
-                class="img-fluid rounded-start"
-                alt="imagen del club"
-              />
+              <img src="../../../public/imagen_club.jpg" class="img-fluid rounded-start" alt="imagen del club" />
             </div>
             <div class="col-md-8">
               <div class="card-body">
@@ -56,12 +47,8 @@
         <div class="card mb-3">
           <div class="row g-0">
             <div class="col-md-4">
-              <img
-                src="../../../public/basquet.jpg"
-                class="img-fluid rounded-start"
-                alt="imagen de socios"
-                style="height: 100%"
-              />
+              <img src="../../../public/basquet.jpg" class="img-fluid rounded-start" alt="imagen de socios"
+                style="height: 100%" />
             </div>
             <div class="col-md-8">
               <div class="card-body">
@@ -83,12 +70,8 @@
         <div class="card mb-3">
           <div class="row g-0">
             <div class="col-md-4">
-              <img
-                src="../../../public/socios.jpg"
-                class="img-fluid rounded-start"
-                alt="imagen de socios"
-                style="height: 100%"
-              />
+              <img src="../../../public/socios.jpg" class="img-fluid rounded-start" alt="imagen de socios"
+                style="height: 100%" />
             </div>
             <div class="col-md-8">
               <div class="card-body">
@@ -121,27 +104,27 @@ export default {
   },
   methods: {
     swapMostrar() {
-      if(this.nro_socio == ''){
-        
-      }else{
+      if (this.nro_socio == '') {
+
+      } else {
         const config = {
-          headers:{
+          headers: {
             id: this.nro_socio
           }
         }
         axios
-        .get("http://127.0.0.1:5000/api/me/license", config)
-        .then((response) => {
-          // JSON responses are automatically parsed.
-          this.info_socio = response.data;
-        })
-        .catch((e) => {
-          this.errors.push(e);
-        });
-        this.mostrar_estado = true;    
+          .get("http://127.0.0.1:5000/api/me/license", config)
+          .then((response) => {
+            // JSON responses are automatically parsed.
+            this.info_socio = response.data;
+          })
+          .catch((e) => {
+            this.errors.push(e);
+          });
+        this.mostrar_estado = true;
       }
     },
-    swapEsconder(){
+    swapEsconder() {
       this.mostrar_estado = false;
     }
   },
