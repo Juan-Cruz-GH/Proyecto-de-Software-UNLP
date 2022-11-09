@@ -18,7 +18,7 @@ def authenticate():
     """Esta funcion realiza la autenticacion de un usuario"""
     params = request.form
     validacion, mensaje = validator_usuario.validar_inputs(
-        params["email"], params["password"]
+        params["email"], params["password"], {"ROL_ADMINISTRADOR": "ignorar"}
     )
     if not validacion:
         flash(mensaje, "error")

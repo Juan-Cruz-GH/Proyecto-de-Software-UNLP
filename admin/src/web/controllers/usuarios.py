@@ -73,7 +73,7 @@ def usuario_add():
         "ROL_OPERADOR": request.form.get("rol_operador"),
     }
     validacion_inputs, mensaje = validator_usuario.validar_inputs(
-        data_usuario["email"], data_usuario["password"]
+        data_usuario["email"], data_usuario["password"], data_rol_usuario
     )
     if validacion_inputs == False:
         flash(mensaje)
