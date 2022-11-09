@@ -12,7 +12,9 @@
     <div class="row mt-2 justify-content-center" v-if="mostrar_estado">
       <div class="col-6">
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          <p>{{info_socio["description"]}}</p>
+          <p v-if="errors && errors.length">El numero de socio ingresado no existe</p>
+          <p v-else-if="mostrar_vacio">Debe ingresar algun numero de socio</p>
+          <p v-else>{{info_socio["description"]}}</p>
         <button v-on:click="swapEsconder" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
       </div>
@@ -99,14 +101,18 @@ export default {
     return {
       info_socio: [],
       mostrar_estado: false,
-      nro_socio: ''
+      mostrar_vacio: false,
+      nro_socio: '',
+      errors: [],
     };
   },
   methods: {
     swapMostrar() {
       if (this.nro_socio == '') {
-
+        this.mostrar_vacio = true;
+        this.mostrar_estado = true;
       } else {
+        this.errors.pop()
         const config = {
           headers: {
             id: this.nro_socio
@@ -119,6 +125,7 @@ export default {
             this.info_socio = response.data;
           })
           .catch((e) => {
+            console.log(e)
             this.errors.push(e);
           });
         this.mostrar_estado = true;
@@ -126,6 +133,7 @@ export default {
     },
     swapEsconder() {
       this.mostrar_estado = false;
+      this.mostrar_vacio = false;
     }
   },
   // Fetches posts when the component is created.
