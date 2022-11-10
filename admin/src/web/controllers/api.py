@@ -18,6 +18,7 @@ def obtener_disciplinas():
 
 @api_blueprint.route("/me/disciplinas", methods=["GET"])
 def obtener_disciplinas_socio():
+    # no enviar header, viaja el JWT, no se pregunta sobre otro socio
     """Valida el header id y devuelve la respuesta en formato json"""
     id = request.headers.get("id")
     mensaje, http_code = validator_api.validar_header_disciplinas_socio(id)
@@ -28,6 +29,7 @@ def obtener_disciplinas_socio():
 
 @api_blueprint.route("/me/license", methods=["GET"])
 def obtener_info_y_estado_socio():
+    # no enviar header, viaja el JWT, no se pregunta sobre otro socio
     """Obtiene la información personal y el estado de credencial del socio enviado en el request y lo retorna"""
     id = request.headers.get("id")
     mensaje, http_code = validator_api.validar_header_estado_socio(id)
@@ -62,5 +64,6 @@ def obtener_token():
 
 @api_blueprint.route("/me/profile", methods=["GET"])
 def obtener_info_usuario():
+    # no enviar header, viaja el JWT, no se pregunta sobre otro socio
     """Obtiene el json con todos los datos del usuario que se envia por parametro y lo retorna"""
     pass
