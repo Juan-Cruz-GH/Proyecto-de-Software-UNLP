@@ -55,8 +55,8 @@ def obtener_info_club():
 
 
 @api_blueprint.route("/auth", methods=["POST"])
-def obtener_token():
-    """"""
+def socio_authenticate():
+    """Recibe email y password de un socio y lo valida"""
     pass
 
 
