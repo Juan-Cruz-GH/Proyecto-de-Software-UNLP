@@ -69,3 +69,10 @@ def obtener_info_club():
 def obtener_token():
     """Recibe un json con user y password y retorna su JWT"""
     pass
+
+@api_blueprint.get("/club/socios-disciplinas")
+def obtener_socios_disciplinas():
+    """Retorna un json con los socios por disciplinas"""
+    respuesta = make_response(disciplinas.disciplinas_socios(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta

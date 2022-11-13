@@ -10,6 +10,9 @@ def agregar_socio(data):
     db.session.commit()
     return socio
 
+def socios_habilitados_disciplina():
+    """Retorna los socios habilitados"""
+    return Socio.query.filter(Socio.activo.is_(True)).all()
 
 def buscar_socio(id):
     """Esta funcion busca un socio por su id"""
