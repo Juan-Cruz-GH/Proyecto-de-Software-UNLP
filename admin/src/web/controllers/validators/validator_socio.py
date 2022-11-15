@@ -7,6 +7,7 @@ def validar_inputs(data):
         data["nombre"] != ""
         and data["apellido"] != ""
         and data["email"] != ""
+        and data["password"] != ""
         and data["tipo_documento"] != ""
         and data["dni"] != ""
         and data["genero"] != ""

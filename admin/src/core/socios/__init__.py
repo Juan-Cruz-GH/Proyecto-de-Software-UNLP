@@ -1,3 +1,5 @@
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from src.core import configuracion_sistema
 from src.core.socios.socios import Socio
 from src.core.db import db
@@ -6,6 +8,7 @@ from src.core.db import db
 def agregar_socio(data):
     """Esta funcion se utiliza para dar de alta un socio"""
     socio = Socio(**data)
+    socio.password = generate_password_hash(socio.password, method="sha256")
     db.session.add(socio)
     db.session.commit()
     return socio
@@ -183,3 +186,11 @@ def estado_socio(id):
         "description": "El socio no registra deuda ni sanción.",
         "profile": datos_perfil,
     }
+
+def find_user_by_mail_and_pass(email, password):
+    """esta funcion verifica que el socio ingresado en login publico exista"""
+    socio = Socio.query.filter(Socio.email == email).first()
+    if socio is None:
+        return None
+    elif check_password_hash(socio.password, password):
+        return socio

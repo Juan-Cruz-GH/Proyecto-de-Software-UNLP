@@ -87,6 +87,7 @@ def socio_add():
         "nombre": request.form.get("nombre").capitalize(),
         "apellido": request.form.get("apellido").capitalize(),
         "email": request.form.get("email"),
+        "password": request.form.get("password"),
         "activo": True,
         "tipo_documento": request.form.get("tipo_documento"),
         "dni": request.form.get("documento"),

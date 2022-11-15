@@ -2,6 +2,7 @@ from flask import Flask, redirect
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 
 from src.web.controllers.usuarios import usuario_blueprint
 from src.web.controllers.configuracion_sistema import configuracion_sistema_blueprint
@@ -21,8 +22,9 @@ def create_app(env="development", static_folder="static"):
     app = Flask(__name__, static_folder=static_folder)
     app.config.from_object(config[env])
     csrf = CSRFProtect(app)
-    CORS(app)
+    CORS(app, supports_credentials=True)
     csrf.exempt(api_blueprint)
+    jwt = JWTManager(app)
 
     @app.get("/")
     @login_requerido
