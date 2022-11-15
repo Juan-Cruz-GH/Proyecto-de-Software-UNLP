@@ -43,6 +43,7 @@
 
 <script>
 export default {
+  inject: ['URL_API_DISCIPLINAS'],
   data() {
     return {
       disciplines: [],
@@ -60,7 +61,7 @@ export default {
   // Fetches posts when the component is created.
   created() {
     axios
-      .get("http://127.0.0.1:5000/api/club/disciplinas")
+      .get(this.URL_API_DISCIPLINAS)
       .then((response) => {
         // JSON responses are automatically parsed.
         this.disciplines = response.data;
