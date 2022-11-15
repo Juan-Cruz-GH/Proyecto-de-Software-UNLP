@@ -1,6 +1,15 @@
 import json
 
-from flask import Blueprint, render_template, request, Response, session, abort
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    Response,
+    session,
+    abort,
+    redirect,
+    flash,
+)
 
 from src.core import configuracion_sistema
 from src.core import socios
@@ -30,7 +39,9 @@ def pagar_json(json):
     """Recibe un json que es una lista con un solo elemento que tendria datos del pago
     los datos son "month" y "amount"."""
     if not configuracion_sistema.get_configuracion_general().activar_pagos:
-        return generar_respuesta("{'error':'Los pagos no estan activados'}", 400, "text")
+        return generar_respuesta(
+            "{'error':'Los pagos no estan activados'}", 400, "text"
+        )
 
     id = request.headers.get("id")
     if not es_entero(id):
@@ -106,8 +117,11 @@ def confirmar_pago(id):
     if not (has_permission(session["user"], "pago_pay")):
         return abort(403)
     pago = pagos.get_cuota(id)
+
     if pago.estado == False:
-        pagos.pagar_cuota(id, pago.socio.id)
+        if not pagos.pagar_cuota(id, pago.socio.id):
+            flash("Error. El valor de la cuota esta fuera de rango")
+            return pagos_socios(pago.socio.id)
     return pagos_socios(pago.socio.id)
 
 
