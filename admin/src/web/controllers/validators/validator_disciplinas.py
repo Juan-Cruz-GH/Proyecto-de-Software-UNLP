@@ -9,10 +9,15 @@ def validar_inputs(data):
         return False, "El costo debe ser un numero"
     if costo_es_negativo(data["costo"]):
         return False, "El costo no puede ser negativo"
+    if costo_fuera_de_rango(data["costo"]):
+        return False, "El costo no puede superar un millon(1000000)"
     if not nombre_es_valido(data["nombre"]):
         return False, "El nombre de la disciplina no puede tener numeros"
     if not horario_es_valido(data["horarios"]):
-        return False, 'El formato de los horarios es incorrecto, debe ser "Dia1 Dia2 (opcional) de X a Yhs"'       
+        return (
+            False,
+            'El formato de los horarios es incorrecto, debe ser "Dia1 Dia2 (opcional) de X a Yhs"',
+        )
     return True, "Los datos son validos"
 
 
@@ -34,7 +39,7 @@ def costo_es_numero(costo):
 
 
 def costo_es_negativo(costo):
-    return (int(costo) < 0)
+    return int(costo) < 0
 
 
 def nombre_es_valido(nombre):
@@ -43,3 +48,7 @@ def nombre_es_valido(nombre):
 
 def horario_es_valido(horarios):
     return "de" in horarios
+
+
+def costo_fuera_de_rango(costo):
+    return int(costo) > 1000000
