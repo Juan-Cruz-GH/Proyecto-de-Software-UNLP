@@ -8,13 +8,13 @@ import router from "./router";
 
 const app = createApp(App);
 
-const headerLocal = "http://127.0.0.1:5000/api";
-const headerRemoto = "https://admin-grupo23.proyecto2022.linti.unlp.edu.ar/api";
+const header = "https://admin-grupo23.proyecto2022.linti.unlp.edu.ar";
+// https://admin-grupo23.proyecto2022.linti.unlp.edu.ar     header remoto
+// http://127.0.0.1:5000                                    header local
 
-app.provide("URL_API_DISCIPLINAS", headerLocal + "/club/disciplinas");
-app.provide("URL_API_LICENCIA", headerLocal + "/me/license");
-app.provide("URL_API_CLUB", headerLocal + "/club/info");
-// cambiar headerLocal por headerRemoto en los provides antes de push a main
+app.provide("URL_API_DISCIPLINAS", header + "/api/club/disciplinas");
+app.provide("URL_API_LICENCIA", header + "/api/me/license");
+app.provide("URL_API_CLUB", header + "/api/club/info");
 
 app.use(createPinia());
 app.use(router);
