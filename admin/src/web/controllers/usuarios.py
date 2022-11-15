@@ -11,11 +11,6 @@ from src.decoradores.login import login_requerido
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
 
 
-def info_usuario(id):
-    """Esta funcion retorna un JSON con informacion del usuario"""
-    return json.dumps(usuarios.get_datos_diccionario(id))
-
-
 @usuario_blueprint.route("/")
 @login_requerido
 def usuario_index():
@@ -78,7 +73,7 @@ def usuario_add():
         "ROL_OPERADOR": request.form.get("rol_operador"),
     }
     validacion_inputs, mensaje = validator_usuario.validar_inputs(
-        data_usuario["email"], data_usuario["password"]
+        data_usuario["email"], data_usuario["password"], data_rol_usuario
     )
     if validacion_inputs == False:
         flash(mensaje)

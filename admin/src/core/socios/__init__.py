@@ -51,8 +51,6 @@ def esta_habilitado(id):
 def disciplinas_socio_diccionario(id):
     """Devuelve una lista de diccionarios con todas las disciplinas que realiza el socio con id pasado por parametro"""
     socio = buscar_socio(id)
-    if socio is None:
-        return None
     lista = []
     for disciplina in socio.disciplinas:
         fila = disciplina.__dict__
@@ -158,3 +156,30 @@ def validar_datos_existentes(dni, email, accion, id=None):
         return False, "El Email ya esta cargado en el sistema."
     else:
         return True, "Ambos son validos"
+
+
+def estado_socio(id):
+    """Devuelve un diccionario con el estado actual del socio que seguro existe"""
+    socio = buscar_socio(id)
+    datos_perfil = {
+        "email": socio.email,
+        "number": socio.id,
+        "document_type": socio.tipo_documento,
+        "document_number": socio.dni,
+        "gender": socio.genero,
+        "gender_other": socio.genero,
+        "address": socio.direccion,
+        "phone": socio.telefono,
+    }
+    for pago in socio.pagos:
+        if pago.estado == False:
+            return {
+                "status": "BAD",
+                "description": "El socio registra deuda o sanción.",
+                "profile": datos_perfil,
+            }
+    return {
+        "status": "OK",
+        "description": "El socio no registra deuda ni sanción.",
+        "profile": datos_perfil,
+    }

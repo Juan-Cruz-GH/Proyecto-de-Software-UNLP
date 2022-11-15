@@ -53,7 +53,7 @@ def listar_usuarios(page, email=None, tipo=None):
     if (email is not None) and (tipo is not None):
         if tipo == "true":
             usuarios = (
-                Usuario.query.filter_by(email=email)
+                Usuario.query.filter(Usuario.email.contains(email))
                 .filter(Usuario.activo.is_(True))
                 .paginate(
                     page, per_page=configuracion_sistema.get_paginado().elementos_pagina
@@ -61,14 +61,14 @@ def listar_usuarios(page, email=None, tipo=None):
             )
         else:
             usuarios = (
-                Usuario.query.filter_by(email=email)
+                Usuario.query.filter(Usuario.email.contains(email))
                 .filter(Usuario.activo.is_(False))
                 .paginate(
                     page, per_page=configuracion_sistema.get_paginado().elementos_pagina
                 )
             )
     elif email is not None:
-        usuarios = Usuario.query.filter_by(email=email).paginate(
+        usuarios = Usuario.query.filter(Usuario.email.contains(email)).paginate(
             page, per_page=configuracion_sistema.get_paginado().elementos_pagina
         )
     elif tipo is not None:
@@ -125,28 +125,6 @@ def validar_datos_existentes(email, username, accion, id=None):
             return False, "El Nombre de Usuario ya esta cargado en el sistema."
         else:
             return True, "Ambos son validos"
-
-
-def get_datos_diccionario(id):
-    """Retorna un diccionario con todos los datos del usuario con el id enviado por parametro"""
-    usuario = buscar_usuario(id)
-    socio = socios.buscar_socio(id)  # probablemente erroneo, cuidado
-    if socio is None:
-        return {}
-    if usuario is None:
-        return {}
-    diccionario = {
-        "user": usuario.username,
-        "email": usuario.email,
-        "number": usuario.id,
-        "document_type": socio.tipo_documento,
-        "document_number": socio.dni,
-        "gender": socio.genero,
-        "gender_other": socio.genero,
-        "address": socio.direccion,
-        "phone": socio.telefono,
-    }
-    return diccionario
 
 
 def agregar_roles(usuario, roles_usuario):
