@@ -13,6 +13,7 @@ def obtener_disciplinas():
     """Retorna un json con todas las disciplinas que se practican en el club"""
     respuesta = make_response(disciplinas.disciplina_json(), 200)
     respuesta.headers["Content-Type"] = "application/json"
+    respuesta.headers.add('Access-Control-Allow-Origin', '*')
     return respuesta
 
 
