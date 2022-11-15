@@ -10,7 +10,7 @@ api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
 
 @api_blueprint.get("/club/disciplinas")
-@cross_origin
+@cross_origin()
 def obtener_disciplinas():
     """Retorna un json con todas las disciplinas que se practican en el club"""
     respuesta = make_response(disciplinas.disciplina_json(), 200)
@@ -62,7 +62,7 @@ def registrar_pago_socio():
 
 
 @api_blueprint.get("/club/info")
-@cross_origin
+@cross_origin()
 def obtener_info_club():
     """Retorna el json con la información de contacto del club"""
     return configuracion_sistema.info_contacto_json()
