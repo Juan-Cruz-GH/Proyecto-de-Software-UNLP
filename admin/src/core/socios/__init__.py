@@ -1,6 +1,7 @@
 from src.core import configuracion_sistema
 from src.core.socios.socios import Socio
 from src.core.db import db
+from src.colores_api.colores_aleatorios import generar_color
 
 
 def agregar_socio(data):
@@ -9,6 +10,20 @@ def agregar_socio(data):
     db.session.add(socio)
     db.session.commit()
     return socio
+
+def socios_por_sexo():
+    """Esta funcion devuelve una lista con los socios por sexo"""
+    socios = Socio.query.all()
+    lista = []
+    dic_socios = {}
+    for socio in socios:
+        if(socio.genero not in dic_socios.keys()):
+            dic_socios[socio.genero] = {'cantidad': 1, 'color': generar_color()}
+        else:
+            dic_socios[socio.genero]['cantidad'] += 1
+    for key, value in dic_socios.items():
+        lista.append([key, value['cantidad'], value['color']])
+    return lista
 
 def socios_habilitados_disciplina():
     """Retorna los socios habilitados"""

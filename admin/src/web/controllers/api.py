@@ -1,6 +1,7 @@
 from flask import Blueprint, make_response, request
 
 from src.web.controllers import disciplinas
+from src.web.controllers import socios
 from src.web.controllers import configuracion_sistema
 from src.web.controllers import pagos
 from src.web.controllers.validators import validator_api
@@ -15,6 +16,12 @@ def obtener_disciplinas():
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
+@api_blueprint.get("/club/socios-genero")
+def socios_genero():
+    """Retorna un json con la cantidad de socios por genero"""
+    respuesta = make_response(socios.socios_genero(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
 
 @api_blueprint.get("/me/disciplinas")
 def obtener_disciplinas_socio():

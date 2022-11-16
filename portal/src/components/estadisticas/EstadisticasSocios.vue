@@ -13,66 +13,85 @@
 </template>
 
 <script>
-
-import { Doughnut } from 'vue-chartjs'
+import { Doughnut } from "vue-chartjs";
 import {
   Chart as ChartJS,
   Title,
   Tooltip,
   Legend,
   ArcElement,
-  CategoryScale
-} from 'chart.js'
+  CategoryScale,
+} from "chart.js";
 
-ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 export default {
-  name: 'DoughnutChart',
+  name: "DoughnutChart",
   components: {
-    Doughnut
+    Doughnut,
   },
   props: {
     chartId: {
       type: String,
-      default: 'doughnut-chart'
+      default: "doughnut-chart",
     },
     width: {
       type: Number,
-      default: 400
+      default: 400,
     },
     height: {
       type: Number,
-      default: 400
+      default: 400,
     },
     cssClasses: {
-      default: '',
-      type: String
+      default: "",
+      type: String,
     },
     styles: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     plugins: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
       chartDataDisciplines: {
-        labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+        labels: [],
         datasets: [
-        {
-          backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-          data: [30, 25, 100, 10]
-        }
-      ]
+          {
+            backgroundColor: [],
+            data: [],
+          },
+        ],
       },
       chartOptionsDisciplines: {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
       },
-    }
-  }
-}
+      errors: [],
+    };
+  },
+  created(){
+    axios
+      .get("http://127.0.0.1:5000/api/club/socios-genero")
+      .then((response) => {
+        // JSON responses are automatically parsed.
+        let cant_lista = []
+        let colores = []
+        for(let i = 0; i < response.data.length; i++) {
+          this.chartDataDisciplines.labels.push(response.data[i][0]);
+          cant_lista.push(response.data[i][1])
+          colores.push(response.data[i][2])
+        }
+        this.chartDataDisciplines.datasets[0].data = cant_lista
+        this.chartDataDisciplines.datasets[0].backgroundColor = colores
+      })
+      .catch((e) => {
+        this.errors.push(e);
+    }); 
+  },
+};
 </script>
