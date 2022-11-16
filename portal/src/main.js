@@ -8,7 +8,7 @@ import router from "./router";
 
 const app = createApp(App);
 
-const header = "https://admin-grupo23.proyecto2022.linti.unlp.edu.ar";
+const header = "http://127.0.0.1:5000";
 // https://admin-grupo23.proyecto2022.linti.unlp.edu.ar     header remoto
 // http://127.0.0.1:5000                                    header local
 
