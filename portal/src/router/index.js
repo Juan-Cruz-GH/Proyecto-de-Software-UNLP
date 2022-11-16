@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import DisciplinasView from "../views/DisciplinasView.vue"
-import EstadisticasView from "../views/EstadisticasView.vue"
+import DisciplinasView from "../views/DisciplinasView.vue";
+import EstadisticasView from "../views/EstadisticasView.vue";
+import CuotasImpagasView from "../views/CuotasImpagasView.vue";
+import CuotasPagasView from "../views/CuotasPagasView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,7 +30,17 @@ const router = createRouter({
       path: "/estadisticas",
       name: "estadisticas",
       component: EstadisticasView,
-    }
+    },
+    {
+      path: "/cuotasPagas",
+      name: "cuotasPagas",
+      component: CuotasPagasView,
+    },
+    {
+      path: "/cuotasImpagas",
+      name: "cuotasImpagas",
+      component: CuotasImpagasView,
+    },
   ],
 });
 
