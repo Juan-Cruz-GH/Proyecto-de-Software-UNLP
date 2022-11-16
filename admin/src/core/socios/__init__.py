@@ -11,6 +11,21 @@ def agregar_socio(data):
     db.session.commit()
     return socio
 
+def socios_por_años():
+    """Esta funcion devuelve una lista de los socios ingresados por año de los ultimos 7 años"""
+    socios = Socio.query.all()
+    lista = []
+    dic_socios = {}
+    for i in range(2015, 2023):
+        dic_socios[str(i)] = 0
+    for socio in socios:
+        anio_str = socio.inserted_at.strftime('%Y')
+        if(anio_str in dic_socios):
+            dic_socios[anio_str] += 1
+    for key, value in dic_socios.items():
+        lista.append([key, value])
+    return lista
+
 def socios_por_sexo():
     """Esta funcion devuelve una lista con los socios por sexo"""
     socios = Socio.query.all()

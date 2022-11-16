@@ -54,10 +54,10 @@
     data() {
       return {
         chartData: {
-          labels: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July' ],
+          labels: [],
           datasets: [ { 
-            label: 'Data One',
-            data: [40, 39, 10, 40, 39, 80, 40],
+            label: 'Socios',
+            data: [],
             backgroundColor: '#f87979'
           } ]
         },
@@ -66,7 +66,23 @@
           maintainAspectRatio: false
         }
       }
-    }
+    },
+    created(){
+    axios
+      .get("http://127.0.0.1:5000/api/club/socios-años")
+      .then((response) => {
+        // JSON responses are automatically parsed.
+        let cant_lista = []
+        for(let i = 0; i < response.data.length; i++) {
+          this.chartData.labels.push(response.data[i][0]);
+          cant_lista.push(response.data[i][1])
+        }
+        this.chartData.datasets[0].data = cant_lista
+      })
+      .catch((e) => {
+        this.errors.push(e);
+    }); 
+  },
   }
   </script>
   

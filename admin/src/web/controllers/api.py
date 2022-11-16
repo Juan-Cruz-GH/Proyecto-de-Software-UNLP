@@ -16,6 +16,13 @@ def obtener_disciplinas():
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
+@api_blueprint.get("/club/socios-años")
+def socios_por_año():
+    """Retorna un json con la cantidad de socios por año"""
+    respuesta = make_response(socios.socios_por_año(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
+
 @api_blueprint.get("/club/socios-genero")
 def socios_genero():
     """Retorna un json con la cantidad de socios por genero"""

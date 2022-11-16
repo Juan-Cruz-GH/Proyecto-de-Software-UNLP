@@ -16,6 +16,7 @@ app.provide("URL_API_DISCIPLINAS", header + "/api/club/disciplinas");
 app.provide("URL_API_LICENCIA", header + "/api/me/license");
 app.provide("URL_API_CLUB", header + "/api/club/info");
 app.provide("URL_SOCIOS_GENERO", header + "api/club/socios-genero")
+app.provide("URL_SOCIOS_AÑO", header + "api/club/socios-años")
 
 app.use(createPinia());
 app.use(router);
