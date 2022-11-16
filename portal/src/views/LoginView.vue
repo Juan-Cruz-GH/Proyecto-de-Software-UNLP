@@ -19,7 +19,13 @@
       </nav>
     </div>
   </header>
+  <div v-if="isLoggedIn">
+    <h3>Usuario: {{ authSocio.name }}</h3>
+    <h3>Mail: {{ authSocio.email }}</h3>
+    <h3>Id: {{ authSocio.id }}</h3>
 
+    <button type="button" @click="logout">Logout</button>
+  </div>
   <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
     <div class="card border-0 shadow rounded-3 my-5">
       <div class="card-body p-4 p-sm-5">
@@ -61,47 +67,47 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from "vuex";
 
-  export default {
-    name: 'auth',
-    data: () => ({
-      socio: {
-        email: null,
-        password: null
-      }
+export default {
+  name: "LoginView",
+  data: () => ({
+    socio: {
+      email: null,
+      password: null,
+    },
+  }),
+
+  computed: {
+    ...mapGetters({
+      authSocio: "auth/socio",
+      isLoggedIn: "auth/isLoggedIn",
     }),
+  },
 
-    computed: {
-      mapGetters({
-        authSocio: 'auth/socio',
-        isLoggedIn: 'auth/isLoggedIn'
-      }),
+  methods: {
+    ...mapActions("auth", ["loginSocio", "logoutSocio"]),
+
+    async login() {
+      await this.loginSocio(this.socio);
+      this.socio = {
+        email: null,
+        password: null,
+      };
+
+      if (this.isLoggedIn) {
+        this.$router.push("/login");
+      }
     },
 
-    methods: {
-      mapActions('auth',['loginSocio','logoutSocio']),
-
-      async login() {
-        await this.loginSocio(this.socio)
-        this.socio = {
-          email = null,
-          password = null
-        }
-        
-        if (this.isLoggedIn) {
-          this.$router.push('/login')
-        }
-      },
-
-      async logout() {
-        await this.logoutSocio()
-        this.socio = {
-          email = null,
-          password = null
-        }
-        this.$router.push('/');
-      },
-    }
+    async logout() {
+      await this.logoutSocio();
+      this.socio = {
+        email: null,
+        password: null,
+      };
+      this.$router.push("/");
+    },
   },
+};
 </script>
