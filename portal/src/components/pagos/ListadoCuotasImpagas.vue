@@ -1,4 +1,9 @@
 <template>
+    <h1 style="text-align:center">
+        <strong>Cuotas adeudadas</strong>
+    </h1>
+    <div id="espacio" style="min-height: 2.5vh;">
+    </div>
     <table id="tableComponent" class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -8,6 +13,14 @@
                 </th>
             </tr>
         </thead>
+        <tbody>
+            <tr style="text-align: center;" v-for="cuotaImpaga in dataPagina">
+                <td>$ {{ cuotaImpaga }}</td>
+                <td>{{ cuotaImpaga }}</td>
+                <td>{{ cuotaImpaga }}</td>
+                <td>{{ cuotaImpaga }}</td>
+            </tr>
+        </tbody>
     </table>
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
@@ -19,8 +32,6 @@
             <li class="page-item" v-on:click="getPaginaSiguiente()"> <a class="page-link" href="#">Siguiente</a></li>
         </ul>
     </nav>
-    <div id="pre-footer" style="min-height: 40vh;">
-    </div>
 </template>
   
 <script>
@@ -35,9 +46,6 @@ export default {
             dataPagina: [],
             paginaActual: 1
         };
-    },
-    mounted() {
-
     },
     methods: {
         getTotalPaginas() {    // Redondeo por si da con decimales
@@ -68,12 +76,10 @@ export default {
     },
     computed: {
     },
-    // Fetches posts when the component is created.
     created() {
         axios
-            .get(this.URL_API_PAYMENTS)
+            .get('URL_API_PAYMENTS')
             .then((response) => {
-                // JSON responses are automatically parsed.
                 this.cuotasImpagas = response.data;
                 this.getDataPagina(1);
             })
