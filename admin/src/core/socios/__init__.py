@@ -187,7 +187,7 @@ def estado_socio(id):
         "profile": datos_perfil,
     }
 
-def find_user_by_mail_and_pass(email, password):
+def find_socio_by_email_and_pass(email, password):
     """esta funcion verifica que el socio ingresado en login publico exista"""
     socio = Socio.query.filter(Socio.email == email).first()
     if socio is None:
