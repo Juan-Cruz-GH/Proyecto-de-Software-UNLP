@@ -1,6 +1,8 @@
-# Para correr la app pública localmente es 1) cd portal 2) npm run dev
-
-This template should help get you started developing with Vue 3 in Vite.
+## Cómo iniciar la app pública localmente 
+```sh
+cd portal
+npm run dev
+```
 
 ## Recommended IDE Setup
 
