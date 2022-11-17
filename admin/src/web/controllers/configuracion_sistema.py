@@ -121,7 +121,12 @@ def configuracion_actualizar():
     if not validar:
         flash("Encabezado de los recibos: " + mensaje)
         hubo_error = True
-
+    validar, mensaje = validator_configuracion.costo_fuera_de_rango(
+        configuracion["cuota_base"]
+    )
+    if validar:
+        flash("Cuota base: " + mensaje)
+        hubo_error = True
     if hubo_error:
         return redirect("/configuracion_del_sistema/")
 

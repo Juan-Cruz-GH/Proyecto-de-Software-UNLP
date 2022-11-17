@@ -1,6 +1,7 @@
 from flask import Blueprint, make_response, request
 
 from src.web.controllers import disciplinas
+from src.web.controllers import socios
 from src.web.controllers import configuracion_sistema
 from src.web.controllers import pagos
 from src.web.controllers.validators import validator_api
@@ -12,6 +13,22 @@ api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 def obtener_disciplinas():
     """Retorna un json con todas las disciplinas que se practican en el club"""
     respuesta = make_response(disciplinas.disciplina_json(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
+
+
+@api_blueprint.get("/club/socios-años")
+def socios_por_año():
+    """Retorna un json con la cantidad de socios por año"""
+    respuesta = make_response(socios.socios_por_año(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
+
+
+@api_blueprint.get("/club/socios-genero")
+def socios_genero():
+    """Retorna un json con la cantidad de socios por genero"""
+    respuesta = make_response(socios.socios_genero(), 200)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
@@ -52,6 +69,9 @@ def obtener_pagos_socio():
     return pagos.pagos_json()
 
 
+# agregar otra api que devuelva los pagos adeudados
+
+
 @api_blueprint.post("/me/payments")
 def registrar_pago_socio():
     """Registra un nuevo pago para
@@ -69,3 +89,11 @@ def obtener_info_club():
 def obtener_token():
     """Recibe un json con user y password y retorna su JWT"""
     pass
+
+
+@api_blueprint.get("/club/socios-disciplinas")
+def obtener_socios_disciplinas():
+    """Retorna un json con los socios por disciplinas"""
+    respuesta = make_response(disciplinas.disciplinas_socios(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta

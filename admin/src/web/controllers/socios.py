@@ -19,6 +19,10 @@ socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 def json_estado_socio(id):
     return json.dumps(socios.estado_socio(id))
 
+def socios_por_año():
+    """Retorna la cantidad de socios por año de los ultimos 7 años"""
+    return json.dumps(socios.socios_por_años())
+
 
 def existe_socio(id):
     if socios.buscar_socio(id) is None:
@@ -30,6 +34,9 @@ def disciplinas_socio(id):
     """Devuelve un json con todas las disciplinas que realiza el socio con id pasado por parametro"""
     return json.dumps(socios.disciplinas_socio_diccionario(id))
 
+def socios_genero():
+    """Retorna un json con los socios por genero"""
+    return json.dumps(socios.socios_por_sexo())
 
 @socio_blueprint.route("/")
 @login_requerido

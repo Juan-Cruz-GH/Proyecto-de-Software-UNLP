@@ -22,6 +22,10 @@ def disciplina_json():
     """Retorna el json con todas las disciplinas"""
     return json.dumps(disciplinas.listar_disciplinas_diccionario())
 
+def disciplinas_socios():
+    """Retorna un json con la cantidad de socios por disciplina"""
+    return json.dumps(disciplinas.socios_habilitados_por_disciplina())
+
 
 @disciplina_blueprint.route("/")
 @login_requerido
