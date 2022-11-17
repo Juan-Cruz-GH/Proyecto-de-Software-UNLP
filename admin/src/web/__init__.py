@@ -33,6 +33,7 @@ def create_app(env="development", static_folder="static"):
             response.headers['Access-Control-Allow-Origin'] = request.headers['Origin'] 
             response.headers['Access-Control-Allow-Methods'] = 'PUT,GET,POST,DELETE'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+        print(response.headers)
         return response
 
     @app.get("/")
