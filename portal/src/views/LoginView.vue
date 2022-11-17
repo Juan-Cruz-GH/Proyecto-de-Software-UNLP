@@ -1,24 +1,4 @@
 <template>
-  <header>
-    <div id="navbar">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-          <RouterLink class="navbar-brand" to="/">Club Villa Elisa</RouterLink>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        </div>
-      </nav>
-    </div>
-  </header>
   <div v-if="isLoggedIn">
     <h3>Usuario: {{ authSocio.name }}</h3>
     <h3>Mail: {{ authSocio.email }}</h3>
@@ -33,33 +13,15 @@
         <form action class="form" @submit.prevent="login">
           <div class="mb-3">
             <label class="form-label" for="#socio.email">Email</label>
-            <input
-              class="form-control"
-              type="email"
-              name="email"
-              placeholder="Correo"
-              v-model="socio.email"
-              id="email"
-              required
-            />
+            <input class="form-control" type="email" name="email" placeholder="Correo" v-model="socio.email" id="email"
+              required />
           </div>
           <div class="mb-3">
             <label class="form-label" for="#socio.password">Password</label>
-            <input
-              class="form-control"
-              type="password"
-              name="password"
-              placeholder="Clave"
-              v-model="socio.password"
-              id="password"
-              required
-            />
+            <input class="form-control" type="password" name="password" placeholder="Clave" v-model="socio.password"
+              id="password" required />
           </div>
-          <input
-            class="btn btn-primary btn-login text-uppercase fw-bold"
-            type="submit"
-            value="Login"
-          />
+          <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Login" />
         </form>
       </div>
     </div>
