@@ -24,6 +24,7 @@ def create_app(env="development", static_folder="static"):
     CORS(app)
     csrf.exempt(api_blueprint)
 
+    """
     @app.after_request
     def after_request(response):
         print(request.headers)
@@ -35,6 +36,7 @@ def create_app(env="development", static_folder="static"):
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
         print(response.headers)
         return response
+    """
 
     @app.get("/")
     @login_requerido
