@@ -1,5 +1,9 @@
 <template>
-
+    <h1 style="text-align:center">
+        <strong>Disciplinas</strong>
+    </h1>
+    <div id="espacio" style="min-height: 5vh;">
+    </div>
     <table id="tableComponent" class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -30,7 +34,7 @@
             <li class="page-item" v-on:click="getPaginaSiguiente()"> <a class="page-link" href="#">Siguiente</a></li>
         </ul>
     </nav>
-    <div id="pre-footer" style="min-height: 40vh;">
+    <div id="pre-footer" style="min-height: 24vh;">
     </div>
 </template>
   

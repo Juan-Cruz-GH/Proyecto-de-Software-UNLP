@@ -16,6 +16,7 @@ def obtener_disciplinas():
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
+
 @api_blueprint.get("/club/socios-años")
 def socios_por_año():
     """Retorna un json con la cantidad de socios por año"""
@@ -23,12 +24,14 @@ def socios_por_año():
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
+
 @api_blueprint.get("/club/socios-genero")
 def socios_genero():
     """Retorna un json con la cantidad de socios por genero"""
     respuesta = make_response(socios.socios_genero(), 200)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
+
 
 @api_blueprint.get("/me/disciplinas")
 def obtener_disciplinas_socio():
@@ -66,6 +69,9 @@ def obtener_pagos_socio():
     return pagos.pagos_json()
 
 
+# agregar otra api que devuelva los pagos adeudados
+
+
 @api_blueprint.post("/me/payments")
 def registrar_pago_socio():
     """Registra un nuevo pago para
@@ -83,6 +89,7 @@ def obtener_info_club():
 def obtener_token():
     """Recibe un json con user y password y retorna su JWT"""
     pass
+
 
 @api_blueprint.get("/club/socios-disciplinas")
 def obtener_socios_disciplinas():
