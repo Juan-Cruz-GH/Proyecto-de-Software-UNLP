@@ -14,16 +14,16 @@ const getters = {
 
 const actions = {
   async loginSocio({ dispatch }, socio) {
-    await apiService.post("/auth/login_publico", socio);
+    await apiService.post("auth_publico/login_publico", socio);
     await dispatch("fetchSocio");
   },
   async fetchSocio({ commit }) {
     await apiService
-      .get("/auth/socio_jwt")
+      .get("auth_publico/socio_jwt")
       .then(({ data }) => commit("setSocio", data));
   },
   async logoutSocio({ commit }) {
-    await apiService.get("/auth/logout_publico");
+    await apiService.get("auth_publico/logout_publico");
     commit("logoutSocioState");
   },
 };

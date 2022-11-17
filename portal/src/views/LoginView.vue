@@ -72,6 +72,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "LoginView",
   data: () => ({
+    error: false,
     socio: {
       email: null,
       password: null,
@@ -89,19 +90,24 @@ export default {
     ...mapActions("auth", ["loginSocio", "logoutSocio"]),
 
     async login() {
-      await this.loginSocio(this.socio);
+      await this.loginSocio(this.socio).catch(() => {
+        this.error = true;
+      });
       this.socio = {
         email: null,
         password: null,
       };
 
       if (this.isLoggedIn) {
-        this.$router.push("/login");
+        this.$router.push("/");
       }
     },
 
     async logout() {
-      await this.logoutSocio();
+      await this.logoutSocio().catch((err) => {
+        console.log(err);
+      });
+      this.error = false;
       this.socio = {
         email: null,
         password: null,
