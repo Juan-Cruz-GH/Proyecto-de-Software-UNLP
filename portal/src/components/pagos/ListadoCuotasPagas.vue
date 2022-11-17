@@ -79,7 +79,7 @@ export default {
     },
     created() {
         axios
-            .get('URL_API_PAYMENTS')
+            .get(this.URL_API_PAYMENTS)
             .then((response) => {
                 this.cuotasPagas = response.data;
                 this.getDataPagina(1);

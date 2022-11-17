@@ -1,15 +1,7 @@
 <template>
-    <Doughnut
-      :chart-options="chartOptionsDisciplines"
-      :chart-data="chartDataDisciplines"
-      :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"
-      :plugins="plugins"
-      :css-classes="cssClasses"
-      :styles="styles"
-      :width="width"
-      :height="height"
-    />
+  <Doughnut :chart-options="chartOptionsDisciplines" :chart-data="chartDataDisciplines" :chart-id="chartId"
+    :dataset-id-key="datasetIdKey" :plugins="plugins" :css-classes="cssClasses" :styles="styles" :width="width"
+    :height="height" />
 </template>
 
 <script>
@@ -26,6 +18,7 @@ import {
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 export default {
+  inject: ['URL_API_SOCIOS_GENERO'],
   name: "DoughnutChart",
   components: {
     Doughnut,
@@ -49,7 +42,7 @@ export default {
     },
     styles: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     plugins: {
       type: Array,
@@ -74,14 +67,14 @@ export default {
       errors: [],
     };
   },
-  created(){
+  created() {
     axios
-      .get("http://127.0.0.1:5000/api/club/socios-genero")
+      .get(this.URL_API_SOCIOS_GENERO)
       .then((response) => {
         // JSON responses are automatically parsed.
         let cant_lista = []
         let colores = []
-        for(let i = 0; i < response.data.length; i++) {
+        for (let i = 0; i < response.data.length; i++) {
           this.chartDataDisciplines.labels.push(response.data[i][0]);
           cant_lista.push(response.data[i][1])
           colores.push(response.data[i][2])
@@ -91,7 +84,7 @@ export default {
       })
       .catch((e) => {
         this.errors.push(e);
-    }); 
+      });
   },
 };
 </script>
