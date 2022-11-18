@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request
+from flask import Flask, redirect
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
 from flask_cors import CORS
@@ -23,20 +23,6 @@ def create_app(env="development", static_folder="static"):
     csrf = CSRFProtect(app)
     CORS(app)
     csrf.exempt(api_blueprint)
-
-    """
-    @app.after_request
-    def after_request(response):
-        print(request.headers)
-        white_origin= ['https://grupo23.proyecto2022.linti.unlp.edu.ar']
-        if request.headers['Origin'] in white_origin:
-            print("entre origin")
-            response.headers['Access-Control-Allow-Origin'] = request.headers['Origin'] 
-            response.headers['Access-Control-Allow-Methods'] = 'PUT,GET,POST,DELETE'
-            response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
-        print(response.headers)
-        return response
-    """
 
     @app.get("/")
     @login_requerido

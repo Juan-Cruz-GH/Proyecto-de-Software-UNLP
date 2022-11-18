@@ -33,6 +33,22 @@ def socios_genero():
     return respuesta
 
 
+@api_blueprint.get("/club/socios-disciplinas")
+def obtener_socios_disciplinas():
+    """Retorna un json con los socios por disciplinas"""
+    respuesta = make_response(disciplinas.disciplinas_socios(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
+
+
+@api_blueprint.get("/club/info")
+def obtener_info_club():
+    """Retorna el json con la información de contacto del club"""
+    respuesta = make_response(configuracion_sistema.info_contacto_json(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
+
+
 @api_blueprint.get("/me/disciplinas")
 def obtener_disciplinas_socio():
     """Retorna el json con todas las disciplinas que realiza
@@ -66,7 +82,11 @@ def obtener_info_socio():
 def obtener_pagos_socio():
     """Retorna la lista de pagos registrados
     del socio que está logueado actualmente en la app pública (JWT)"""
-    return pagos.pagos_json()
+    id = request.headers.get("id")
+    mensaje, http_code = validator_api.validar_header_pagos_socio(id)
+    respuesta = make_response(mensaje, http_code)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
 
 
 # agregar otra api que devuelva los pagos adeudados
@@ -79,21 +99,7 @@ def registrar_pago_socio():
     return pagos.pagar_json(request.get_json())
 
 
-@api_blueprint.get("/club/info")
-def obtener_info_club():
-    """Retorna el json con la información de contacto del club"""
-    return configuracion_sistema.info_contacto_json()
-
-
 @api_blueprint.post("/auth")
 def obtener_token():
     """Recibe un json con user y password y retorna su JWT"""
     pass
-
-
-@api_blueprint.get("/club/socios-disciplinas")
-def obtener_socios_disciplinas():
-    """Retorna un json con los socios por disciplinas"""
-    respuesta = make_response(disciplinas.disciplinas_socios(), 200)
-    respuesta.headers["Content-Type"] = "application/json"
-    return respuesta
