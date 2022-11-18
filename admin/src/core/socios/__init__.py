@@ -194,3 +194,23 @@ def find_socio_by_email_and_pass(email, password):
         return None
     elif check_password_hash(socio.password, password):
         return socio
+
+def informacion_socio(id):
+    socio = buscar_socio(id)
+    datos_perfil = {
+        "nombre": socio.nombre,
+        "apellido": socio.apellido,
+        "email": socio.email,
+        "id": socio.id,
+        "document_type": socio.tipo_documento,
+        "document_number": socio.dni,
+        "gender": socio.genero,
+        "gender_other": socio.genero,
+        "address": socio.direccion,
+        "phone": socio.telefono,
+    }
+    return {
+        "status": "OK",
+        "descripcion": "Informacion del socio jwt",
+        "profile": datos_perfil,
+    }

@@ -1,5 +1,6 @@
-from flask import Blueprint, request, jsonify, abort
+from flask import Blueprint, request, jsonify, make_response
 from src.core import socios
+from src.web.controllers.socios import json_informacion_socio
 
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies
 from flask_jwt_extended import unset_jwt_cookies, jwt_required
@@ -18,22 +19,22 @@ def login_publico():
         access_token = create_access_token(identity=socio.id)
         response = jsonify()
         set_access_cookies(response, access_token)
-        return response, 200
+        return response, 201
     else:
-        return jsonify(message='Sin autorizacion'), 401
-"""respuesta del post aprobado 201 y mala 400"""
+        return jsonify(message='Sin autorizacion'), 400
+"""validar que los campos email y pass me lleguen con algo"""
 
 @auth_publico_blueprint.get("/logout_publico")
-@jwt_required()
+@jwt_required( )
 def logout_publico():
     response = jsonify()
     unset_jwt_cookies(response)
     return response, 200
 
 @auth_publico_blueprint.get("/socio_jwt")
-@jwt_required()
+@jwt_required( )
 def socio_jwt():
     socio_actual = get_jwt_identity()
-    socio = socio.buscar_socio(socio_actual)
-    response = jsonify(socio)
+    info_socio = make_response(json_informacion_socio(socio_actual))
+    response = info_socio
     return response, 200

@@ -15,6 +15,9 @@ from src.decoradores.login import login_requerido
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
+def json_informacion_socio(id):
+    """Devuelve un json con la informacion del socio pasado por id"""
+    return json.dumps(socios.informacion_socio(id))
 
 def json_estado_socio(id):
     return json.dumps(socios.estado_socio(id))
