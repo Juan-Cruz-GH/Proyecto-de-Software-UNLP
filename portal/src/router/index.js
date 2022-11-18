@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import DisciplinasView from "../views/DisciplinasView.vue";
+import LoginView from "../views/LoginView.vue";
 import EstadisticasView from "../views/EstadisticasView.vue";
 import PagosView from "../views/PagosView.vue";
 
@@ -18,14 +19,19 @@ const router = createRouter({
       component: DisciplinasView,
     },
     {
-      path: "/estadisticas",
-      name: "estadisticas",
-      component: EstadisticasView,
+      path: "/auth",
+      name: "auth",
+      component: LoginView,
     },
     {
       path: "/pagos",
       name: "pagos",
       component: PagosView,
+    },
+    {
+      path: "/estadisticas",
+      name: "estadisticas",
+      component: EstadisticasView,
     }
   ],
 });

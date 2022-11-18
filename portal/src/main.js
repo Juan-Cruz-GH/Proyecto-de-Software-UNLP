@@ -3,6 +3,7 @@ import { createPinia } from "pinia";
 
 import App from "./App.vue";
 import router from "./router";
+import store from "./store"
 
 //import "./assets/main.css";
 
@@ -21,5 +22,6 @@ app.provide("URL_API_PAYMENTS", header + "/api/me/payments") // GET en ListadoCu
 
 app.use(createPinia());
 app.use(router);
+app.use(store);
 
 app.mount("#app");
