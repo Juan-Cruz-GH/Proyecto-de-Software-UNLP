@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Configuración del sistema - Club Villa Elisa
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+<div id="carnet" style="border-style:solid;">
+    <div class="card">
+        <div class="row">
+            <div class="column-12">
+                <h1 style="font-family:'Brush Script MT', cursive; font-size:4rem; border-style:solid;"> Club Deportivo
+                    Villa
+                    Elisa</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5">
+                <img class="card-img-left"
+                    src="https://png.vector.me/files/images/2/5/252001/generic_male_avatar_rectangular_preview"
+                    alt="Card image cap">
+            </div>
+            <div class="col-7">
+                <div class="card-body">
+                    <p>{{socio.apellido}} {{socio.nombre}} </p>
+                    <p>{{socio.tipo_documento}}:{{socio.dni}}</p>
+                    <p> Socio: #{{socio.id}}</p>
+                    <p>Fecha alta: {{socio.inserted_at.strftime('%Y-%m-%d')}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5">
+                Estado: Estado del socio
+            </div>
+            <div class="col-7">
+                <img class="card-img-left" src="{{ qrcode(url) }}" alt="Card image cap">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

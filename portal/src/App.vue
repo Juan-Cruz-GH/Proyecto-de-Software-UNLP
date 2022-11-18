@@ -28,6 +28,9 @@ import { RouterLink, RouterView } from "vue-router";
                 <li class="nav-item">
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/estadisticas">Estadisticas</RouterLink>
                 </li>
+                <li class="nav-item">
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/carnet">Mi Carnet</RouterLink>
+                </li>
               </ul>
               <ul class="navbar-nav ms-auto d-lg-inline-flex">
                 <li class="nav-item dropdown">
