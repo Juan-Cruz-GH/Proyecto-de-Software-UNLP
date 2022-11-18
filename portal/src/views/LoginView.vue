@@ -1,28 +1,49 @@
 <template>
   <div v-if="isLoggedIn">
-    <h3>Usuario: {{ authSocio.name }}</h3>
-    <h3>Mail: {{ authSocio.email }}</h3>
-    <h3>Id: {{ authSocio.id }}</h3>
+    <h3>Usuario: {{ authSocio.profile.nombre }}</h3>
+    <h3>Mail: {{ authSocio.profile.email }}</h3>
+    <h3>Id: {{ authSocio.profile.id }}</h3>
 
     <button type="button" @click="logout">Logout</button>
   </div>
-  <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-    <div class="card border-0 shadow rounded-3 my-5">
-      <div class="card-body p-4 p-sm-5">
-        <h5 class="card-title text-center mb-5 fw-light fs-5">Log In</h5>
-        <form action class="form" @submit.prevent="login">
-          <div class="mb-3">
-            <label class="form-label" for="#socio.email">Email</label>
-            <input class="form-control" type="email" name="email" placeholder="Correo" v-model="socio.email" id="email"
-              required />
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="#socio.password">Password</label>
-            <input class="form-control" type="password" name="password" placeholder="Clave" v-model="socio.password"
-              id="password" required />
-          </div>
-          <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Login" />
-        </form>
+
+  <div v-else>
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+      <div class="card border-0 shadow rounded-3 my-5">
+        <div class="card-body p-4 p-sm-5">
+          <h5 class="card-title text-center mb-5 fw-light fs-5">Log In</h5>
+          <form action class="form" @submit.prevent="login">
+            <div class="mb-3">
+              <label class="form-label" for="#socio.email">Email</label>
+              <input
+                class="form-control"
+                type="email"
+                name="email"
+                placeholder="Correo"
+                v-model="socio.email"
+                id="email"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="#socio.password">Password</label>
+              <input
+                class="form-control"
+                type="password"
+                name="password"
+                placeholder="Clave"
+                v-model="socio.password"
+                id="password"
+                required
+              />
+            </div>
+            <input
+              class="btn btn-primary btn-login text-uppercase fw-bold"
+              type="submit"
+              value="Login"
+            />
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -61,7 +82,7 @@ export default {
       };
 
       if (this.isLoggedIn) {
-        this.$router.push("/");
+        this.$router.push("/auth");
       }
     },
 
