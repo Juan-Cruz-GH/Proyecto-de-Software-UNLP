@@ -89,7 +89,15 @@ def obtener_pagos_socio():
     return respuesta
 
 
-# agregar otra api que devuelva los pagos adeudados
+@api_blueprint.get("/me/pending_payments")
+def obtener_pagos_socio():
+    """Retorna la lista de pagos adeudados
+    del socio que está logueado actualmente en la app pública (JWT)"""
+    id = request.headers.get("id")
+    mensaje, http_code = validator_api.validar_header_pagos_socio(id)
+    respuesta = make_response(mensaje, http_code)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
 
 
 @api_blueprint.post("/me/payments")
