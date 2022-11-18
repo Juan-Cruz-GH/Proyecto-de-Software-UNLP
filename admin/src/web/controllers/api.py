@@ -1,6 +1,7 @@
 from flask import Blueprint, make_response, request
 
 from src.web.controllers import disciplinas
+from src.web.controllers import socios
 from src.web.controllers import configuracion_sistema
 from src.web.controllers import pagos
 from src.web.controllers.validators import validator_api
@@ -8,17 +9,50 @@ from src.web.controllers.validators import validator_api
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
 
-@api_blueprint.route("/club/disciplinas", methods=["GET"])
+@api_blueprint.get("/club/disciplinas")
 def obtener_disciplinas():
-    """Obtiene el json con todas las disciplinas y lo retorna"""
+    """Retorna un json con todas las disciplinas que se practican en el club"""
     respuesta = make_response(disciplinas.disciplina_json(), 200)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
 
-@api_blueprint.route("/me/disciplinas", methods=["GET"])
+@api_blueprint.get("/club/socios-años")
+def socios_por_año():
+    """Retorna un json con la cantidad de socios por año"""
+    respuesta = make_response(socios.socios_por_año(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
+
+
+@api_blueprint.get("/club/socios-genero")
+def socios_genero():
+    """Retorna un json con la cantidad de socios por genero"""
+    respuesta = make_response(socios.socios_genero(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
+
+
+@api_blueprint.get("/club/socios-disciplinas")
+def obtener_socios_disciplinas():
+    """Retorna un json con los socios por disciplinas"""
+    respuesta = make_response(disciplinas.disciplinas_socios(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
+
+
+@api_blueprint.get("/club/info")
+def obtener_info_club():
+    """Retorna el json con la información de contacto del club"""
+    respuesta = make_response(configuracion_sistema.info_contacto_json(), 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
+
+
+@api_blueprint.get("/me/disciplinas")
 def obtener_disciplinas_socio():
-    """Valida el header id y devuelve la respuesta en formato json"""
+    """Retorna el json con todas las disciplinas que realiza
+    el socio que está logueado actualmente en la app pública (JWT)"""
     id = request.headers.get("id")
     mensaje, http_code = validator_api.validar_header_disciplinas_socio(id)
     respuesta = make_response(mensaje, http_code)
@@ -26,9 +60,10 @@ def obtener_disciplinas_socio():
     return respuesta
 
 
-@api_blueprint.route("/me/license", methods=["GET"])
+@api_blueprint.get("/me/license")
 def obtener_info_y_estado_socio():
-    """Obtiene la información personal y el estado de credencial del socio enviado en el request y lo retorna"""
+    """Retorna el json con el estado de credencial y los datos
+    del socio que está logueado actualmente en la app pública (JWT)"""
     id = request.headers.get("id")
     mensaje, http_code = validator_api.validar_header_estado_socio(id)
     respuesta = make_response(mensaje, http_code)
@@ -36,31 +71,35 @@ def obtener_info_y_estado_socio():
     return respuesta
 
 
-@api_blueprint.route("/me/payments", methods=["GET"])
-def obtener_pagos():
-    """Obtiene la lista de pagos registrados del usuario logueado en este momento y lo retorna"""
-    return pagos.pagos_json()
-
-
-@api_blueprint.route("/me/payments", methods=["POST"])
-def registrar_pagos():
-    """Registra un nuevo pago para el usuario logueado en este momento"""
-    return pagos.pagar_json(request.get_json())
-
-
-@api_blueprint.route("/club/info", methods=["GET"])
-def obtener_info_club():
-    """Obtiene el json con la informacion de contacto y lo retorna"""
-    return configuracion_sistema.info_contacto_json()
-
-
-@api_blueprint.route("/auth", methods=["POST"])
-def socio_authenticate():
-    """Recibe email y password de un socio y lo valida"""
+@api_blueprint.get("/me/profile")
+def obtener_info_socio():
+    """Retorna el json con todos los datos
+    del socio que está logueado actualmente en la app pública (JWT)"""
     pass
 
 
-@api_blueprint.route("/me/profile", methods=["GET"])
-def obtener_info_usuario():
-    """Obtiene el json con todos los datos del usuario que se envia por parametro y lo retorna"""
+@api_blueprint.get("/me/payments")
+def obtener_pagos_socio():
+    """Retorna la lista de pagos registrados
+    del socio que está logueado actualmente en la app pública (JWT)"""
+    id = request.headers.get("id")
+    mensaje, http_code = validator_api.validar_header_pagos_socio(id)
+    respuesta = make_response(mensaje, http_code)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
+
+
+# agregar otra api que devuelva los pagos adeudados
+
+
+@api_blueprint.post("/me/payments")
+def registrar_pago_socio():
+    """Registra un nuevo pago para
+    el socio que está logueado actualmente en la app pública (JWT)"""
+    return pagos.pagar_json(request.get_json())
+
+
+@api_blueprint.post("/auth")
+def obtener_token():
+    """Recibe un json con user y password y retorna su JWT"""
     pass

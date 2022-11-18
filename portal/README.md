@@ -1,6 +1,14 @@
-# .
+# TODO al 17/11 
+* Carnet (Hernán)
+* Terminar estadísticas (Manuel)
+* Terminar login y JWT (Nico)
+* Terminar pagos (Juan)
 
-This template should help get you started developing with Vue 3 in Vite.
+## Cómo iniciar la app pública localmente 
+```sh
+cd portal
+npm run dev
+```
 
 ## Recommended IDE Setup
 

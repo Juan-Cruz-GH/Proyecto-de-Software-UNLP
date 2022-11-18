@@ -14,9 +14,10 @@
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
           <p v-if="errors && errors.length">El numero de socio ingresado no existe</p>
           <p v-else-if="mostrar_vacio">Debe ingresar algun numero de socio</p>
-          <p v-else>{{info_socio["description"]}}</p>
-        <button v-on:click="swapEsconder" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
+          <p v-else>{{ info_socio["description"] }}</p>
+          <button v-on:click="swapEsconder" type="button" class="btn-close" data-bs-dismiss="alert"
+            aria-label="Close"></button>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -97,6 +98,7 @@
 
 <script>
 export default {
+  inject: ['URL_API_LICENCIA'],
   data() {
     return {
       info_socio: [],
@@ -119,7 +121,7 @@ export default {
           }
         }
         axios
-          .get("http://127.0.0.1:5000/api/me/license", config)
+          .get(this.URL_API_LICENCIA, config)
           .then((response) => {
             // JSON responses are automatically parsed.
             this.info_socio = response.data;

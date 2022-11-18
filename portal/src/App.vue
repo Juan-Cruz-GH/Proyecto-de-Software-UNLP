@@ -20,10 +20,13 @@ import { RouterLink, RouterView } from "vue-router";
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/">Home</RouterLink>
                 </li>
                 <li class="nav-item">
-                  <RouterLink class="nav-link mx-2" aria-current="page" to="/about">About</RouterLink>
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/disciplinas">Disciplinas</RouterLink>
                 </li>
                 <li class="nav-item">
-                  <RouterLink class="nav-link mx-2" aria-current="page" to="/disciplinas">Disciplinas</RouterLink>
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/estadisticas">Estadisticas</RouterLink>
+                </li>
+                <li class="nav-item">
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/pagos">Pagos</RouterLink>
                 </li>
               </ul>
               <ul class="navbar-nav ms-auto d-lg-inline-flex">
