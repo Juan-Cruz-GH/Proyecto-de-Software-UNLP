@@ -90,7 +90,7 @@ def obtener_pagos_socio():
 
 
 @api_blueprint.get("/me/pending_payments")
-def obtener_pagos_socio():
+def obtener_impagos_socio():
     """Retorna la lista de pagos adeudados
     del socio que está logueado actualmente en la app pública (JWT)"""
     id = request.headers.get("id")
