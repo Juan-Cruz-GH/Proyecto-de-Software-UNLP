@@ -16,14 +16,17 @@ import Footer from "../components/footer.vue"
           </h5>
           <div class="row mb-4">
             <div class="col-6">
+              <h4 class="text-center">Socios por Disciplina</h4>
               <EstadisticasDisciplinas />
             </div>
             <div class="col-6">
+              <h4 class="text-center">Socios por Genero</h4>
               <EstadisticasSocios />
             </div>
           </div>
           <div class="row">
             <div class="col-12">
+              <h4 class="text-center">Socios inscriptos por año</h4>
               <EstadisticasAños />
             </div>
           </div>
