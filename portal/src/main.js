@@ -16,6 +16,7 @@ const header = "https://admin-grupo23.proyecto2022.linti.unlp.edu.ar";
 app.provide("URL_API_DISCIPLINAS", header + "/api/club/disciplinas");
 app.provide("URL_API_LICENCIA", header + "/api/me/license");
 app.provide("URL_API_CLUB", header + "/api/club/info");
+app.provide("URL_API_SOCIOS_DISCIPLINAS", header + "/api/club/socios-disciplinas")
 app.provide("URL_API_SOCIOS_GENERO", header + "/api/club/socios-genero")
 app.provide("URL_API_SOCIOS_AÑO", header + "/api/club/socios-años")
 app.provide("URL_API_PAYMENTS", header + "/api/me/payments") // GET en ListadoCuotas, POST para pagar.
