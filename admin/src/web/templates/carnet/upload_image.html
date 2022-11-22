@@ -24,8 +24,10 @@ Configuración del sistema - Club Villa Elisa
                     <div>
                         {{ form.photo(class="form-control")}}
                     </div>
-                    <div>
-                        {{form.submit(class="btn btn-success")}}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{form.submit(class="btn btn-success")}}
+                        </div>
                     </div>
                 </div>
             </form>
@@ -39,6 +41,11 @@ Configuración del sistema - Club Villa Elisa
 
         </div>
     </div>
+
+</div>
+<div class="col-md-4 offset-md-9 mt-6">
+    <a href="{{url_for('carnet.view_license', id=socio.id)}}" class="btn btn-dark">Volver al
+        Carnet</a>
 </div>
 
 {% endblock %}
