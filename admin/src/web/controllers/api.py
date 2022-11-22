@@ -1,4 +1,5 @@
 from flask import Blueprint, make_response, request
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from src.web.controllers import disciplinas
 from src.web.controllers import socios
@@ -50,28 +51,33 @@ def obtener_info_club():
 
 
 @api_blueprint.get("/me/disciplinas")
+@jwt_required()
 def obtener_disciplinas_socio():
     """Retorna el json con todas las disciplinas que realiza
     el socio que está logueado actualmente en la app pública (JWT)"""
     id = request.headers.get("id")
-    mensaje, http_code = validator_api.validar_header_disciplinas_socio(id)
+    mensaje, http_code = validator_api.validar_header_disciplinas_socio(
+        get_jwt_identity()
+    )
     respuesta = make_response(mensaje, http_code)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
 
 @api_blueprint.get("/me/license")
+@jwt_required()
 def obtener_info_y_estado_socio():
     """Retorna el json con el estado de credencial y los datos
     del socio que está logueado actualmente en la app pública (JWT)"""
     id = request.headers.get("id")
-    mensaje, http_code = validator_api.validar_header_estado_socio(id)
+    mensaje, http_code = validator_api.validar_header_estado_socio(get_jwt_identity())
     respuesta = make_response(mensaje, http_code)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
 
 @api_blueprint.get("/me/profile")
+@jwt_required()
 def obtener_info_socio():
     """Retorna el json con todos los datos
     del socio que está logueado actualmente en la app pública (JWT)"""
@@ -79,32 +85,35 @@ def obtener_info_socio():
 
 
 @api_blueprint.get("/me/payments")
+@jwt_required()
 def obtener_pagos_socio():
     """Retorna la lista de pagos registrados
     del socio que está logueado actualmente en la app pública (JWT)"""
     id = request.headers.get("id")
-    mensaje, http_code = validator_api.validar_header_pagos_socio(id)
+    mensaje, http_code = validator_api.validar_header_pagos_socio(get_jwt_identity())
     respuesta = make_response(mensaje, http_code)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
 
 @api_blueprint.get("/me/pending_payments")
+@jwt_required()
 def obtener_pagos_adeudados_socio():
     """Retorna la lista de pagos adeudados
     del socio que está logueado actualmente en la app pública (JWT)"""
     id = request.headers.get("id")
-    mensaje, http_code = validator_api.validar_header_pagos_socio(id)
+    mensaje, http_code = validator_api.validar_header_pagos_socio(get_jwt_identity())
     respuesta = make_response(mensaje, http_code)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
 
 @api_blueprint.post("/me/payments")
+@jwt_required()
 def registrar_pago_socio():
     """Registra un nuevo pago para
     el socio que está logueado actualmente en la app pública (JWT)"""
-    return pagos.pagar_json(request.get_json())
+    return pagos.pagar_json(request.get_json(), get_jwt_identity())
 
 
 @api_blueprint.post("/auth")
