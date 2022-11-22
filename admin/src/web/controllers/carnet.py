@@ -89,7 +89,7 @@ def view_license_only(id):
     if not (has_permission(session["user"], "carnet_license")):
         return abort(403)
     kwargs = {
-        "url": request.url,
+        "url": url_for("carnet.view_license", id=id),
         "socio": buscar_socio(id),
         "photo": get_photo_socio(id),
     }
