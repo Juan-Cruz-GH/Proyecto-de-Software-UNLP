@@ -109,5 +109,8 @@ def get_default_photo_path():
 
 
 @carnet_blueprint.route("/download/<id>")
+@login_requerido
 def carnet_pdf_download(id):
+    if not (has_permission(session["user"], "carnet_download")):
+        return abort(403)
     return render_pdf(url_for("carnet.view_license_only", id=id))
