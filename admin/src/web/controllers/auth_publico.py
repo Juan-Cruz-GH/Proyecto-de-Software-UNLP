@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response
 from src.core import socios
 from src.web.controllers.socios import json_informacion_socio
+from src.web.controllers.validators import validator_usuario
 
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies
 from flask_jwt_extended import unset_jwt_cookies, jwt_required
@@ -13,6 +14,10 @@ def login_publico():
     data = request.get_json()
     email = data['email']
     password = data['password']
+    validacion, mensaje= validator_usuario.validar_inputs_publico(email, password)
+    if not validacion:
+        return jsonify(message=mensaje), 400
+
     socio = socios.find_socio_by_email_and_pass(email, password)
 
     if socio: 
@@ -21,8 +26,7 @@ def login_publico():
         set_access_cookies(response, access_token)
         return response, 201
     else:
-        return jsonify(message='Sin autorizacion'), 400
-"""validar que los campos email y pass me lleguen con algo"""
+        return jsonify(message='Credenciales Invalidas'), 400
 
 @auth_publico_blueprint.get("/logout_publico")
 @jwt_required( )

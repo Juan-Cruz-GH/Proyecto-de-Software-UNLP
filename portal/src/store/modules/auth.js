@@ -31,7 +31,7 @@ const actions = {
 const mutations = {
   setSocio(state, socio) {
     state.isLoggedIn = true;
-    state.socio = socio;
+    state.socio = socio.profile;
   },
   logoutSocioState(state) {
     state.isLoggedIn = false;
