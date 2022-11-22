@@ -20,9 +20,7 @@ Configuración del sistema - Club Villa Elisa
         </div>
         <div class="row">
             <div class="col-5">
-                <img class="card-img-left"
-                    src="https://png.vector.me/files/images/2/5/252001/generic_male_avatar_rectangular_preview"
-                    alt="Card image cap">
+                <img class="card-img-left" src="{{photo}}" width="240px">
             </div>
             <div class="col-7">
                 <div class="card-body">
@@ -44,5 +42,6 @@ Configuración del sistema - Club Villa Elisa
     </div>
 </div>
 
+<a href="{{ url_for('carnet.upload_image', id=socio.id) }}" class="btn btn-warning">Subir Imagen</a>
 
 {% endblock %}
