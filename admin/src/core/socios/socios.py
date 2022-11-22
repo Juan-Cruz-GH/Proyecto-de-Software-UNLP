@@ -15,6 +15,8 @@ class Socio(db.Model):
     genero = db.Column(db.String, nullable=False)
     direccion = db.Column(db.String, nullable=False)
     telefono = db.Column(db.String, nullable=False)
+    photo_path = db.Column(db.String, nullable=False)
+    password = db.Column(db.String, nullable=False)
     pagos = db.relationship("Pago", back_populates="socio")
     inserted_at = db.Column(db.DateTime, default=datetime.now)
 
