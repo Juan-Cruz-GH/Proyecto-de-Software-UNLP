@@ -70,6 +70,20 @@ pillow = "*"
 qrcode = "*"
 
 [[package]]
+name = "Flask-Reuploaded"
+version = "1.2.0"
+description = "Flexible and efficient upload handling for Flask"
+category = "main"
+optional = false
+python-versions = ">= 3.6"
+
+[package.dependencies]
+Flask = ">=1.0.4"
+
+[package.extras]
+test = ["pytest", "pytest-cov"]
+
+[[package]]
 name = "Flask-Session"
 version = "0.4.0"
 description = "Adds server-side session support to your Flask application"
@@ -295,7 +309,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "b8ce4c274928038d260b59ec06d4d2966ecc24735e273ed81d508e4e8f207a88"
+content-hash = "27fd66b224527e110971e992285e5c5b4d5dcec11e11bf273bef0b21d93c2c14"
 
 [metadata.files]
 cachelib = [
@@ -321,6 +335,10 @@ Flask-Cors = [
 Flask-QRcode = [
     {file = "Flask-QRcode-3.1.0.tar.gz", hash = "sha256:2b0598c9ebc67f3f9ca18fb1ee64b365a4c76ab528bd9e1dc69a71d590e98a78"},
     {file = "Flask_QRcode-3.1.0-py3-none-any.whl", hash = "sha256:e251fd843edc8f719d0690d9cc4496ccb83db8942d7fc8009dc8e92a040232d3"},
+]
+Flask-Reuploaded = [
+    {file = "Flask-Reuploaded-1.2.0.tar.gz", hash = "sha256:fde68f9fb246c55d97996a9339ad56f70b268f69f2bcbff92deaddf663f12c32"},
+    {file = "Flask_Reuploaded-1.2.0-py3-none-any.whl", hash = "sha256:dbf2fe96b1125aa7e1d4e0155ab150d997868f6d31b2b0523945c8b0fe392772"},
 ]
 Flask-Session = [
     {file = "Flask-Session-0.4.0.tar.gz", hash = "sha256:c9ed54321fa8c4ca0132ffd3369582759eda7252fb4b3bee480e690d1ba41f46"},

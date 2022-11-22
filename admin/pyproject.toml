@@ -17,6 +17,7 @@ Werkzeug = "^2.2.2"
 Flask-Session = "^0.4.0"
 Flask-Cors = "^3.0.10"
 Flask-QRcode = "^3.1.0"
+Flask-Reuploaded = "^1.2.0"
 
 
 [build-system]
