@@ -12,6 +12,7 @@ from flask import (
     send_from_directory,
     url_for,
     Response,
+    abort,
 )
 
 from flask_weasyprint import HTML, render_pdf
