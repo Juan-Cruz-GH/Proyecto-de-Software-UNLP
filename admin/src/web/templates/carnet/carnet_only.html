@@ -5,5 +5,65 @@
 {% endblock %}
 
 {% block content %}
-<img src="{{ qrcode(url) }}" alt="Card image cap">
-{% endblock %}
+<style>
+    body {
+        font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+    }
+
+    .split {
+        height: 60%;
+        width: 50%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        overflow-x: hidden;
+        padding-top: 20px;
+    }
+
+    .left {
+        left: 0;
+    }
+
+    .right {
+        right: 0;
+    }
+
+    .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    .centered img {
+        width: 200px;
+        border-radius: 50%;
+    }
+</style>
+</head>
+
+<body>
+    <h1 style="font-family:'Brush Script MT', cursive; font-size:4rem; border-bottom:5px solid;">
+        Club Deportivo
+        Villa
+        Elisa</h1>
+
+    <div class="split left">
+        <div class="centered">
+            <img src="{{photo}}" width="240rem" style="border-radius:50%" ;>
+            <h2>Estado:</h2>
+            <p>{%if socio.activo%} Activo{%else%} Inactivo{%endif%}</p>
+        </div>
+    </div>
+
+    <div class="split right">
+        <div class="centered">
+            <h2>{{socio.apellido}} {{socio.nombre}}</h2>
+            <p>{{socio.tipo_documento}}: {{socio.dni}} <br>
+                Socio: #{{socio.id}} <br>
+                Fecha alta: {{socio.inserted_at.strftime('%Y-%m-%d')}}<br></p>
+            <img src="{{ qrcode(url) }}" width="200rem" style="border-radius: 0%;">
+        </div>
+    </div>
+    {% endblock %}

@@ -57,6 +57,7 @@ Permisos del rol de operador
 -Para socio, disciplina, permisos de: index, new, update
 -Para usuario, permisos de: index
 -para pago: index, pay, download
+-para carnet: license, upload, photo
 
 Permisos del rol de administrador: 
 -Todos los permisos de operador
@@ -68,3 +69,8 @@ Permisos del rol de administrador:
 Tabla "Usuario_Rol":
 Relacionar al menos un usuario con el rol admin
 Relacionar un usuario con el rol operador
+
+# Carnet
+Deberia haber una carpeta admin/public/uploads donde se guardaran las imagenes de los socios.
+
+Se debería tener una imagen en admin/public/uploads cuyo nombre debe ser EXACTAMENTE: "default_photo.jpg"

@@ -11,7 +11,10 @@ from flask import (
     redirect,
     send_from_directory,
     url_for,
+    Response,
 )
+
+from flask_weasyprint import HTML, render_pdf
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
@@ -83,14 +86,28 @@ def view_license(id):
 
 @carnet_blueprint.route("/<id>/carnet.png")
 def view_license_only(id):
-    return render_template("carnet/carnet_only.html")
+    if not (has_permission(session["user"], "carnet_license")):
+        return abort(403)
+    kwargs = {
+        "url": request.url,
+        "socio": buscar_socio(id),
+        "photo": get_photo_socio(id),
+    }
+    print(image_exists(kwargs["photo"]))
+    if not image_exists(kwargs["photo"]):
+        kwargs["photo"] = get_default_photo_path()
+    return render_template("carnet/carnet_only.html", **kwargs)
 
 
 def image_exists(path):
     path = str(Path(__file__).parent.parent.parent.parent) + path
-    print(path)
     return Path(path).exists()
 
 
 def get_default_photo_path():
     return "/public/uploads/default_photo.jpg"
+
+
+@carnet_blueprint.route("/download/<id>")
+def carnet_pdf_download(id):
+    return render_pdf(url_for("carnet.view_license_only", id=id))

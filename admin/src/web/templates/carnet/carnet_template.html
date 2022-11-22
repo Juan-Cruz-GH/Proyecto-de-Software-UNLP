@@ -50,4 +50,8 @@ Configuración del sistema - Club Villa Elisa
 <div class="text-center">
     <a href="{{ url_for('carnet.upload_image', id=socio.id) }}" class="btn btn-warning">Subir Imagen</a>
 </div>
+
+<div class="text-center">
+    <a href="{{ url_for('carnet.carnet_pdf_download', id=socio.id) }}" class="btn btn-warning">PDF</a>
+</div>
 {% endblock %}
