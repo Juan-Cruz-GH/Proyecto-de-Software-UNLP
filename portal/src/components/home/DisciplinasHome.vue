@@ -6,13 +6,8 @@
           <h5 class="card-title text-center mb-5 fw-light fs-5">Disciplinas</h5>
           <div class="row mb-4">
             <div class="col-6">
-              <input
-                class="form-control me-2"
-                type="search"
-                placeholder="Buscar disciplina por nombre..."
-                aria-label="Buscar por nombre"
-                v-model="search"
-                />
+              <input class="form-control me-2" type="search" placeholder="Buscar disciplina por nombre..."
+                aria-label="Buscar por nombre" v-model="search" />
             </div>
           </div>
           <div class="row">
@@ -20,15 +15,15 @@
               <div class="card text-center">
                 <div class="card-header"></div>
                 <div class="card-body">
-                  <h5 class="card-title">{{discipline.name}}</h5>
+                  <h5 class="card-title">{{ discipline.name }}</h5>
                   <p class="card-text">
-                    <ul class="list-group">
-                      <li class="list-group-item"><strong>Profesores: </strong>{{discipline.teacher}}</li>
-                      <li class="list-group-item"><strong>Horarios: </strong>{{discipline.time}}</li>
-                      <li class="list-group-item"><strong>Categoria: </strong>{{discipline.category}}</li>
-                      <li class="list-group-item"><strong>Dias: </strong>{{discipline.days}}</li>
-                      <li class="list-group-item"><strong>Costo: </strong>{{discipline.price}}</li>
-                    </ul>
+                  <ul class="list-group">
+                    <li class="list-group-item"><strong>Profesores: </strong>{{ discipline.teacher }}</li>
+                    <li class="list-group-item"><strong>Horarios: </strong>{{ discipline.time }}</li>
+                    <li class="list-group-item"><strong>Categoria: </strong>{{ discipline.category }}</li>
+                    <li class="list-group-item"><strong>Dias: </strong>{{ discipline.days }}</li>
+                    <li class="list-group-item"><strong>Costo: </strong>{{ discipline.price }}</li>
+                  </ul>
                   </p>
                 </div>
                 <div class="card-footer text-muted"></div>
@@ -43,6 +38,7 @@
 
 <script>
 export default {
+  inject: ['URL_API_DISCIPLINAS'],
   data() {
     return {
       disciplines: [],
@@ -51,7 +47,7 @@ export default {
     };
   },
   computed: {
-    filterList(){
+    filterList() {
       return this.disciplines.filter(discipline => {
         return discipline.name.toLowerCase().includes(this.search.toLowerCase())
       })
@@ -60,7 +56,7 @@ export default {
   // Fetches posts when the component is created.
   created() {
     axios
-      .get("http://127.0.0.1:5000/api/club/disciplinas")
+      .get(this.URL_API_DISCIPLINAS)
       .then((response) => {
         // JSON responses are automatically parsed.
         this.disciplines = response.data;
