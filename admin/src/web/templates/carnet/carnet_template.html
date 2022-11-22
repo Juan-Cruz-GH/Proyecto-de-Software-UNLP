@@ -9,7 +9,8 @@ Configuración del sistema - Club Villa Elisa
 {% endblock %}
 
 {% block content %}
-<div id="carnet" class="container" style="font-family:'Comic Sans MS','Comic Sans',cursive;">
+<br>
+<div id="carnet" class="container" style="font-family:'Comic Sans MS','Comic Sans',cursive;width: 600px;">
     <div class="card border-dark border border-5 text-center" style="width: 600px;">
         <div class="row">
             <div class="column-12">
@@ -44,6 +45,9 @@ Configuración del sistema - Club Villa Elisa
     </div>
 </div>
 
-<a href="{{ url_for('carnet.upload_image', id=socio.id) }}" class="btn btn-warning">Subir Imagen</a>
+<br>
 
+<div class="text-center">
+    <a href="{{ url_for('carnet.upload_image', id=socio.id) }}" class="btn btn-warning">Subir Imagen</a>
+</div>
 {% endblock %}
