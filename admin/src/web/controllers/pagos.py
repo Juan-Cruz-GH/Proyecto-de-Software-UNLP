@@ -1,15 +1,6 @@
 import json
 
-from flask import (
-    Blueprint,
-    render_template,
-    request,
-    Response,
-    session,
-    abort,
-    redirect,
-    flash,
-)
+from flask import Blueprint, render_template, request, Response, session, abort, flash
 
 from src.core import configuracion_sistema
 from src.core import socios
@@ -23,27 +14,17 @@ from src.decoradores.login import login_requerido
 pago_blueprint = Blueprint("pagos", __name__, url_prefix="/pagos")
 
 
-@pago_blueprint.route("/api")
-def pagos_json():
+def pagos_json(id):
     """Retorna el json con todos los pagos del socio logeado"""
-    id = request.headers.get("id")
-    if es_entero(id):
-        return json.dumps(pagos.listar_pagos_diccionario(id))
-    return generar_respuesta(
-        "{'error': el id enviado en el header debe ser un entero}", 400, "text"
-    )
+    return json.dumps(pagos.listar_pagos_diccionario(id))
 
 
-@pago_blueprint.route("/api")
-def pagar_json(json):
+def pagar_json(json, id):
     """Recibe un json que es una lista con un solo elemento que tendria datos del pago
     los datos son "month" y "amount"."""
     if not configuracion_sistema.get_configuracion_general().activar_pagos:
-        return generar_respuesta(
-            "{'error':'Los pagos no estan activados'}", 400, "text"
-        )
+        return generar_respuesta("{'error':'Los pagos no estan activados'}", 400, "text")
 
-    id = request.headers.get("id")
     if not es_entero(id):
         return generar_respuesta(
             "{'error': el id enviado en el header debe ser un entero}", 400, "text"
@@ -68,16 +49,6 @@ def generar_respuesta(respuesta_json, codigo, tipo_respuesta):
     """Genera una respuesta a los pedidos a la api POST de pagos, recibe un json,
     el codigo que devuelve el servidor y el tipo de respuesta que envia"""
     return Response(respuesta_json, status=codigo, mimetype=tipo_respuesta)
-
-
-@pago_blueprint.route("/")
-@login_requerido
-def pagos_index():
-    """Esta funcion llama al modulo pagos para listar todos los socios"""
-    kwargs = {
-        "pagos": pagos.listar_pagos(),
-    }
-    return render_template("socios/pagos.html", **kwargs)
 
 
 @pago_blueprint.route("/socioPagos/<id>/")

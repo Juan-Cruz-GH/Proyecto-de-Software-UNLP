@@ -1,3 +1,5 @@
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from src.core import configuracion_sistema
 from src.core.socios.socios import Socio
 from src.core.db import db
@@ -7,6 +9,7 @@ from src.colores_api.colores_aleatorios import generar_color
 def agregar_socio(data):
     """Esta funcion se utiliza para dar de alta un socio"""
     socio = Socio(**data)
+    socio.password = generate_password_hash(socio.password, method="sha256")
     db.session.add(socio)
     db.session.commit()
     return socio
@@ -234,3 +237,33 @@ def get_photo_socio(id):
     if socio != None and socio.photo_path != None:
         return socio.photo_path
     return "/public/uploads/default_photo.jpg"
+
+
+def find_socio_by_email_and_pass(email, password):
+    """esta funcion verifica que el socio ingresado en login publico exista"""
+    socio = Socio.query.filter(Socio.email == email).first()
+    if socio is None:
+        return None
+    elif check_password_hash(socio.password, password):
+        return socio
+
+
+def informacion_socio(id):
+    socio = buscar_socio(id)
+    datos_perfil = {
+        "nombre": socio.nombre,
+        "apellido": socio.apellido,
+        "email": socio.email,
+        "id": socio.id,
+        "document_type": socio.tipo_documento,
+        "document_number": socio.dni,
+        "gender": socio.genero,
+        "gender_other": socio.genero,
+        "address": socio.direccion,
+        "phone": socio.telefono,
+    }
+    return {
+        "status": "OK",
+        "descripcion": "Informacion del socio jwt",
+        "profile": datos_perfil,
+    }

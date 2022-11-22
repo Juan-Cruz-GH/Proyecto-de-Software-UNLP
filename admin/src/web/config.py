@@ -8,6 +8,9 @@ class Config(object):
     SECRET_KEY = "secret"
     DEBUG = False
     TESTING = False
+    JWT_SECRET_KEY="secret_key"
+    JWT_TOKEN_LOCATION=["cookies"]
+    JWT_ACCESS_COOKIE_NAME="access_token_cookie"
     # Desactivar CSRF para testear API POST de registrar pagos
     # WTF_CSRF_CHECK_DEFAULT = False
 

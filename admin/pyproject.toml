@@ -20,6 +20,7 @@ Flask-QRcode = "^3.1.0"
 Flask-Reuploaded = "^1.2.0"
 weasyprint = "^57.1"
 flask_weasyprint = "^1.0.0"
+Flask-JWT-Extended = "^4.4.4"
 
 
 [build-system]
