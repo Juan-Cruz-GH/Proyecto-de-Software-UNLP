@@ -8,35 +8,19 @@ import { RouterLink, RouterView } from "vue-router";
       <div id="navbar">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
           <div class="container-fluid">
-            <RouterLink class="navbar-brand" to="/"
-              >Club Villa Elisa</RouterLink
-            >
-            <button
-              class="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNavDropdown"
-              aria-controls="navbarNavDropdown"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
+            <RouterLink class="navbar-brand" to="/">Club Villa Elisa</RouterLink>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+              aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
               <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                  <RouterLink class="nav-link mx-2" aria-current="page" to="/"
-                    >Home</RouterLink
-                  >
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/">Home</RouterLink>
                 </li>
                 <li class="nav-item">
-                  <RouterLink
-                    class="nav-link mx-2"
-                    aria-current="page"
-                    to="/auth"
-                    >Login</RouterLink
-                  >
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/auth">Login</RouterLink>
                 </li>
                 <li class="nav-item">
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/disciplinas">Disciplinas</RouterLink>
@@ -45,25 +29,19 @@ import { RouterLink, RouterView } from "vue-router";
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/estadisticas">Estadisticas</RouterLink>
                 </li>
                 <li class="nav-item">
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/carnet">Carnet</RouterLink>
+                </li>
+                <li>
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/pagos">Pagos</RouterLink>
                 </li>
               </ul>
               <ul v-if="estaLogueado" class="navbar-nav ms-auto d-lg-inline-flex">
                 <li class="nav-item dropdown">
-                  <a
-                    class="nav-link mx-2 dropdown-toggle"
-                    href="#"
-                    id="navbarDropdownMenuLink"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
+                  <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     {{ authSocio.nombre }} {{ authSocio.apellido }}
                   </a>
-                  <ul
-                    class="dropdown-menu"
-                    aria-labelledby="navbarDropdownMenuLink"
-                  >
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li><a class="dropdown-item" href="#">Perfil</a></li>
                     <li><a class="dropdown-item" @click="logout">Cerrar Sesion</a></li>
                   </ul>
@@ -71,12 +49,7 @@ import { RouterLink, RouterView } from "vue-router";
               </ul>
               <ul v-else class="navbar-nav ms-auto d-lg-inline-flex">
                 <li class="nav-item dropdown">
-                  <RouterLink
-                    class="nav-link mx-2"
-                    aria-current="page"
-                    to="/auth"
-                    >Login</RouterLink
-                  >
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/auth">Login</RouterLink>
                 </li>
               </ul>
             </div>

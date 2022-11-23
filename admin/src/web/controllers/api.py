@@ -118,5 +118,5 @@ def registrar_pago_socio():
 
 @api_blueprint.post("/auth")
 def obtener_token():
-    """Recibe un json con user y password y retorna su JWT"""
+    """Recibe un json con user y password y retorna su JWT, lo realiza el login publico por ahora"""
     pass

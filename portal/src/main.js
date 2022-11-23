@@ -20,6 +20,7 @@ app.provide("URL_API_SOCIOS_DISCIPLINAS", header + "/api/club/socios-disciplinas
 app.provide("URL_API_SOCIOS_GENERO", header + "/api/club/socios-genero")
 app.provide("URL_API_SOCIOS_AÑO", header + "/api/club/socios-años")
 app.provide("URL_API_PAYMENTS", header + "/api/me/payments") // GET en ListadoCuotas, POST para pagar.
+app.provide("URL_API_DEBT", header + "/api/me/pending_payments")
 
 app.use(createPinia());
 app.use(router);
