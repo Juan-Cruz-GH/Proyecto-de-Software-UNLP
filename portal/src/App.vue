@@ -31,7 +31,6 @@ import { RouterLink, RouterView } from "vue-router";
                   >
                 </li>
                 <li class="nav-item">
-<<<<<<< HEAD
                   <RouterLink
                     class="nav-link mx-2"
                     aria-current="page"
@@ -40,13 +39,6 @@ import { RouterLink, RouterView } from "vue-router";
                   >
                 </li>
                 <li class="nav-item">
-                  <RouterLink
-                    class="nav-link mx-2"
-                    aria-current="page"
-                    to="/disciplinas"
-                    >Disciplinas</RouterLink
-                  >
-=======
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/disciplinas">Disciplinas</RouterLink>
                 </li>
                 <li class="nav-item">
@@ -54,7 +46,6 @@ import { RouterLink, RouterView } from "vue-router";
                 </li>
                 <li class="nav-item">
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/pagos">Pagos</RouterLink>
->>>>>>> b09bd8e9f4101cf6c0f7735bd51df0cf7ef89fbc
                 </li>
               </ul>
               <ul v-if="estaLogueado" class="navbar-nav ms-auto d-lg-inline-flex">

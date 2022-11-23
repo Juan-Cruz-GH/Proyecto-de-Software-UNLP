@@ -9,7 +9,7 @@ import store from "./store"
 
 const app = createApp(App);
 
-const header = "https://admin-grupo23.proyecto2022.linti.unlp.edu.ar";
+const header = "http://127.0.0.1:5000";
 // https://admin-grupo23.proyecto2022.linti.unlp.edu.ar     cambiar header a este antes de cada push/merge a main
 // http://127.0.0.1:5000                                    cambiar header a este para correr la app localmente
 
