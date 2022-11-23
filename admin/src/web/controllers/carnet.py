@@ -15,7 +15,7 @@ from flask import (
     abort,
 )
 
-from flask_weasyprint import HTML, render_pdf
+
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
@@ -109,9 +109,11 @@ def get_default_photo_path():
     return "/public/uploads/default_photo.jpg"
 
 
+"""
 @carnet_blueprint.route("/download/<id>")
 @login_requerido
 def carnet_pdf_download(id):
     if not (has_permission(session["user"], "carnet_download")):
         return abort(403)
     return render_pdf(url_for("carnet.view_license_only", id=id))
+"""
