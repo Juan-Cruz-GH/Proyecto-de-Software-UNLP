@@ -20,18 +20,15 @@ import { RouterLink, RouterView } from "vue-router";
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/">Home</RouterLink>
                 </li>
                 <li class="nav-item">
-                  <RouterLink class="nav-link mx-2" aria-current="page" to="/auth">Login</RouterLink>
-                </li>
-                <li class="nav-item">
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/disciplinas">Disciplinas</RouterLink>
                 </li>
                 <li class="nav-item">
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/estadisticas">Estadisticas</RouterLink>
                 </li>
-                <li class="nav-item">
+                <li v-if="estaLogueado" class="nav-item">
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/carnet">Carnet</RouterLink>
                 </li>
-                <li>
+                <li v-if="estaLogueado" class="nav-item">
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/pagos">Pagos</RouterLink>
                 </li>
               </ul>
