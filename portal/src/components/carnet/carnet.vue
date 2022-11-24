@@ -2,7 +2,7 @@
     <div class="card mb-3" style="max-width: 1080px;" v-if="socio">
         <div class="row no-gutters">
             <div class="col-md-3">
-                <img src="..." class="card-img" alt="...">
+                <img src="" class="card-img" alt="...">
             </div>
 
             <div class="col-md-6">
@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <img src="..." class="card-img" alt="...">
+            <img src="" class="card-img" alt="...">
         </div>
     <p v-if="socio">
         {{ socio.profile.email }}
