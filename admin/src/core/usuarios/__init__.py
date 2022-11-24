@@ -1,7 +1,6 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from src.core import configuracion_sistema
-from src.core import socios
 from src.core import roles
 from src.core.usuarios.usuarios import Usuario
 from src.core.db import db

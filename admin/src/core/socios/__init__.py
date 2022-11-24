@@ -1,3 +1,5 @@
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from src.core import configuracion_sistema
 from src.core.socios.socios import Socio
 from src.core.db import db
@@ -7,9 +9,11 @@ from src.colores_api.colores_aleatorios import generar_color
 def agregar_socio(data):
     """Esta funcion se utiliza para dar de alta un socio"""
     socio = Socio(**data)
+    socio.password = generate_password_hash(socio.password, method="sha256")
     db.session.add(socio)
     db.session.commit()
     return socio
+
 
 def socios_por_años():
     """Esta funcion devuelve una lista de los socios ingresados por año de los ultimos 7 años"""
@@ -19,12 +23,13 @@ def socios_por_años():
     for i in range(2015, 2023):
         dic_socios[str(i)] = 0
     for socio in socios:
-        anio_str = socio.inserted_at.strftime('%Y')
-        if(anio_str in dic_socios):
+        anio_str = socio.inserted_at.strftime("%Y")
+        if anio_str in dic_socios:
             dic_socios[anio_str] += 1
     for key, value in dic_socios.items():
         lista.append([key, value])
     return lista
+
 
 def socios_por_sexo():
     """Esta funcion devuelve una lista con los socios por sexo"""
@@ -32,17 +37,19 @@ def socios_por_sexo():
     lista = []
     dic_socios = {}
     for socio in socios:
-        if(socio.genero not in dic_socios.keys()):
-            dic_socios[socio.genero] = {'cantidad': 1, 'color': generar_color()}
+        if socio.genero not in dic_socios.keys():
+            dic_socios[socio.genero] = {"cantidad": 1, "color": generar_color()}
         else:
-            dic_socios[socio.genero]['cantidad'] += 1
+            dic_socios[socio.genero]["cantidad"] += 1
     for key, value in dic_socios.items():
-        lista.append([key, value['cantidad'], value['color']])
+        lista.append([key, value["cantidad"], value["color"]])
     return lista
+
 
 def socios_habilitados_disciplina():
     """Retorna los socios habilitados"""
     return Socio.query.filter(Socio.activo.is_(True)).all()
+
 
 def buscar_socio(id):
     """Esta funcion busca un socio por su id"""
@@ -214,5 +221,49 @@ def estado_socio(id):
     return {
         "status": "OK",
         "description": "El socio no registra deuda ni sanción.",
+        "profile": datos_perfil,
+    }
+
+
+def save_photo(id, photo_path):
+    socio = buscar_socio(id)
+    if socio != None:
+        socio.photo_path = photo_path
+        db.session.commit()
+
+
+def get_photo_socio(id):
+    socio = buscar_socio(id)
+    if socio != None and socio.photo_path != None:
+        return socio.photo_path
+    return "/public/uploads/default_photo.jpg"
+
+
+def find_socio_by_email_and_pass(email, password):
+    """esta funcion verifica que el socio ingresado en login publico exista"""
+    socio = Socio.query.filter(Socio.email == email).first()
+    if socio is None:
+        return None
+    elif check_password_hash(socio.password, password):
+        return socio
+
+
+def informacion_socio(id):
+    socio = buscar_socio(id)
+    datos_perfil = {
+        "nombre": socio.nombre,
+        "apellido": socio.apellido,
+        "email": socio.email,
+        "id": socio.id,
+        "document_type": socio.tipo_documento,
+        "document_number": socio.dni,
+        "gender": socio.genero,
+        "gender_other": socio.genero,
+        "address": socio.direccion,
+        "phone": socio.telefono,
+    }
+    return {
+        "status": "OK",
+        "descripcion": "Informacion del socio jwt",
         "profile": datos_perfil,
     }
