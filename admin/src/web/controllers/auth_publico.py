@@ -17,9 +17,13 @@ auth_publico_blueprint = Blueprint("auth_publico", __name__, url_prefix="/auth_p
 
 @auth_publico_blueprint.post("/login_publico")
 def login_publico():
-    data = request.get_json()
-    email = data["email"]
-    password = data["password"]
+    if not (request.data):
+        return jsonify(message="No se envió nada."), 400
+    json = request.get_json()
+    email = json.get("email")
+    password = json.get("password")
+    if (email is None) or (password is None):
+        return jsonify(message="El email o password está vacio."), 400
     validacion, mensaje = validator_usuario.validar_inputs_publico(email, password)
     if not validacion:
         return jsonify(message=mensaje), 400
