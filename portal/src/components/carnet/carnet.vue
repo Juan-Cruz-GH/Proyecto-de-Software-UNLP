@@ -24,6 +24,7 @@
   
 <script>
 export default {
+    inject: ['URL_API_LICENCIA'],
     data() {
         return {
             socio: '',
@@ -38,7 +39,7 @@ export default {
             }
         }
         axios
-            .get("https://admin-grupo23.proyecto2022.linti.unlp.edu.ar/api/me/license", config)
+            .get(this.URL_API_LICENCIA, config)
             .then((response) => {
                 // JSON responses are automatically parsed.
                 this.socio = response.data;
