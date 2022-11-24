@@ -7,7 +7,7 @@ class PDFCarnet(FPDF):
     def header(self):
         self.set_font("Arial", "B", 12)
         self.set_xy(0, 0)
-        self.cell(200, 40, "Recibo de pago", 0, 0, "R")
+        self.cell(200, 40, "", 0, 0, "R")
         self.ln(10)
 
     def footer(self):
@@ -16,14 +16,17 @@ class PDFCarnet(FPDF):
         self.cell(0, 10, "Page" + str(self.page_no()) + "/{nb}", 0, 0, "C")
 
 
-def generar_carnet_PDF(qr):
+def generar_carnet_PDF(socio, photo, url):
     """Genera el pdf de una cuota paga"""
     pdf = PDFCarnet()
     pdf.add_page()
     pdf.alias_nb_pages()
     pdf.set_font("Arial", "B", 16)
     pdf.set_font("Arial", "", 12)
-    pdf.image(qr)
+    pdf.image(photo)
+    pdf.image(
+        "http://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=" + url + "&.png"
+    )
     response = make_response(pdf.output(dest="S").encode("latin-1"))
     response.headers.set(
         "Content-Disposition", "attachment", filename="Carnet" + ".pdf"

@@ -20,9 +20,14 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
 from flask_uploads import UploadSet, IMAGES
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 
-from src.core.socios import buscar_socio, save_photo, get_photo_socio
+from src.core.socios import (
+    buscar_socio,
+    save_photo,
+    get_photo_socio,
+    estado_socio_boolean,
+)
 from src.web.exportaciones import carnet_PDF
 from src.web.helpers.permission import has_permission
 from src.decoradores.login import login_requerido
@@ -78,6 +83,7 @@ def view_license(id):
         "url": request.url,
         "socio": buscar_socio(id),
         "photo": get_photo_socio(id),
+        "estado": estado_socio_boolean(id),
     }
     print(image_exists(kwargs["photo"]))
     if not image_exists(kwargs["photo"]):
@@ -93,6 +99,7 @@ def view_license_only(id):
         "url": url_for("carnet.view_license", id=id),
         "socio": buscar_socio(id),
         "photo": get_photo_socio(id),
+        "estado": estado_socio_boolean(id),
     }
     print(image_exists(kwargs["photo"]))
     if not image_exists(kwargs["photo"]):
@@ -100,8 +107,12 @@ def view_license_only(id):
     return render_template("carnet/carnet_only.html", **kwargs)
 
 
+def image_full_path(path):
+    return str(Path(__file__).parent.parent.parent.parent) + path
+
+
 def image_exists(path):
-    path = str(Path(__file__).parent.parent.parent.parent) + path
+    path = image_full_path(path)
     return Path(path).exists()
 
 
@@ -109,11 +120,17 @@ def get_default_photo_path():
     return "/public/uploads/default_photo.jpg"
 
 
-"""
 @carnet_blueprint.route("/download/<id>")
 @login_requerido
 def carnet_pdf_download(id):
     if not (has_permission(session["user"], "carnet_download")):
         return abort(403)
-    return render_pdf(url_for("carnet.view_license_only", id=id))
-"""
+    socio = buscar_socio(id)
+    path = image_full_path(get_photo_socio(id))
+    kwargs = {
+        "socio": socio,
+        "photo": path,
+        "url": url_for("carnet.view_license", id=id),
+    }
+    outpot = carnet_PDF.generar_carnet_PDF(**kwargs)
+    return outpot
