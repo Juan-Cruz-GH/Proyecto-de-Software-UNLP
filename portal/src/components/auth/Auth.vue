@@ -9,7 +9,6 @@
   </div>
 
   <div v-else>
-    <h3>{{ this.error }}</h3>
     <div v-if="this.error">
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <p>Credenciales Invalidas</p>
@@ -18,6 +17,7 @@
           class="btn-close"
           data-bs-dismiss="alert"
           aria-label="Close"
+          v-on:click="swapEsconder"
         ></button>
       </div>
     </div>
@@ -108,6 +108,11 @@ export default {
       };
       this.$router.push("/");
     },
+
+    swapEsconder() {
+      this.error = false;
+    }
+
   },
 };
 </script>
