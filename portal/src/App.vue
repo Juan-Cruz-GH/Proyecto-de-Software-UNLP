@@ -23,12 +23,7 @@ import { RouterLink, RouterView } from "vue-router";
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/disciplinas">Disciplinas</RouterLink>
                 </li>
                 <li class="nav-item">
-                  <RouterLink
-                    class="nav-link mx-2"
-                    aria-current="page"
-                    to="/estadisticas"
-                    >Estadisticas</RouterLink
-                  >
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/estadisticas">Estadisticas</RouterLink>
                 </li>
                 <li v-if="estaLogueado" class="nav-item">
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/carnet">Carnet</RouterLink>
@@ -37,11 +32,17 @@ import { RouterLink, RouterView } from "vue-router";
                   <RouterLink class="nav-link mx-2" aria-current="page" to="/pagos">Pagos</RouterLink>
                 </li>
               </ul>
+              <ul v-if="estaLogueado" class="navbar-nav ms-auto d-lg-inline-flex">
+                <li class="nav-item dropdown">
+                  <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ authSocio.nombre }} {{ authSocio.apellido }}
+                  </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li><a class="dropdown-item" href="#">Perfil</a></li>
-                    <li>
-                      <a class="dropdown-item" @click="logout">Cerrar Sesion</a>
-                    </li>
+                    <li><a class="dropdown-item" @click="logout">Cerrar Sesion</a></li>
+                  </ul>
+                </li>
               </ul>
               <ul v-else class="navbar-nav ms-auto d-lg-inline-flex">
                 <li class="nav-item dropdown">
@@ -83,6 +84,7 @@ export default {
       };
       this.$router.push("/");
     },
-  },
+  }
 };
 </script>
+
