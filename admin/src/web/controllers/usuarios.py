@@ -43,7 +43,8 @@ def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
     if not (has_permission(session["user"], "usuario_new")):
         return abort(403)
-    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
+    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])
+    }
     return render_template("usuarios/alta_usuarios.html", **kwargs)
 
 
@@ -51,7 +52,10 @@ def form_usuario():
 @login_requerido
 def usuario_profile(id):
     """Esta funcion llama al modulo correspondiente para obtener a un usuario por su id."""
-    kwargs = {"usuario": usuarios.buscar_usuario(id)}
+    kwargs = {
+        "usuario": usuarios.buscar_usuario(id),
+        "rol": usuarios.verificar_rol_usuario(id),
+    }
     return render_template("usuarios/perfil_usuario.html", **kwargs)
 
 
@@ -130,3 +134,4 @@ def usuario_delete(id):
         return abort(403)
     usuarios.eliminar_usuario(id)
     return redirect("/usuarios")
+

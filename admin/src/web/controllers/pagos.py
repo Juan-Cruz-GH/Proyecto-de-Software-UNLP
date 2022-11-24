@@ -19,13 +19,12 @@ def pagos_json(id):
     return json.dumps(pagos.listar_pagos_diccionario(id))
 
 
-def pagar_json(json):
+def pagar_json(json, id):
     """Recibe un json que es una lista con un solo elemento que tendria datos del pago
     los datos son "month" y "amount"."""
     if not configuracion_sistema.get_configuracion_general().activar_pagos:
         return generar_respuesta("{'error':'Los pagos no estan activados'}", 400, "text")
 
-    id = request.headers.get("id")
     if not es_entero(id):
         return generar_respuesta(
             "{'error': el id enviado en el header debe ser un entero}", 400, "text"

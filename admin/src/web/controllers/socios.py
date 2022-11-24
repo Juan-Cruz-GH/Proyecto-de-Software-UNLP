@@ -15,6 +15,9 @@ from src.decoradores.login import login_requerido
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
+def json_informacion_socio(id):
+    """Devuelve un json con la informacion del socio pasado por id"""
+    return json.dumps(socios.informacion_socio(id))
 
 def json_estado_socio(id):
     return json.dumps(socios.estado_socio(id))
@@ -94,6 +97,7 @@ def socio_add():
         "nombre": request.form.get("nombre").capitalize(),
         "apellido": request.form.get("apellido").capitalize(),
         "email": request.form.get("email"),
+        "password": request.form.get("password"),
         "activo": True,
         "tipo_documento": request.form.get("tipo_documento"),
         "dni": request.form.get("documento"),
