@@ -16,10 +16,10 @@
         <div class="col-md-3">
             <img src="..." class="card-img" alt="...">
         </div>
-    </div>
     <p v-if="socio">
         {{ socio.profile.email }}
     </p>
+    </div>
 </template>
   
 <script>
@@ -38,7 +38,7 @@ export default {
             }
         }
         axios
-            .get("http://127.0.0.1:5000/api/me/license", config)
+            .get("https://admin-grupo23.proyecto2022.linti.unlp.edu.ar/api/me/license", config)
             .then((response) => {
                 // JSON responses are automatically parsed.
                 this.socio = response.data;
