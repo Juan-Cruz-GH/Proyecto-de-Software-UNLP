@@ -30,3 +30,11 @@ def validar_cadena(dato):
     if len(dato) > 500:
         return False, "Límite de caracteres excedido"
     return True, "Cadena valida"
+
+
+def costo_fuera_de_rango(costo):
+    return float(costo) > 1000000, "La cuota base no puede superar 1000000(un millon)"
+
+
+def pago_fuera_de_rango(costo):
+    return float(costo) > 1000000000

@@ -2,11 +2,12 @@ import json
 
 from flask import Blueprint, session, render_template, request, redirect, flash, abort
 
-from src import exportaciones
 from src.core import socios
 from src.core import pagos
 from src.core import disciplinas
 from src.core import usuarios
+from src.web.exportaciones import socios_CSV
+from src.web.exportaciones import socios_PDF
 from src.web.helpers.permission import has_permission
 from src.web.controllers.validators import validator_socio
 from src.decoradores.login import login_requerido
@@ -14,13 +15,31 @@ from src.decoradores.login import login_requerido
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
+def json_informacion_socio(id):
+    """Devuelve un json con la informacion del socio pasado por id"""
+    return json.dumps(socios.informacion_socio(id))
+
+def json_estado_socio(id):
+    return json.dumps(socios.estado_socio(id))
+
+def socios_por_año():
+    """Retorna la cantidad de socios por año de los ultimos 7 años"""
+    return json.dumps(socios.socios_por_años())
+
+
+def existe_socio(id):
+    if socios.buscar_socio(id) is None:
+        return False
+    return True
+
 
 def disciplinas_socio(id):
     """Devuelve un json con todas las disciplinas que realiza el socio con id pasado por parametro"""
-    if socios.disciplinas_socio_diccionario(id) is None:
-        return None
     return json.dumps(socios.disciplinas_socio_diccionario(id))
 
+def socios_genero():
+    """Retorna un json con los socios por genero"""
+    return json.dumps(socios.socios_por_sexo())
 
 @socio_blueprint.route("/")
 @login_requerido
@@ -78,6 +97,7 @@ def socio_add():
         "nombre": request.form.get("nombre").capitalize(),
         "apellido": request.form.get("apellido").capitalize(),
         "email": request.form.get("email"),
+        "password": request.form.get("password"),
         "activo": True,
         "tipo_documento": request.form.get("tipo_documento"),
         "dni": request.form.get("documento"),
@@ -157,7 +177,7 @@ def exportar_csv():
         else None
     )
     data_socios = socios.todos_los_socios(apellido, tipo)
-    output = exportaciones.generarCSV(data_socios)
+    output = socios_CSV.generar_CSV(data_socios)
     return output
 
 
@@ -176,7 +196,7 @@ def exportar_pdf():
         else None
     )
     data_socios = socios.todos_los_socios(apellido, tipo)
-    output = exportaciones.generarPDF(data_socios)
+    output = socios_PDF.generar_PDF(data_socios)
     return output
 
 

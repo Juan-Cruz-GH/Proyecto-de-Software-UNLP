@@ -1,91 +1,90 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
 </script>
 
 <template>
   <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <div id="navbar">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div class="container-fluid">
+            <RouterLink class="navbar-brand" to="/">Club Villa Elisa</RouterLink>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+              aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/">Home</RouterLink>
+                </li>
+                <li class="nav-item">
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/disciplinas">Disciplinas</RouterLink>
+                </li>
+                <li class="nav-item">
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/estadisticas">Estadisticas</RouterLink>
+                </li>
+                <li v-if="estaLogueado" class="nav-item">
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/carnet">Carnet</RouterLink>
+                </li>
+                <li v-if="estaLogueado" class="nav-item">
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/pagos">Pagos</RouterLink>
+                </li>
+              </ul>
+              <ul v-if="estaLogueado" class="navbar-nav ms-auto d-lg-inline-flex">
+                <li class="nav-item dropdown">
+                  <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ authSocio.nombre }} {{ authSocio.apellido }}
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item" href="#">Perfil</a></li>
+                    <li><a class="dropdown-item" @click="logout">Cerrar Sesion</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <ul v-else class="navbar-nav ms-auto d-lg-inline-flex">
+                <li class="nav-item dropdown">
+                  <RouterLink class="nav-link mx-2" aria-current="page" to="/auth">Login</RouterLink>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
     </div>
   </header>
 
   <RouterView />
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
+<script>
+import { mapActions, mapGetters } from "vuex";
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+export default {
+  computed: {
+    ...mapGetters({
+      authSocio: "auth/socio",
+      estaLogueado: "auth/isLoggedIn",
+    }),
+  },
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
+  methods: {
+    ...mapActions("auth", ["logoutSocio"]),
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    async logout() {
+      await this.logoutSocio().catch((err) => {
+        console.log(err);
+      });
+      this.error = false;
+      this.socio = {
+        email: null,
+        password: null,
+      };
+      this.$router.push("/");
+    },
   }
+};
+</script>
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>

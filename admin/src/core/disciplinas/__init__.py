@@ -1,8 +1,13 @@
 from src.core import configuracion_sistema
 from src.core.socios import buscar_socio
+from src.core.socios import socios_habilitados_disciplina
 from src.core.disciplinas.disciplinas import Disciplina
 from src.core.db import db
+from src.colores_api.colores_aleatorios import generar_color
 
+def nombre_disciplinas():
+    """Retorna un json con los socios por disciplina"""
+    return Disciplina.query.all()
 
 def agregar_disciplina(data):
     """Dar de alta una disciplina en la BD"""
@@ -10,6 +15,22 @@ def agregar_disciplina(data):
     db.session.add(disciplina)
     db.session.commit()
     return disciplina
+
+def socios_habilitados_por_disciplina():
+    """Retorna todos los socios inscriptos en alguna disciplina habilitado"""
+    socios = socios_habilitados_disciplina()
+    disciplinas = nombre_disciplinas()
+    socios_disciplinas = {}
+    lista = []
+    for disciplina in disciplinas:
+        socios_disciplinas[disciplina.nombre] = {'cantidad': 0, 'color': generar_color()}
+    for socio in socios:
+        for dis_soc in socio.disciplinas:
+            socios_disciplinas[dis_soc.nombre]['cantidad'] = socios_disciplinas[dis_soc.nombre]['cantidad'] + 1
+    for key, value in socios_disciplinas.items():
+        lista.append([key, value['cantidad'], value['color']])
+    return lista
+
 
 
 def buscar_disciplina(id):
@@ -50,7 +71,7 @@ def esta_habilitada(id):
 def listar_disciplinas_diccionario():
     """Devuelve una lista de diccionarios con todas las disciplinas."""
     lista = []
-    disciplinas = Disciplina.query.all()
+    disciplinas = Disciplina.query.order_by(Disciplina.nombre).all()
     for disciplina in disciplinas:
         fila = disciplina.__dict__
         dias_horarios = fila["horarios"].split(" de ")
@@ -59,6 +80,8 @@ def listar_disciplinas_diccionario():
             "days": dias_horarios[0],  # hay que consultar con el ayudante
             "time": dias_horarios[1],  #
             "teacher": fila["instructores"],
+            "price": fila["costo"],
+            "category": fila["categoria"],
         }
         lista.append(diccionario)
     return lista

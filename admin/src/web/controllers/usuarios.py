@@ -11,11 +11,6 @@ from src.decoradores.login import login_requerido
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
 
 
-def info_usuario(id):
-    """Esta funcion retorna un JSON con informacion del usuario"""
-    return json.dumps(usuarios.get_datos_diccionario(id))
-
-
 @usuario_blueprint.route("/")
 @login_requerido
 def usuario_index():
@@ -48,7 +43,8 @@ def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
     if not (has_permission(session["user"], "usuario_new")):
         return abort(403)
-    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
+    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])
+    }
     return render_template("usuarios/alta_usuarios.html", **kwargs)
 
 
@@ -56,7 +52,10 @@ def form_usuario():
 @login_requerido
 def usuario_profile(id):
     """Esta funcion llama al modulo correspondiente para obtener a un usuario por su id."""
-    kwargs = {"usuario": usuarios.buscar_usuario(id)}
+    kwargs = {
+        "usuario": usuarios.buscar_usuario(id),
+        "rol": usuarios.verificar_rol_usuario(id),
+    }
     return render_template("usuarios/perfil_usuario.html", **kwargs)
 
 
@@ -78,7 +77,7 @@ def usuario_add():
         "ROL_OPERADOR": request.form.get("rol_operador"),
     }
     validacion_inputs, mensaje = validator_usuario.validar_inputs(
-        data_usuario["email"], data_usuario["password"]
+        data_usuario["email"], data_usuario["password"], data_rol_usuario
     )
     if validacion_inputs == False:
         flash(mensaje)
@@ -135,3 +134,4 @@ def usuario_delete(id):
         return abort(403)
     usuarios.eliminar_usuario(id)
     return redirect("/usuarios")
+
