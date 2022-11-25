@@ -126,11 +126,14 @@ def socio_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un socio."""
     if not (has_permission(session["user"], "socio_update")):
         return abort(403)
+    socio = socios.buscar_socio(request.form.get("id"))
+    password = socio.password
     data_socio = {
         "id": request.form.get("id"),
         "nombre": request.form.get("nombre").capitalize(),
         "apellido": request.form.get("apellido").capitalize(),
         "email": request.form.get("email"),
+        "password": password,
         "activo": True,
         "tipo_documento": request.form.get("tipo_documento"),
         "dni": request.form.get("documento"),

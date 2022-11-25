@@ -34,6 +34,7 @@ def modificar_usuario(data):
     usuario.nombre = data["nombre"]
     usuario.apellido = data["apellido"]
     usuario.email = data["email"]
+    usuario.password = data["password"]
     usuario.activo = data["activo"]
     usuario.username = data["username"]
     db.session.commit()
