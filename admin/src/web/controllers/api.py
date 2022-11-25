@@ -1,5 +1,6 @@
 from flask import Blueprint, make_response, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity, unset_jwt_cookies, create_access_token, set_access_cookies
+from flask_jwt_extended import jwt_required, get_jwt_identity, unset_jwt_cookies
+from flask_jwt_extended import create_access_token, set_access_cookies
 
 from src.core.socios import find_socio_by_email_and_pass
 from src.web.controllers import disciplinas
@@ -125,16 +126,14 @@ def auth():
     validacion, mensaje = validator_usuario.validar_inputs_publico(email, password)
     if not validacion:
         return jsonify(message=mensaje), 400
-
     socio = find_socio_by_email_and_pass(email, password)
-
-    if socio:
-        access_token = create_access_token(identity=socio.id)
-        response = jsonify(access_token)
-        set_access_cookies(response, access_token)
-        return response, 201
-    else:
+    if socio is None:
         return jsonify(message="Credenciales Invalidas"), 400
+    access_token = create_access_token(identity=socio.id)
+    response = jsonify(access_token)
+    set_access_cookies(response, access_token)
+    return response, 201
+
 
 @api_blueprint.get("/logout_publico")
 @jwt_required()
@@ -153,4 +152,3 @@ def socio_jwt():
     socio_actual = get_jwt_identity()
     response = make_response(json_informacion_socio(socio_actual))
     return response, 200
-

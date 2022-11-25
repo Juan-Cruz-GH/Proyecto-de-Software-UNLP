@@ -18,7 +18,11 @@
                 <td>$ {{ cuotaImpaga.amount }}</td>
                 <td>{{ cuotaImpaga.month }}</td>
                 <td>{{ cuotaImpaga.year }}</td>
-                <td>botonPagar</td>
+                <td v-on:click="pagar(cuotaImpaga)">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="button">Pagar</button>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -50,6 +54,20 @@ export default {
         };
     },
     methods: {
+        pagar(cuotaImpaga) {
+            //this.$router.push("/pagos/pagar");
+            console.log(cuotaImpaga.data)
+            apiService
+                .post("/api/me/payments")
+                .then((response) => {
+                    this.cuotasImpagas = response.data;
+                    this.getDataPagina(1);
+                })
+                .catch((e) => {
+                    this.errors.push(e);
+                });
+            console.log(cuotaImpaga.amount, cuotaImpaga.month, cuotaImpaga.year)
+        },
         getTotalPaginas() {    // Redondeo por si da con decimales
             return Math.ceil(this.cuotasImpagas.length / this.porPagina);
         },
