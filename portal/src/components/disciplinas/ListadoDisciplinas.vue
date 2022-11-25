@@ -1,7 +1,6 @@
 <template>
     <h1 style="text-align:center">
         <strong>Disciplinas</strong>
-        {{ test }}
     </h1>
     <div id="espacio" style="min-height: 5vh;">
     </div>
@@ -50,8 +49,7 @@ export default {
             campos: ["Nombre", "Categoria", "Dias", "Horario", "Profesor", "Precio"],
             porPagina: 5,
             dataPagina: [],
-            paginaActual: 1,
-            test: []
+            paginaActual: 1
         };
     },
     mounted() {
@@ -93,9 +91,6 @@ export default {
             .then((response) => {
                 // JSON responses are automatically parsed.
                 this.disciplines = response.data;
-                apiService.get("api/me/disciplinas").then((response) => {
-                    this.test = response.data;
-                })
                 this.getDataPagina(1);
             })
             .catch((e) => {
