@@ -12,25 +12,26 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-5">
-                    <img class="card-img-left" src="{{photo}}" width="240rem" style="border-radius:50%" ;>
-                </div>
                 <div class="col-7">
                     <div class="card-body">
                         <span style="font-size: 1.5rem ;">{{ socio.profile.apellido }} {{ socio.nombre }}</span><br>
                         {{ socio.tipo_documento }}: {{ socio.dni }} <br>
                         Socio: #{{ socio.id }} <br>
-                        Fecha alta: {{ socio.inserted_at.strftime('%Y-%m-%d') }}<br>
+                        Email: {{ socio.email }}<br>
+                        Género: {{ socio.gender }}
+                        Dirección: {{ socio.address }}
+                        Teléfono: {{ socio.phone }}
                     </div>
                 </div>
             </div>
             <div class=" row">
-                <div class="col-5" style="font-size: 2rem; ">
-                    <br> Estado:<br>{%if socio.activo%} Activo{%else%} Inactivo{%endif%}
+                <div class="col-5" style="font-size: 2rem; " v-if="status == 'OK'">
+                    <br> Al día
                 </div>
-                <div class="col-7">
-                    <img class="card-img-left" src="{{}}" width="200rem">
+                <div class="col-5" style="font-size: 2rem; " v-else>
+                    <br> Al día
                 </div>
+
             </div>
             <br>
         </div>
