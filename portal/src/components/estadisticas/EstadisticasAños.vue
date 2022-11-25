@@ -6,6 +6,7 @@
 <script>
 import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale } from 'chart.js'
+import { apiService } from "@/api";
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
 
@@ -60,7 +61,7 @@ export default {
     }
   },
   created() {
-    axios
+    apiService
       .get(this.URL_API_SOCIOS_AÑO)
       .then((response) => {
         // JSON responses are automatically parsed.

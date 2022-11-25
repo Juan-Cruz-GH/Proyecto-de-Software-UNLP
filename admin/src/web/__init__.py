@@ -5,6 +5,7 @@ from flask_cors import CORS
 from flask_qrcode import QRcode
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 from src.web.controllers.usuarios import usuario_blueprint
 from src.web.controllers.configuracion_sistema import configuracion_sistema_blueprint

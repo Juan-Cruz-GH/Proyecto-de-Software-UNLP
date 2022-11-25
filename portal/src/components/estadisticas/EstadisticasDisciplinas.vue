@@ -22,10 +22,12 @@ import {
   ArcElement,
   CategoryScale,
 } from "chart.js";
+import { apiService } from "@/api";
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 export default {
+  inject: ['URL_API_SOCIOS_DISCIPLINAS'],
   name: "DoughnutChart",
   components: {
     Doughnut,
@@ -75,8 +77,8 @@ export default {
     };
   },
   created(){
-    axios
-      .get("http://127.0.0.1:5000/api/club/socios-disciplinas")
+    apiService
+      .get(this.URL_API_SOCIOS_DISCIPLINAS)
       .then((response) => {
         // JSON responses are automatically parsed.
         let cant_lista = []

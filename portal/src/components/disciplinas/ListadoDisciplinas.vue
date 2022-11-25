@@ -39,6 +39,8 @@
 </template>
   
 <script>
+import { apiService } from "@/api";
+
 export default {
     inject: ['URL_API_DISCIPLINAS'],
     data() {
@@ -85,7 +87,7 @@ export default {
     },
     // Fetches posts when the component is created.
     created() {
-        axios
+        apiService
             .get(this.URL_API_DISCIPLINAS)
             .then((response) => {
                 // JSON responses are automatically parsed.

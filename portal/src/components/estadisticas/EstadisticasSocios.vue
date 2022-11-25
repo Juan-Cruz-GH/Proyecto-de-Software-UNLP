@@ -14,6 +14,7 @@ import {
   ArcElement,
   CategoryScale,
 } from "chart.js";
+import { apiService } from "@/api";
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
@@ -68,7 +69,7 @@ export default {
     };
   },
   created() {
-    axios
+    apiService
       .get(this.URL_API_SOCIOS_GENERO)
       .then((response) => {
         // JSON responses are automatically parsed.
