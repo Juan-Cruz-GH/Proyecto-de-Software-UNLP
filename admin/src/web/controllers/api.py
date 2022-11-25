@@ -55,7 +55,6 @@ def obtener_info_club():
 def obtener_disciplinas_socio():
     """Retorna el json con todas las disciplinas que realiza
     el socio que está logueado actualmente en la app pública (JWT)"""
-    id = request.headers.get("id")
     mensaje, http_code = validator_api.validar_header_disciplinas_socio(
         str(get_jwt_identity())
     )
