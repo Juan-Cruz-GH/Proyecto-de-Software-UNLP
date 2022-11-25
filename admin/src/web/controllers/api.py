@@ -1,11 +1,14 @@
-from flask import Blueprint, make_response, request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask import Blueprint, make_response, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity, unset_jwt_cookies
+from flask_jwt_extended import create_access_token, set_access_cookies
 
+from src.core.socios import find_socio_by_email_and_pass
 from src.web.controllers import disciplinas
 from src.web.controllers import socios
 from src.web.controllers import configuracion_sistema
 from src.web.controllers import pagos
-from src.web.controllers.validators import validator_api
+from src.web.controllers.socios import json_informacion_socio
+from src.web.controllers.validators import validator_usuario
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
@@ -55,10 +58,7 @@ def obtener_info_club():
 def obtener_disciplinas_socio():
     """Retorna el json con todas las disciplinas que realiza
     el socio que está logueado actualmente en la app pública (JWT)"""
-    mensaje, http_code = validator_api.validar_header_disciplinas_socio(
-        str(get_jwt_identity())
-    )
-    respuesta = make_response(mensaje, http_code)
+    respuesta = make_response(socios.disciplinas_socio(get_jwt_identity()), 200)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
@@ -68,8 +68,7 @@ def obtener_disciplinas_socio():
 def obtener_info_y_estado_socio():
     """Retorna el json con el estado de credencial y los datos
     del socio que está logueado actualmente en la app pública (JWT)"""
-    mensaje, http_code = validator_api.validar_header_estado_socio(str(get_jwt_identity()))
-    respuesta = make_response(mensaje, http_code)
+    respuesta = make_response(socios.json_estado_socio(get_jwt_identity()), 200)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
@@ -87,9 +86,7 @@ def obtener_info_socio():
 def obtener_pagos_socio():
     """Retorna la lista de pagos registrados
     del socio que está logueado actualmente en la app pública (JWT)"""
-    id = request.headers.get("id")
-    mensaje, http_code = validator_api.validar_header_pagos_socio(str(get_jwt_identity()))
-    respuesta = make_response(mensaje, http_code)
+    respuesta = make_response(pagos.pagos_json(get_jwt_identity()), 200)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
@@ -99,9 +96,7 @@ def obtener_pagos_socio():
 def obtener_pagos_adeudados_socio():
     """Retorna la lista de pagos adeudados
     del socio que está logueado actualmente en la app pública (JWT)"""
-    id = request.headers.get("id")
-    mensaje, http_code = validator_api.validar_header_pagos_socio(str(get_jwt_identity()))
-    respuesta = make_response(mensaje, http_code)
+    respuesta = make_response(pagos.pagos_adeudados_json(get_jwt_identity()), 200)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
 
@@ -111,10 +106,49 @@ def obtener_pagos_adeudados_socio():
 def registrar_pago_socio():
     """Registra un nuevo pago para
     el socio que está logueado actualmente en la app pública (JWT)"""
-    return pagos.pagar_json(request.get_json(), get_jwt_identity())
+    pagos_json = pagos.pagar_json(request.get_json(), get_jwt_identity())
+    respuesta = make_response(pagos_json, 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
 
 
 @api_blueprint.post("/auth")
-def obtener_token():
-    """Recibe un json con user y password y retorna su JWT, lo realiza el login publico por ahora"""
-    pass
+def auth():
+    """Esta funcion recibe la peticion de la api de login, en caso de estar todo correcto loguea al usuario y devuelve el token
+    jwt"""
+    if not (request.data):
+        return jsonify(message="No se envió nada."), 400
+    json = request.get_json()
+    email = json["email"]
+    password = json["password"]
+    if (email is None) or (password is None):
+        return jsonify(message="El email o password está vacio."), 400
+    validacion, mensaje = validator_usuario.validar_inputs_publico(email, password)
+    if not validacion:
+        return jsonify(message=mensaje), 400
+    socio = find_socio_by_email_and_pass(email, password)
+    if socio is None:
+        return jsonify(message="Credenciales Invalidas"), 400
+    access_token = create_access_token(identity=socio.id)
+    response = jsonify(access_token)
+    set_access_cookies(response, access_token)
+    return response, 201
+
+
+@api_blueprint.get("/logout_publico")
+@jwt_required()
+def logout_publico():
+    """Esta funcion desloguea a un socio de la app publica"""
+    response = jsonify()
+    unset_jwt_cookies(response)
+    return response, 200
+
+
+@api_blueprint.get("/socio_jwt")
+@jwt_required()
+def socio_jwt():
+    """Esta funcion se ejecuta a la vez que el auth de la app publica, devuelve la informacion del socio en caso
+    que el logueo sea exitoso"""
+    socio_actual = get_jwt_identity()
+    response = make_response(json_informacion_socio(socio_actual))
+    return response, 200

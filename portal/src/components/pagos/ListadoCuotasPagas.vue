@@ -15,10 +15,10 @@
         </thead>
         <tbody>
             <tr style="text-align: center;" v-for="cuotaPaga in dataPagina">
-                <td>$ {{ cuotaPaga }}</td>
-                <td>{{ cuotaPaga }}</td>
-                <td>{{ cuotaPaga }}</td>
-                <td>{{ cuotaPaga }}</td>
+                <td>$ {{ cuotaPaga.amount }}</td>
+                <td>{{ cuotaPaga.month }}</td>
+                <td>{{ cuotaPaga.year }}</td>
+                <td>{{ cuotaPaga.date }}</td>
             </tr>
         </tbody>
     </table>
@@ -39,12 +39,11 @@
 import { apiService } from "@/api";
 
 export default {
-    inject: ['URL_API_PAYMENTS'],
     data() {
         return {
             cuotasPagas: [],
             errors: [],
-            campos: ["Total", "Mes de cuota", "Fecha de pago", "Recibo"],
+            campos: ["Total", "Mes de cuota", "Año", "Fecha de pago"],
             porPagina: 5,
             dataPagina: [],
             paginaActual: 1
@@ -81,7 +80,7 @@ export default {
     },
     created() {
         apiService
-            .get(this.URL_API_PAYMENTS)
+            .get("/api/me/payments")            // POST con la misma url para PAGAR.
             .then((response) => {
                 this.cuotasPagas = response.data;
                 this.getDataPagina(1);

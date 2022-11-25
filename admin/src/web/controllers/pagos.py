@@ -15,8 +15,13 @@ pago_blueprint = Blueprint("pagos", __name__, url_prefix="/pagos")
 
 
 def pagos_json(id):
-    """Retorna el json con todos los pagos del socio logeado"""
+    """Retorna el json con todos los pagos del socio logueado"""
     return json.dumps(pagos.listar_pagos_diccionario(id))
+
+
+def pagos_adeudados_json(id):
+    """Retorna el json con todos los pagos adeudados del socio logueado"""
+    return json.dumps(pagos.listar_pagos_adeudados_diccionario(id))
 
 
 def pagar_json(json, id):

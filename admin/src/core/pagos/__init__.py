@@ -9,15 +9,33 @@ from src.web.controllers.validators.validator_configuracion import pago_fuera_de
 
 def listar_pagos_diccionario(id):
     socio = socios.buscar_socio(id)
-    if socio == None:
-        return []
     todos_los_pagos = socio.pagos
     pagos_pagados = []
     for pago in todos_los_pagos:
         if pago.estado == True:
-            diccionario = {"month": pago.nro_cuota, "amount": pago.total}
+            diccionario = {
+                "month": pago.nro_cuota,
+                "amount": pago.total,
+                "year": pago.año_cuota,
+                "date": pago.fecha_pago.strftime("%d/%m/%Y"),
+            }
             pagos_pagados.append(diccionario)
     return pagos_pagados
+
+
+def listar_pagos_adeudados_diccionario(id):
+    socio = socios.buscar_socio(id)
+    todos_los_pagos = socio.pagos
+    pagos_adeudados = []
+    for pago in todos_los_pagos:
+        if pago.estado != True:
+            diccionario = {
+                "month": pago.nro_cuota,
+                "amount": pago.total,
+                "year": pago.año_cuota,
+            }
+            pagos_adeudados.append(diccionario)
+    return pagos_adeudados
 
 
 def pagar_con_api(diccionario, id):
