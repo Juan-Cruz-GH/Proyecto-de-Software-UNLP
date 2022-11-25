@@ -102,7 +102,10 @@ def obtener_pagos_adeudados_socio():
 def registrar_pago_socio():
     """Registra un nuevo pago para
     el socio que está logueado actualmente en la app pública (JWT)"""
-    return pagos.pagar_json(request.get_json(), get_jwt_identity())
+    pagos_json = pagos.pagar_json(request.get_json(), get_jwt_identity())
+    respuesta = make_response(pagos_json, 200)
+    respuesta.headers["Content-Type"] = "application/json"
+    return respuesta
 
 
 @api_blueprint.post("/auth")
