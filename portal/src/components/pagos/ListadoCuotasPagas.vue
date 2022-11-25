@@ -39,7 +39,6 @@
 import { apiService } from "@/api";
 
 export default {
-    inject: ['URL_API_PAYMENTS'],
     data() {
         return {
             cuotasPagas: [],
@@ -81,7 +80,7 @@ export default {
     },
     created() {
         apiService
-            .get(this.URL_API_PAYMENTS)
+            .get("/api/me/payments")            // POST con la misma url para PAGAR.
             .then((response) => {
                 this.cuotasPagas = response.data;
                 this.getDataPagina(1);

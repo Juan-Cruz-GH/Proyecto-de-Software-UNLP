@@ -80,7 +80,7 @@ export default {
     },
     created() {
         apiService
-            .get(this.URL_API_PAYMENTS)
+            .get("/api/me/pending_payments")
             .then((response) => {
                 this.cuotasImpagas = response.data;
                 this.getDataPagina(1);

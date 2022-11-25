@@ -11,7 +11,6 @@ import { apiService } from "@/api";
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
 
 export default {
-  inject: ['URL_API_SOCIOS_AÑO'],
   name: 'LineChart',
   components: { Line },
   props: {
@@ -62,7 +61,7 @@ export default {
   },
   created() {
     apiService
-      .get(this.URL_API_SOCIOS_AÑO)
+      .get("/api/club/socios-años")
       .then((response) => {
         // JSON responses are automatically parsed.
         let cant_lista = []

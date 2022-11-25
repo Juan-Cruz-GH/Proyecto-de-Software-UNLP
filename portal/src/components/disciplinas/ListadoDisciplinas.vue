@@ -42,7 +42,6 @@
 import { apiService } from "@/api";
 
 export default {
-    inject: ['URL_API_DISCIPLINAS'],
     data() {
         return {
             disciplines: [],
@@ -88,7 +87,7 @@ export default {
     // Fetches posts when the component is created.
     created() {
         apiService
-            .get(this.URL_API_DISCIPLINAS)
+            .get("/api/club/disciplinas")
             .then((response) => {
                 // JSON responses are automatically parsed.
                 this.disciplines = response.data;
