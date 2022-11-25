@@ -131,6 +131,7 @@ def carnet_pdf_download(id):
         "socio": socio,
         "photo": path,
         "url": url_for("carnet.view_license", id=id),
+        "estado": estado_socio_boolean(id),
     }
     outpot = carnet_PDF.generar_carnet_PDF(**kwargs)
     return outpot
