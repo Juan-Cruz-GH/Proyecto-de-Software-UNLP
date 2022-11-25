@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <img src="..." class="card-img" alt="...">
+            <img src="" class="card-img" alt="...">
         </div>
         <p v-if="socio">
             {{ socio.profile.email }}
