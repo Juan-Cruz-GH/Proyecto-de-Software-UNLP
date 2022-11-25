@@ -35,7 +35,6 @@
 import { apiService } from "@/api";
 
 export default {
-  inject: ['URL_API_CLUB'],
   data() {
     return {
       info_club: [],
@@ -45,7 +44,7 @@ export default {
   // Fetches posts when the component is created.
   created() {
     apiService
-      .get(this.URL_API_CLUB)
+      .get("/api/club/info")
       .then((response) => {
         // JSON responses are automatically parsed.
         this.info_club = response.data;

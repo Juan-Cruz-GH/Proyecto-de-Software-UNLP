@@ -40,7 +40,7 @@ export default {
             }
         }
         apiService
-            .get("api/me/license", config)
+            .get("/api/me/license", config)
             .then((response) => {
                 // JSON responses are automatically parsed.
                 this.socio = response.data;

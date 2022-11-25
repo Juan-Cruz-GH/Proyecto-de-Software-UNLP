@@ -1,6 +1,7 @@
 <template>
     <h1 style="text-align:center">
         <strong>Disciplinas</strong>
+        {{ test }}
     </h1>
     <div id="espacio" style="min-height: 5vh;">
     </div>
@@ -42,7 +43,6 @@
 import { apiService } from "@/api";
 
 export default {
-    inject: ['URL_API_DISCIPLINAS'],
     data() {
         return {
             disciplines: [],
@@ -50,7 +50,8 @@ export default {
             campos: ["Nombre", "Categoria", "Dias", "Horario", "Profesor", "Precio"],
             porPagina: 5,
             dataPagina: [],
-            paginaActual: 1
+            paginaActual: 1,
+            test: []
         };
     },
     mounted() {
@@ -88,10 +89,13 @@ export default {
     // Fetches posts when the component is created.
     created() {
         apiService
-            .get(this.URL_API_DISCIPLINAS)
+            .get("/api/club/disciplinas")
             .then((response) => {
                 // JSON responses are automatically parsed.
                 this.disciplines = response.data;
+                apiService.get("api/me/disciplinas").then((response) => {
+                    this.test = response.data;
+                })
                 this.getDataPagina(1);
             })
             .catch((e) => {

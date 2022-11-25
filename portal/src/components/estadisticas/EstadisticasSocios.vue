@@ -19,7 +19,6 @@ import { apiService } from "@/api";
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 export default {
-  inject: ['URL_API_SOCIOS_GENERO'],
   name: "DoughnutChart",
   components: {
     Doughnut,
@@ -70,7 +69,7 @@ export default {
   },
   created() {
     apiService
-      .get(this.URL_API_SOCIOS_GENERO)
+      .get("/api/club/socios-genero")
       .then((response) => {
         // JSON responses are automatically parsed.
         let cant_lista = []
