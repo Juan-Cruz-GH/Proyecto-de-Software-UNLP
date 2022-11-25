@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import { apiService } from "@/api";
 import { mapGetters } from 'vuex';
 
 export default {
@@ -129,7 +130,7 @@ export default {
             id: this.nro_socio
           }
         }
-        axios
+        apiService
           .get(this.URL_API_LICENCIA, config)
           .then((response) => {
             // JSON responses are automatically parsed.

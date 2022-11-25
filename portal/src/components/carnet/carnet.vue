@@ -23,6 +23,8 @@
 </template>
   
 <script>
+import { apiService } from "@/api";
+
 export default {
     inject: ['URL_API_LICENCIA'],
     data() {
@@ -38,8 +40,8 @@ export default {
                 id: 10,
             }
         }
-        axios
-            .get(this.URL_API_LICENCIA, config)
+        apiService
+            .get("api/me/license", config)
             .then((response) => {
                 // JSON responses are automatically parsed.
                 this.socio = response.data;

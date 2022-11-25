@@ -36,6 +36,8 @@
 </template>
   
 <script>
+import { apiService } from "@/api";
+
 export default {
     inject: ['URL_API_PAYMENTS'],
     data() {
@@ -78,7 +80,7 @@ export default {
     computed: {
     },
     created() {
-        axios
+        apiService
             .get(this.URL_API_PAYMENTS)
             .then((response) => {
                 this.cuotasPagas = response.data;
