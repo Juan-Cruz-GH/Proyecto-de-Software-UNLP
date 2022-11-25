@@ -115,23 +115,18 @@ export default {
   },
   methods: {
     swapMostrar() {
-      if (this.nro_socio == '') {
-        this.mostrar_vacio = true;
-        this.mostrar_estado = true;
-      } else {
-        this.errors.pop()
-        apiService
-          .get(this.URL_API_LICENCIA)
-          .then((response) => {
-            // JSON responses are automatically parsed.
-            this.info_socio = response.data;
-          })
-          .catch((e) => {
-            console.log(e)
-            this.errors.push(e);
-          });
-        this.mostrar_estado = true;
-      }
+      this.errors.pop()
+      apiService
+        .get(this.URL_API_LICENCIA)
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          this.info_socio = response.data;
+        })
+        .catch((e) => {
+          console.log(e)
+          this.errors.push(e);
+        });
+      this.mostrar_estado = true;   
     },
     swapEsconder() {
       this.mostrar_estado = false;

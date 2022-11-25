@@ -68,7 +68,6 @@ def obtener_disciplinas_socio():
 def obtener_info_y_estado_socio():
     """Retorna el json con el estado de credencial y los datos
     del socio que está logueado actualmente en la app pública (JWT)"""
-    id = request.headers.get("id")
     mensaje, http_code = validator_api.validar_header_estado_socio(str(get_jwt_identity()))
     respuesta = make_response(mensaje, http_code)
     respuesta.headers["Content-Type"] = "application/json"
