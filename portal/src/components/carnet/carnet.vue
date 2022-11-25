@@ -24,24 +24,21 @@
                     </div>
                 </div>
             </div>
-            <div class=" row">
-                <div class="col-5" style="font-size: 2rem; " v-if="status == 'OK'">
-                    <br> Al día
-                </div>
-                <div class="col-5" style="font-size: 2rem; " v-else>
-                    <br> Al día
-                </div>
-
-            </div>
-            <br>
+        </div>
+        <div class="col-md-3">
+            <img src="..." class="card-img" alt="...">
         </div>
     </div>
+    <p v-if="socio">
+        {{ socio.profile.email }}
+    </p>
 </template>
   
 <script>
 import { apiService } from "@/api";
 
 export default {
+    inject: ['URL_API_LICENCIA'],
     data() {
         return {
             socio: '',
@@ -50,13 +47,8 @@ export default {
     },
     // Fetches posts when the component is created.
     created() {
-        let config = {
-            headers: {
-                id: 10,
-            }
-        }
         apiService
-            .get("/api/me/license", config)
+            .get("api/me/license", config)
             .then((response) => {
                 // JSON responses are automatically parsed.
                 this.socio = response.data;
