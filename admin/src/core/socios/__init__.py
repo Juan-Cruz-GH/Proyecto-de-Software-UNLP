@@ -225,6 +225,14 @@ def estado_socio(id):
     }
 
 
+def estado_socio_boolean(id):
+    socio = buscar_socio(id)
+    for pago in socio.pagos:
+        if pago.estado == False:
+            return False
+    return True
+
+
 def save_photo(id, photo_path):
     socio = buscar_socio(id)
     if socio != None:

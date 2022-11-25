@@ -1,25 +1,41 @@
 <template>
-    <div class="card mb-3" style="max-width: 1080px;" v-if="socio">
-        <div class="row no-gutters">
-            <div class="col-md-3">
-                <img src="..." class="card-img" alt="...">
-            </div>
-
-            <div class="col-md-6">
-                <div class="card-body">
-                    <h5 class="card-title"> {{ socio.profile.email }}</h5>
-                    <p class="card-text"> {{ socio.profile.address }}</p>
-                    <p class="card-text"> {{ socio.profile.gender }}</p>
+    <br>
+    <div id="carnet" class="container" style="font-family:'Comic Sans MS','Comic Sans',cursive;width: 600px;"
+        v-if="socio">
+        <div class="card border-dark border border-5 text-center" style="width: 600px;">
+            <div class="row">
+                <div class="column-12">
+                    <h1 style="font-family:'Brush Script MT', cursive; font-size:4rem; border-bottom:5px solid;">
+                        Club Deportivo
+                        Villa
+                        Elisa</h1>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <img src="..." class="card-img" alt="...">
+            <div class="row">
+                <div class="col-7">
+                    <div class="card-body">
+                        <span style="font-size: 1.5rem ;">{{ socio.profile.apellido }} {{ socio.nombre }}</span><br>
+                        {{ socio.tipo_documento }}: {{ socio.dni }} <br>
+                        Socio: #{{ socio.id }} <br>
+                        Email: {{ socio.email }}<br>
+                        Género: {{ socio.gender }}
+                        Dirección: {{ socio.address }}
+                        Teléfono: {{ socio.phone }}
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <div class="col-5" style="font-size: 2rem; " v-if="status == 'OK'">
+                    <br> Al día
+                </div>
+                <div class="col-5" style="font-size: 2rem; " v-else>
+                    <br> Al día
+                </div>
+
+            </div>
+            <br>
         </div>
     </div>
-    <p v-if="socio">
-        {{ socio.profile.email }}
-    </p>
 </template>
   
 <script>

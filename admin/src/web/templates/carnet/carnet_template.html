@@ -35,7 +35,7 @@ Configuración del sistema - Club Villa Elisa
         </div>
         <div class=" row">
             <div class="col-5" style="font-size: 2rem; ">
-                <br> Estado:<br>{%if socio.activo%} Activo{%else%} Inactivo{%endif%}
+                <br> Estado:<br>{%if estado%} Al día{%else%} No esta al día{%endif%}
             </div>
             <div class="col-7">
                 <img class="card-img-left" src="{{ qrcode(url) }}" width="200rem">
@@ -51,6 +51,7 @@ Configuración del sistema - Club Villa Elisa
     <div>
         <a href="{{ url_for('carnet.upload_image', id=socio.id) }}" class="btn btn-success">Subir
             Imagen</a>
+        <a href="{{ url_for('carnet.carnet_pdf_download', id=socio.id) }}" class="btn btn-success">Descargar PDF</a>
     </div>
 </div>
 
