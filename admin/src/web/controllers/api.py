@@ -110,6 +110,8 @@ def registrar_pago_socio():
 
 @api_blueprint.post("/auth")
 def auth():
+    """Esta funcion recibe la peticion de la api de login, en caso de estar todo correcto loguea al usuario y devuelve el token
+    jwt"""
     if not (request.data):
         return jsonify(message="No se envió nada."), 400
     json = request.get_json()
@@ -134,6 +136,7 @@ def auth():
 @api_blueprint.get("/logout_publico")
 @jwt_required()
 def logout_publico():
+    """Esta funcion desloguea a un socio de la app publica"""
     response = jsonify()
     unset_jwt_cookies(response)
     return response, 200
@@ -142,6 +145,8 @@ def logout_publico():
 @api_blueprint.get("/socio_jwt")
 @jwt_required()
 def socio_jwt():
+    """Esta funcion se ejecuta a la vez que el auth de la app publica, devuelve la informacion del socio en caso
+    que el logueo sea exitoso"""
     socio_actual = get_jwt_identity()
     response = make_response(json_informacion_socio(socio_actual))
     return response, 200
