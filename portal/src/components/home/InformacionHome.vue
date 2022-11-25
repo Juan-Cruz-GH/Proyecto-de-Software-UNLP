@@ -2,12 +2,8 @@
   <div>
     <div v-if="estaLogueado">
       <div class="row justify-content-center mt-3">
-      <div class="col-sm-2 col-md-2 col-lg-2">
-        <input class="form-control me-2" type="search" placeholder="Verificar cuota con NroSocio..."
-          aria-label="Buscar por nombre" v-model="nro_socio" />
-      </div>
-      <div class="col-sm-4 col-md-4 col-lg-4">
-        <button v-on:click="swapMostrar" class="btn btn-outline-success" type="submit">Buscar</button>
+      <div class="col-sm-4 col-md-4 col-lg-6">
+        <button v-on:click="swapMostrar" class="btn btn-outline-success" type="submit">Verificar Estado Cuota</button>
       </div>
     </div>
     <div class="row mt-2 justify-content-center" v-if="mostrar_estado">
@@ -109,7 +105,6 @@ export default {
       info_socio: [],
       mostrar_estado: false,
       mostrar_vacio: false,
-      nro_socio: '',
       errors: [],
     };
   },
@@ -125,13 +120,8 @@ export default {
         this.mostrar_estado = true;
       } else {
         this.errors.pop()
-        const config = {
-          headers: {
-            id: this.nro_socio
-          }
-        }
         apiService
-          .get(this.URL_API_LICENCIA, config)
+          .get(this.URL_API_LICENCIA)
           .then((response) => {
             // JSON responses are automatically parsed.
             this.info_socio = response.data;
