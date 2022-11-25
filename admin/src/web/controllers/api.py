@@ -57,7 +57,7 @@ def obtener_disciplinas_socio():
     el socio que está logueado actualmente en la app pública (JWT)"""
     id = request.headers.get("id")
     mensaje, http_code = validator_api.validar_header_disciplinas_socio(
-        get_jwt_identity()
+        str(get_jwt_identity())
     )
     respuesta = make_response(mensaje, http_code)
     respuesta.headers["Content-Type"] = "application/json"
@@ -70,7 +70,7 @@ def obtener_info_y_estado_socio():
     """Retorna el json con el estado de credencial y los datos
     del socio que está logueado actualmente en la app pública (JWT)"""
     id = request.headers.get("id")
-    mensaje, http_code = validator_api.validar_header_estado_socio(get_jwt_identity())
+    mensaje, http_code = validator_api.validar_header_estado_socio(str(get_jwt_identity()))
     respuesta = make_response(mensaje, http_code)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
@@ -90,7 +90,7 @@ def obtener_pagos_socio():
     """Retorna la lista de pagos registrados
     del socio que está logueado actualmente en la app pública (JWT)"""
     id = request.headers.get("id")
-    mensaje, http_code = validator_api.validar_header_pagos_socio(get_jwt_identity())
+    mensaje, http_code = validator_api.validar_header_pagos_socio(str(get_jwt_identity()))
     respuesta = make_response(mensaje, http_code)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta
@@ -102,7 +102,7 @@ def obtener_pagos_adeudados_socio():
     """Retorna la lista de pagos adeudados
     del socio que está logueado actualmente en la app pública (JWT)"""
     id = request.headers.get("id")
-    mensaje, http_code = validator_api.validar_header_pagos_socio(get_jwt_identity())
+    mensaje, http_code = validator_api.validar_header_pagos_socio(str(get_jwt_identity()))
     respuesta = make_response(mensaje, http_code)
     respuesta.headers["Content-Type"] = "application/json"
     return respuesta

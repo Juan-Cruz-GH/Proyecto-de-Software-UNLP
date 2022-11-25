@@ -23,6 +23,8 @@
 </template>
   
 <script>
+import { apiService } from "@/api";
+
 export default {
     data() {
         return {
@@ -37,8 +39,8 @@ export default {
                 id: 10,
             }
         }
-        axios
-            .get("http://127.0.0.1:5000/api/me/license", config)
+        apiService
+            .get("api/me/license", config)
             .then((response) => {
                 // JSON responses are automatically parsed.
                 this.socio = response.data;
