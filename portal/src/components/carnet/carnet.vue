@@ -28,10 +28,10 @@
         <div class="col-md-3">
             <img src="..." class="card-img" alt="...">
         </div>
+        <p v-if="socio">
+            {{ socio.profile.email }}
+        </p>
     </div>
-    <p v-if="socio">
-        {{ socio.profile.email }}
-    </p>
 </template>
   
 <script>
