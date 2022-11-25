@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="row justify-content-center mt-3">
+    <div v-if="estaLogueado">
+      <div class="row justify-content-center mt-3">
       <div class="col-sm-2 col-md-2 col-lg-2">
         <input class="form-control me-2" type="search" placeholder="Verificar cuota con NroSocio..."
           aria-label="Buscar por nombre" v-model="nro_socio" />
@@ -19,6 +20,7 @@
             aria-label="Close"></button>
         </div>
       </div>
+    </div>
     </div>
     <div class="row">
       <div class="col-sm-9 col-md-7 col-lg-6 mx-auto mt-4">
@@ -98,6 +100,7 @@
 
 <script>
 import { apiService } from "@/api";
+import { mapGetters } from 'vuex';
 
 export default {
   inject: ['URL_API_LICENCIA'],
@@ -109,6 +112,11 @@ export default {
       nro_socio: '',
       errors: [],
     };
+  },
+  computed: {
+    ...mapGetters({
+      estaLogueado: "auth/isLoggedIn",
+    }),
   },
   methods: {
     swapMostrar() {
