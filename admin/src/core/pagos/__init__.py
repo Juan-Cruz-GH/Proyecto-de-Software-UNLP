@@ -13,7 +13,12 @@ def listar_pagos_diccionario(id):
     pagos_pagados = []
     for pago in todos_los_pagos:
         if pago.estado == True:
-            diccionario = {"month": pago.nro_cuota, "amount": pago.total}
+            diccionario = {
+                "month": pago.nro_cuota,
+                "amount": pago.total,
+                "year": pago.año_cuota,
+                "date": pago.fecha_pago.strftime("%d/%m/%Y"),
+            }
             pagos_pagados.append(diccionario)
     return pagos_pagados
 
@@ -24,7 +29,11 @@ def listar_pagos_adeudados_diccionario(id):
     pagos_adeudados = []
     for pago in todos_los_pagos:
         if pago.estado != True:
-            diccionario = {"month": pago.nro_cuota, "amount": pago.total}
+            diccionario = {
+                "month": pago.nro_cuota,
+                "amount": pago.total,
+                "year": pago.año_cuota,
+            }
             pagos_adeudados.append(diccionario)
     return pagos_adeudados
 

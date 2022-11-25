@@ -15,10 +15,10 @@
         </thead>
         <tbody>
             <tr style="text-align: center;" v-for="cuotaImpaga in dataPagina">
-                <td>$ {{ cuotaImpaga }}</td>
-                <td>{{ cuotaImpaga }}</td>
-                <td>{{ cuotaImpaga }}</td>
-                <td>{{ cuotaImpaga }}</td>
+                <td>$ {{ cuotaImpaga.amount }}</td>
+                <td>{{ cuotaImpaga.month }}</td>
+                <td>{{ cuotaImpaga.year }}</td>
+                <td>botonPagar</td>
             </tr>
         </tbody>
     </table>

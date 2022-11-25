@@ -15,10 +15,10 @@
         </thead>
         <tbody>
             <tr style="text-align: center;" v-for="cuotaPaga in dataPagina">
-                <td>$ {{ cuotaPaga }}</td>
-                <td>{{ cuotaPaga }}</td>
-                <td>{{ cuotaPaga }}</td>
-                <td>{{ cuotaPaga }}</td>
+                <td>$ {{ cuotaPaga.amount }}</td>
+                <td>{{ cuotaPaga.month }}</td>
+                <td>{{ cuotaPaga.year }}</td>
+                <td>{{ cuotaPaga.date }}</td>
             </tr>
         </tbody>
     </table>
@@ -43,7 +43,7 @@ export default {
         return {
             cuotasPagas: [],
             errors: [],
-            campos: ["Total", "Mes de cuota", "Fecha de pago", "Recibo"],
+            campos: ["Total", "Mes de cuota", "Año", "Fecha de pago"],
             porPagina: 5,
             dataPagina: [],
             paginaActual: 1
