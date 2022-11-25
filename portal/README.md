@@ -1,8 +1,11 @@
-# TODO al 17/11 
+## TODO al 25/11 
 * Carnet (Hernán)
-* Terminar estadísticas (Manuel)
-* Terminar login y JWT (Nico)
 * Terminar pagos (Juan)
+
+## Logueo del socio en producción
+ Email           | Password  |
+| ------------- |:-------------:| -:|
+| socio1@gmail.com | 1234 |
 
 ## Cómo iniciar la app pública localmente 
 ```sh
