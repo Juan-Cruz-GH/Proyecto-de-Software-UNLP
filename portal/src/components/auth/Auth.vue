@@ -8,7 +8,7 @@
     <button type="button" @click="logout">Logout</button>
   </div>
 
-  <div v-else>
+  <div v-else style="min-height: 80vh">
     <div v-if="this.error">
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <p>Credenciales Invalidas</p>

@@ -1,7 +1,7 @@
 <template>
-    <br>
-    <div id="carnet" class="container" style="font-family:'Comic Sans MS','Comic Sans',cursive;width: 600px;"
+    <div id="carnet" class="container" style="font-family:'Comic Sans MS','Comic Sans',cursive;width: 600px; min-height: 80vh; "
         v-if="socio">
+        <br>
         <div class="card border-dark border border-5 text-center" style="width: 600px;">
             <div class="row">
                 <div class="column-12">
