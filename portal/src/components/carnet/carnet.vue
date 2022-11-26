@@ -48,7 +48,7 @@ export default {
     // Fetches posts when the component is created.
     created() {
         apiService
-            .get("api/me/license", config)
+            .get("api/me/license")
             .then((response) => {
                 // JSON responses are automatically parsed.
                 this.socio = response.data;
