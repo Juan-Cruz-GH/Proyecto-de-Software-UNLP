@@ -10,6 +10,20 @@ Configuración del sistema - Club Villa Elisa
 
 {% block content %}
 
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+    {% for message in messages %}
+    <div class="alert alert-warning" role="alert">
+        <li>{{ message }}</li>
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+
+
 <div class="container">
     <div>
         <div>
