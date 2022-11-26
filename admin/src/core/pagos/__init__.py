@@ -115,8 +115,10 @@ def generar_pagos(id_socio):
 
 def listar_pagos_socio(id, page):
     """Esta funcion realiza la consulta para obtener los pagos del socio recibido"""
-    pagos = Pago.query.filter_by(socio_id=id).paginate(
-        page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+    pagos = (
+        Pago.query.filter_by(socio_id=id)
+        .order_by(Pago.estado, Pago.año_cuota, Pago.nro_cuota)
+        .paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
     )
 
     for pago in pagos.items:

@@ -149,6 +149,7 @@ def listar_socios(page, apellido=None, tipo=None):
             socios = (
                 Socio.query.filter(Socio.apellido.contains(apellido.capitalize()))
                 .filter(Socio.activo.is_(True))
+                .order_by(Socio.apellido, Socio.nombre)
                 .paginate(
                     page, per_page=configuracion_sistema.get_paginado().elementos_pagina
                 )
@@ -157,25 +158,38 @@ def listar_socios(page, apellido=None, tipo=None):
             socios = (
                 Socio.query.filter(Socio.apellido.contains(apellido.capitalize()))
                 .filter(Socio.activo.is_(False))
+                .order_by(Socio.apellido, Socio.nombre)
                 .paginate(
                     page, per_page=configuracion_sistema.get_paginado().elementos_pagina
                 )
             )
     elif apellido is not None:
-        socios = Socio.query.filter(
-            Socio.apellido.contains(apellido.capitalize())
-        ).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
+        socios = (
+            Socio.query.filter(Socio.apellido.contains(apellido.capitalize()))
+            .order_by(Socio.apellido, Socio.nombre)
+            .paginate(
+                page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+            )
+        )
     elif tipo is not None:
         if tipo == "true":
-            socios = Socio.query.filter(Socio.activo.is_(True)).paginate(
-                page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+            socios = (
+                Socio.query.filter(Socio.activo.is_(True))
+                .order_by(Socio.apellido, Socio.nombre)
+                .paginate(
+                    page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+                )
             )
         else:
-            socios = Socio.query.filter(Socio.activo.is_(False)).paginate(
-                page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+            socios = (
+                Socio.query.filter(Socio.activo.is_(False))
+                .order_by(Socio.apellido, Socio.nombre)
+                .paginate(
+                    page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+                )
             )
     else:
-        socios = Socio.query.paginate(
+        socios = Socio.query.order_by(Socio.apellido, Socio.nombre).paginate(
             page, per_page=configuracion_sistema.get_paginado().elementos_pagina
         )
     return socios
