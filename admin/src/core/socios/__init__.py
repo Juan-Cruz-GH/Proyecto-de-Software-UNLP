@@ -1,4 +1,5 @@
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
 
 from src.core import configuracion_sistema
 from src.core.socios.socios import Socio
@@ -226,11 +227,24 @@ def estado_socio(id):
 
 
 def estado_socio_boolean(id):
+    """chequea el estado del socio respecto a las cuotas que ha pagado o debe pagar.
+    True significa que esta al día, False significa que no lo esta."""
     socio = buscar_socio(id)
     for pago in socio.pagos:
-        if pago.estado == False:
-            return False
+        if check_fecha_cuota_es_presente_o_pasada(pago):
+            if pago.estado == False:
+                return False
     return True
+
+
+def check_fecha_cuota_es_presente_o_pasada(pago):
+    """Chequea si al fecha es del mes actual o anterior para verificar si debe tenerse
+    en cuanta al verificar que un socio esta al día con los pagos"""
+    if pago.año_cuota < datetime.now().year or (
+        pago.año_cuota == datetime.now().year and pago.nro_cuota <= datetime.now().month
+    ):
+        return True
+    return False
 
 
 def save_photo(id, photo_path):

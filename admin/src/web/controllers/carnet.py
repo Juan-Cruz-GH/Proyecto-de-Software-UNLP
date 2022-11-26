@@ -31,6 +31,7 @@ carnet_blueprint = Blueprint("carnet", __name__, url_prefix="/carnet")
 @carnet_blueprint.route("public/uploads/<filename>")
 @login_requerido
 def get_file(filename):
+    """Se usa para recuperar la dirección donde se guardara la foto del carnet"""
     if not (has_permission(session["user"], "carnet_photo")):
         return abort(403)
     return send_from_directory("public/uploads", filename)
@@ -67,6 +68,7 @@ def upload_image(id):
 @carnet_blueprint.route("/<id>")
 @login_requerido
 def view_license(id):
+    """Maneja el módulo de mostrar el carnet de un socio existente."""
     if not (has_permission(session["user"], "carnet_license")):
         return abort(403)
     socio = buscar_socio(id)
