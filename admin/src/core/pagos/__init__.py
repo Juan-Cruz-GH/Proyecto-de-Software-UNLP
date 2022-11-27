@@ -40,7 +40,7 @@ def listar_pagos_adeudados_diccionario(id):
         if pago.estado != True:
             diccionario = {
                 "month": pago.nro_cuota,
-                "amount": pago.total,
+                "amount": calcular_cuota(pago.id, socio.id),
                 "year": pago.año_cuota,
             }
             pagos_adeudados.append(diccionario)
@@ -56,16 +56,13 @@ def pagar_con_api(diccionario, id):
     amount: costo de la cuota
     year: año de la cuota"""
     socio = socios.buscar_socio(id)
-    if socio == None:
-        return False, "El socio no existe"
     for pago in socio.pagos:
         if (
-            pago.nro_cuota == diccionario["month"]
+            pago.nro_cuota == int(diccionario["month"])
             and pago.año_cuota == datetime.now().year
             and pago.estado == False
-            and float(diccionario["amount"]) == calcular_cuota(pago.id, pago.socio.id)
+            and (int(diccionario["amount"])) == calcular_cuota(pago.id, pago.socio.id)
         ):
-
             pago.total = diccionario["amount"]
             pago.fecha_pago = datetime.now()
             pago.estado = True
