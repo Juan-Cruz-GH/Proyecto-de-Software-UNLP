@@ -117,16 +117,16 @@ def auth():
     """Esta funcion recibe la peticion de la api de login, en caso de estar todo correcto loguea al usuario y devuelve el token
     jwt"""
     if not (request.data):
-        return jsonify(message="No se envió nada."), 400
+        return jsonify(message="No se envió un json."), 400
     json = request.get_json()
-    email = json["email"]
-    password = json["password"]
-    if (email is None) or (password is None):
-        return jsonify(message="El email o password está vacio."), 400
-    validacion, mensaje = validator_usuario.validar_inputs_publico(email, password)
+    if not (("email") in json.keys() and ("password") in json.keys()):
+        return jsonify(message="No se envió el email o la password."), 400
+    validacion, mensaje = validator_usuario.validar_inputs_publico(
+        json["email"], json["password"]
+    )
     if not validacion:
         return jsonify(message=mensaje), 400
-    socio = find_socio_by_email_and_pass(email, password)
+    socio = find_socio_by_email_and_pass(json["email"], json["password"])
     if socio is None:
         return jsonify(message="Credenciales Invalidas"), 400
     access_token = create_access_token(identity=socio.id)
