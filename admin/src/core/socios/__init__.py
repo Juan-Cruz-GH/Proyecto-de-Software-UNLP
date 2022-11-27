@@ -217,6 +217,7 @@ def estado_socio(id):
     """Devuelve un diccionario con el estado actual del socio que seguro existe"""
     socio = buscar_socio(id)
     datos_perfil = {
+        "user": socio.apellido + " " + socio.nombre,
         "email": socio.email,
         "number": socio.id,
         "document_type": socio.tipo_documento,
