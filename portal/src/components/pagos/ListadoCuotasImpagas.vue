@@ -23,7 +23,7 @@
                     <!-- <button class="btn btn-primary" type="button">Subir comprobante</button>-->
                 </td>
                 <td v-if="subioComprobante()">
-                    <button class="btn btn-primary" type="button">Pagar</button>
+                    <button v-on:click="pagar(cuotaImpaga)" class="btn btn-primary" type="button">Pagar</button>
                 </td>
             </tr>
         </tbody>
