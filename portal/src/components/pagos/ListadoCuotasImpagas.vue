@@ -57,19 +57,8 @@ export default {
     },
     methods: {
         pagar(cuotaImpaga) {
-            function getCookie(name) {
-                const value = `; ${document.cookie}`;
-                const parts = value.split(`; ${name}=`);
-                if (parts.length === 2) return parts.pop().split(';').shift();
-            }
-            const options = {
-                credentials: 'same-origin',
-                headers: {
-                    'X-CSRF-TOKEN': getCookie('csrf_access_token'),
-                },
-            };
             apiService
-                .post("/api/me/payments", options)
+                .post("/api/me/payments")
                 .then((response) => {
                     this.cuotasImpagas = response.data;
                     this.getDataPagina(1);
