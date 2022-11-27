@@ -14,12 +14,16 @@ class Pago(db.Model):
     socio_id = db.Column(db.Integer, db.ForeignKey("Socios.id"))
     socio = db.relationship("Socio", back_populates="pagos")
 
-    def __init__(self, total, socio_id, nro_cuota, estado, fecha_pago=None):
+    def __init__(
+        self, total, socio_id, nro_cuota, estado, año_cuota=None, fecha_pago=None
+    ):
         self.total = total
         self.fecha_pago = fecha_pago
         self.socio_id = socio_id
         self.nro_cuota = nro_cuota
         self.estado = estado
+        if año_cuota != None:
+            self.año_cuota = año_cuota
 
     def __repr__(self):
         return f"Socio(id={self.id!r}, total={self.total!r}, fecha={self.fecha_pago!r})"

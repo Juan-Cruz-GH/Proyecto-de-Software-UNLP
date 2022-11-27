@@ -8,30 +8,61 @@ from src.web.controllers.validators.validator_configuracion import pago_fuera_de
 
 
 def listar_pagos_diccionario(id):
+    """devuelve una lista de diccionarios con los pagos ya pagados de un socio
+    month: numero de cuota
+    amount: costo de la cuota
+    year: año de la cuota
+    date:fecha en la que se pago."""
     socio = socios.buscar_socio(id)
-    if socio == None:
-        return []
     todos_los_pagos = socio.pagos
     pagos_pagados = []
     for pago in todos_los_pagos:
         if pago.estado == True:
-            diccionario = {"month": pago.nro_cuota, "amount": pago.total}
+            diccionario = {
+                "month": pago.nro_cuota,
+                "amount": pago.total,
+                "year": pago.año_cuota,
+                "date": pago.fecha_pago.strftime("%d/%m/%Y"),
+            }
             pagos_pagados.append(diccionario)
     return pagos_pagados
 
 
-def pagar_con_api(diccionario, id):
+def listar_pagos_adeudados_diccionario(id):
+    """devuelve un diccionario con los pagos adeudados de un socio
+    month: numero de cuota
+    amount: costo de la cuota
+    year: año de la cuota"""
     socio = socios.buscar_socio(id)
-    if socio == None:
-        return False, "El socio no existe"
+    todos_los_pagos = socio.pagos
+    pagos_adeudados = []
+    for pago in todos_los_pagos:
+        if pago.estado != True:
+            diccionario = {
+                "month": pago.nro_cuota,
+                "amount": calcular_cuota(pago.id, socio.id),
+                "year": pago.año_cuota,
+            }
+            pagos_adeudados.append(diccionario)
+    return pagos_adeudados
+
+
+def pagar_con_api(diccionario, id):
+    """recibe un diccionario con los datos de un pago.
+    Devuelve un booleano y un mensaje dependiendo de como concluye la operación
+
+    Datos que contiene le diccionario:
+    month: numero de cuota
+    amount: costo de la cuota
+    year: año de la cuota"""
+    socio = socios.buscar_socio(id)
     for pago in socio.pagos:
         if (
-            pago.nro_cuota == diccionario["month"]
+            pago.nro_cuota == int(diccionario["month"])
             and pago.año_cuota == datetime.now().year
             and pago.estado == False
-            and float(diccionario["amount"]) == calcular_cuota(pago.id, pago.socio.id)
+            and (int(diccionario["amount"])) == calcular_cuota(pago.id, pago.socio.id)
         ):
-
             pago.total = diccionario["amount"]
             pago.fecha_pago = datetime.now()
             pago.estado = True
@@ -65,12 +96,26 @@ def generar_pagos(id_socio):
         pago = Pago(**data_pago)
         db.session.add(pago)
         db.session.commit()
+    hasta = 12 - (12 - desde)
+    for j in range(1, hasta):
+        data_pago = {
+            "total": 0,
+            "socio_id": id_socio,
+            "nro_cuota": j,
+            "estado": False,
+            "año_cuota": str((int(año_actual) + 1)),
+        }
+        pago = Pago(**data_pago)
+        db.session.add(pago)
+        db.session.commit()
 
 
 def listar_pagos_socio(id, page):
     """Esta funcion realiza la consulta para obtener los pagos del socio recibido"""
-    pagos = Pago.query.filter_by(socio_id=id).paginate(
-        page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+    pagos = (
+        Pago.query.filter_by(socio_id=id)
+        .order_by(Pago.estado, Pago.año_cuota, Pago.nro_cuota)
+        .paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
     )
 
     for pago in pagos.items:
@@ -106,7 +151,7 @@ def calcular_cuota(id_pago, id_socio):
         cuota = cuota + int(disciplina.costo)
     if cuota_esta_vencida(id_pago):
         cuota = cuota + ((cuota * recargo) / 100)
-    return cuota
+    return round(cuota)
 
 
 def cuota_esta_vencida(id_pago):

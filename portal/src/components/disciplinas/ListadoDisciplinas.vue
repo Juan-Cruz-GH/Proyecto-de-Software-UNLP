@@ -1,20 +1,19 @@
 <template>
+    <div id="espacio" style="min-height: 80vh;">
     <h1 style="text-align:center">
         <strong>Disciplinas</strong>
     </h1>
-    <div id="espacio" style="min-height: 5vh;">
-    </div>
     <table id="tableComponent" class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th style="text-align: center" v-for="campo in campos">
+                <th style="text-align: center" v-for="(campo, i) in campos" :key="i">
                     <!-- Listar los campos para la tabla -->
                     {{ campo }}
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr style="text-align: center;" v-for="disciplina in dataPagina">
+            <tr style="text-align: center;" v-for="(disciplina, i) in dataPagina" :key="i">
                 <td>{{ disciplina.name }}</td>
                 <td>{{ disciplina.category }}</td>
                 <td>{{ disciplina.days }}</td>
@@ -27,20 +26,20 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item" v-on:click="getPaginaAnterior()"><a class="page-link" href="#">Anterior</a></li>
-            <li v-for="pagina in getTotalPaginas()" v-on:click="getDataPagina(pagina)" class="page-item"
+            <li v-for="(pagina, i) in getTotalPaginas()" :key="i" v-on:click="getDataPagina(pagina)" class="page-item"
                 v-bind:class="estaActiva(pagina)">
                 <a class="page-link" href="#"> {{ pagina }} </a>
             </li>
             <li class="page-item" v-on:click="getPaginaSiguiente()"> <a class="page-link" href="#">Siguiente</a></li>
         </ul>
     </nav>
-    <div id="pre-footer" style="min-height: 24vh;">
     </div>
 </template>
   
 <script>
+import { apiService } from "@/api";
+
 export default {
-    inject: ['URL_API_DISCIPLINAS'],
     data() {
         return {
             disciplines: [],
@@ -85,8 +84,8 @@ export default {
     },
     // Fetches posts when the component is created.
     created() {
-        axios
-            .get(this.URL_API_DISCIPLINAS)
+        apiService
+            .get("/api/club/disciplinas")
             .then((response) => {
                 // JSON responses are automatically parsed.
                 this.disciplines = response.data;

@@ -1,4 +1,5 @@
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
 
 from src.core import configuracion_sistema
 from src.core.socios.socios import Socio
@@ -148,6 +149,7 @@ def listar_socios(page, apellido=None, tipo=None):
             socios = (
                 Socio.query.filter(Socio.apellido.contains(apellido.capitalize()))
                 .filter(Socio.activo.is_(True))
+                .order_by(Socio.apellido, Socio.nombre)
                 .paginate(
                     page, per_page=configuracion_sistema.get_paginado().elementos_pagina
                 )
@@ -156,25 +158,38 @@ def listar_socios(page, apellido=None, tipo=None):
             socios = (
                 Socio.query.filter(Socio.apellido.contains(apellido.capitalize()))
                 .filter(Socio.activo.is_(False))
+                .order_by(Socio.apellido, Socio.nombre)
                 .paginate(
                     page, per_page=configuracion_sistema.get_paginado().elementos_pagina
                 )
             )
     elif apellido is not None:
-        socios = Socio.query.filter(
-            Socio.apellido.contains(apellido.capitalize())
-        ).paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
+        socios = (
+            Socio.query.filter(Socio.apellido.contains(apellido.capitalize()))
+            .order_by(Socio.apellido, Socio.nombre)
+            .paginate(
+                page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+            )
+        )
     elif tipo is not None:
         if tipo == "true":
-            socios = Socio.query.filter(Socio.activo.is_(True)).paginate(
-                page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+            socios = (
+                Socio.query.filter(Socio.activo.is_(True))
+                .order_by(Socio.apellido, Socio.nombre)
+                .paginate(
+                    page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+                )
             )
         else:
-            socios = Socio.query.filter(Socio.activo.is_(False)).paginate(
-                page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+            socios = (
+                Socio.query.filter(Socio.activo.is_(False))
+                .order_by(Socio.apellido, Socio.nombre)
+                .paginate(
+                    page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+                )
             )
     else:
-        socios = Socio.query.paginate(
+        socios = Socio.query.order_by(Socio.apellido, Socio.nombre).paginate(
             page, per_page=configuracion_sistema.get_paginado().elementos_pagina
         )
     return socios
@@ -202,6 +217,7 @@ def estado_socio(id):
     """Devuelve un diccionario con el estado actual del socio que seguro existe"""
     socio = buscar_socio(id)
     datos_perfil = {
+        "user": socio.apellido + " " + socio.nombre,
         "email": socio.email,
         "number": socio.id,
         "document_type": socio.tipo_documento,
@@ -212,17 +228,39 @@ def estado_socio(id):
         "phone": socio.telefono,
     }
     for pago in socio.pagos:
-        if pago.estado == False:
-            return {
-                "status": "BAD",
-                "description": "El socio registra deuda o sanción.",
-                "profile": datos_perfil,
-            }
+        if check_fecha_cuota_es_presente_o_pasada(pago):
+            if pago.estado == False:
+                return {
+                    "status": "BAD",
+                    "description": "El socio registra deuda o sanción.",
+                    "profile": datos_perfil,
+                }
     return {
         "status": "OK",
         "description": "El socio no registra deuda ni sanción.",
         "profile": datos_perfil,
     }
+
+
+def estado_socio_boolean(id):
+    """chequea el estado del socio respecto a las cuotas que ha pagado o debe pagar.
+    True significa que esta al día, False significa que no lo esta."""
+    socio = buscar_socio(id)
+    for pago in socio.pagos:
+        if check_fecha_cuota_es_presente_o_pasada(pago):
+            if pago.estado == False:
+                return False
+    return True
+
+
+def check_fecha_cuota_es_presente_o_pasada(pago):
+    """Chequea si al fecha es del mes actual o anterior para verificar si debe tenerse
+    en cuanta al verificar que un socio esta al día con los pagos"""
+    if pago.año_cuota < datetime.now().year or (
+        pago.año_cuota == datetime.now().year and pago.nro_cuota <= datetime.now().month
+    ):
+        return True
+    return False
 
 
 def save_photo(id, photo_path):

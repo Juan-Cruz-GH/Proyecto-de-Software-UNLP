@@ -4,7 +4,6 @@ from flask_session import Session
 from flask_qrcode import QRcode
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 from flask_jwt_extended import JWTManager
-from flask_cors import CORS
 
 from src.web.controllers.usuarios import usuario_blueprint
 from src.web.controllers.configuracion_sistema import configuracion_sistema_blueprint
@@ -14,7 +13,6 @@ from src.web.controllers.socios import socio_blueprint
 from src.web.controllers.pagos import pago_blueprint
 from src.web.controllers.auth import auth_blueprint
 from src.web.controllers.carnet import carnet_blueprint
-from src.web.controllers.auth_publico import auth_publico_blueprint
 from src.decoradores.login import login_requerido
 from src.web.helpers import handlers
 from src.web.helpers.permission import has_permission
@@ -27,8 +25,6 @@ def create_app(env="development", static_folder="static"):
     app.config.from_object(config[env])
     csrf = CSRFProtect(app)
     csrf.exempt(api_blueprint)
-    csrf.exempt(auth_publico_blueprint)
-    CORS(app, supports_credentials=True)
     jwt = JWTManager(app)
     QRcode(app)
     app.config["UPLOADED_PHOTOS_DEST"] = "public/uploads"
@@ -49,7 +45,6 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(api_blueprint)
     app.register_blueprint(carnet_blueprint)
-    app.register_blueprint(auth_publico_blueprint)
 
     Session(app)
 

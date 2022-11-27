@@ -2,25 +2,21 @@
   <div>
     <div v-if="estaLogueado">
       <div class="row justify-content-center mt-3">
-      <div class="col-sm-2 col-md-2 col-lg-2">
-        <input class="form-control me-2" type="search" placeholder="Verificar cuota con NroSocio..."
-          aria-label="Buscar por nombre" v-model="nro_socio" />
-      </div>
-      <div class="col-sm-4 col-md-4 col-lg-4">
-        <button v-on:click="swapMostrar" class="btn btn-outline-success" type="submit">Buscar</button>
-      </div>
-    </div>
-    <div class="row mt-2 justify-content-center" v-if="mostrar_estado">
-      <div class="col-6">
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          <p v-if="errors && errors.length">El numero de socio ingresado no existe</p>
-          <p v-else-if="mostrar_vacio">Debe ingresar algun numero de socio</p>
-          <p v-else>{{ info_socio["description"] }}</p>
-          <button v-on:click="swapEsconder" type="button" class="btn-close" data-bs-dismiss="alert"
-            aria-label="Close"></button>
+        <div class="col-sm-4 col-md-4 col-lg-6">
+          <button v-on:click="swapMostrar" class="btn btn-outline-success" type="submit">Verificar Estado Cuota</button>
         </div>
       </div>
-    </div>
+      <div class="row mt-2 justify-content-center" v-if="mostrar_estado">
+        <div class="col-6">
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <p v-if="errors && errors.length">El numero de socio ingresado no existe</p>
+            <p v-else-if="mostrar_vacio">Debe ingresar algun numero de socio</p>
+            <p v-else>{{ info_socio["description"] }}</p>
+            <button v-on:click="swapEsconder" type="button" class="btn-close" data-bs-dismiss="alert"
+              aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="row">
       <div class="col-sm-9 col-md-7 col-lg-6 mx-auto mt-4">
@@ -99,16 +95,15 @@
 </template>
 
 <script>
+import { apiService } from "@/api";
 import { mapGetters } from 'vuex';
 
 export default {
-  inject: ['URL_API_LICENCIA'],
   data() {
     return {
       info_socio: [],
       mostrar_estado: false,
       mostrar_vacio: false,
-      nro_socio: '',
       errors: [],
     };
   },
@@ -119,28 +114,18 @@ export default {
   },
   methods: {
     swapMostrar() {
-      if (this.nro_socio == '') {
-        this.mostrar_vacio = true;
-        this.mostrar_estado = true;
-      } else {
-        this.errors.pop()
-        const config = {
-          headers: {
-            id: this.nro_socio
-          }
-        }
-        axios
-          .get(this.URL_API_LICENCIA, config)
-          .then((response) => {
-            // JSON responses are automatically parsed.
-            this.info_socio = response.data;
-          })
-          .catch((e) => {
-            console.log(e)
-            this.errors.push(e);
-          });
-        this.mostrar_estado = true;
-      }
+      this.errors.pop()
+      apiService
+        .get("/api/me/license")
+        .then((response) => {
+          // JSON responses are automatically parsed.
+          this.info_socio = response.data;
+        })
+        .catch((e) => {
+          console.log(e)
+          this.errors.push(e);
+        });
+      this.mostrar_estado = true;
     },
     swapEsconder() {
       this.mostrar_estado = false;

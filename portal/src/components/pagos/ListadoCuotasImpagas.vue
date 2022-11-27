@@ -15,10 +15,18 @@
         </thead>
         <tbody>
             <tr style="text-align: center;" v-for="cuotaImpaga in dataPagina">
-                <td>$ {{ cuotaImpaga }}</td>
-                <td>{{ cuotaImpaga }}</td>
-                <td>{{ cuotaImpaga }}</td>
-                <td>{{ cuotaImpaga }}</td>
+                <td>$ {{ cuotaImpaga.amount }}</td>
+                <td>{{ cuotaImpaga.month }}</td>
+                <td>{{ cuotaImpaga.year }}</td>
+                <td>
+                    <button class="btn btn-primary" type="button">
+                        <RouterLink class="mx-2 text-white" aria-current="page" :to="
+                        {
+                            name: 'pagar',
+                            query: { month: cuotaImpaga.month, amount: cuotaImpaga.amount }
+                        }">Pagar</RouterLink>
+                    </button>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -35,8 +43,9 @@
 </template>
   
 <script>
+import { apiService } from "@/api";
+
 export default {
-    inject: ['URL_API_PAYMENTS'],
     data() {
         return {
             cuotasImpagas: [],
@@ -44,7 +53,7 @@ export default {
             campos: ["Total", "Mes de cuota", "Año", "Pagar"],
             porPagina: 5,
             dataPagina: [],
-            paginaActual: 1
+            paginaActual: 1,
         };
     },
     methods: {
@@ -74,11 +83,9 @@ export default {
             return numPagina == this.paginaActual ? "active" : "";
         }
     },
-    computed: {
-    },
     created() {
-        axios
-            .get(this.URL_API_PAYMENTS)
+        apiService
+            .get("/api/me/pending_payments")
             .then((response) => {
                 this.cuotasImpagas = response.data;
                 this.getDataPagina(1);

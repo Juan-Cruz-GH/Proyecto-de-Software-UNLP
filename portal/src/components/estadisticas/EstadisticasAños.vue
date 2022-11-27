@@ -6,11 +6,11 @@
 <script>
 import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale } from 'chart.js'
+import { apiService } from "@/api";
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
 
 export default {
-  inject: ['URL_API_SOCIOS_AÑO'],
   name: 'LineChart',
   components: { Line },
   props: {
@@ -60,8 +60,8 @@ export default {
     }
   },
   created() {
-    axios
-      .get(this.URL_API_SOCIOS_AÑO)
+    apiService
+      .get("/api/club/socios-años")
       .then((response) => {
         // JSON responses are automatically parsed.
         let cant_lista = []

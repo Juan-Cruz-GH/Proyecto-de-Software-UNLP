@@ -32,8 +32,9 @@
 </template>
 
 <script>
+import { apiService } from "@/api";
+
 export default {
-  inject: ['URL_API_CLUB'],
   data() {
     return {
       info_club: [],
@@ -42,8 +43,8 @@ export default {
   },
   // Fetches posts when the component is created.
   created() {
-    axios
-      .get(this.URL_API_CLUB)
+    apiService
+      .get("/api/club/info")
       .then((response) => {
         // JSON responses are automatically parsed.
         this.info_club = response.data;
