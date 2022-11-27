@@ -3,7 +3,12 @@
 | ------------- |:-------------:| -:|
 | Admin      | admin@gmail.com | admin123 |
 | Operador | operador@gmail.com | operador123 |
-        
+
+# Carnet
+
+- Deberia haber una carpeta admin/public/uploads donde se guardaran las imagenes de los socios.
+- Se debería tener una imagen en admin/public/uploads cuyo nombre debe ser **EXACTAMENTE**: "default_photo.jpg"
+
 # Base de datos
 
 ## Conexión:

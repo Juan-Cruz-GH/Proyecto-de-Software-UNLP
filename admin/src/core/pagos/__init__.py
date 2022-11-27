@@ -8,6 +8,11 @@ from src.web.controllers.validators.validator_configuracion import pago_fuera_de
 
 
 def listar_pagos_diccionario(id):
+    """devuelve una lista de diccionarios con los pagos ya pagados de un socio
+    month: numero de cuota
+    amount: costo de la cuota
+    year: año de la cuota
+    date:fecha en la que se pago."""
     socio = socios.buscar_socio(id)
     todos_los_pagos = socio.pagos
     pagos_pagados = []
@@ -24,6 +29,10 @@ def listar_pagos_diccionario(id):
 
 
 def listar_pagos_adeudados_diccionario(id):
+    """devuelve un diccionario con los pagos adeudados de un socio
+    month: numero de cuota
+    amount: costo de la cuota
+    year: año de la cuota"""
     socio = socios.buscar_socio(id)
     todos_los_pagos = socio.pagos
     pagos_adeudados = []
@@ -39,6 +48,13 @@ def listar_pagos_adeudados_diccionario(id):
 
 
 def pagar_con_api(diccionario, id):
+    """recibe un diccionario con los datos de un pago.
+    Devuelve un booleano y un mensaje dependiendo de como concluye la operación
+
+    Datos que contiene le diccionario:
+    month: numero de cuota
+    amount: costo de la cuota
+    year: año de la cuota"""
     socio = socios.buscar_socio(id)
     if socio == None:
         return False, "El socio no existe"
@@ -83,12 +99,26 @@ def generar_pagos(id_socio):
         pago = Pago(**data_pago)
         db.session.add(pago)
         db.session.commit()
+    hasta = 12 - (12 - desde)
+    for j in range(1, hasta):
+        data_pago = {
+            "total": 0,
+            "socio_id": id_socio,
+            "nro_cuota": j,
+            "estado": False,
+            "año_cuota": str((int(año_actual) + 1)),
+        }
+        pago = Pago(**data_pago)
+        db.session.add(pago)
+        db.session.commit()
 
 
 def listar_pagos_socio(id, page):
     """Esta funcion realiza la consulta para obtener los pagos del socio recibido"""
-    pagos = Pago.query.filter_by(socio_id=id).paginate(
-        page, per_page=configuracion_sistema.get_paginado().elementos_pagina
+    pagos = (
+        Pago.query.filter_by(socio_id=id)
+        .order_by(Pago.estado, Pago.año_cuota, Pago.nro_cuota)
+        .paginate(page, per_page=configuracion_sistema.get_paginado().elementos_pagina)
     )
 
     for pago in pagos.items:
@@ -124,7 +154,7 @@ def calcular_cuota(id_pago, id_socio):
         cuota = cuota + int(disciplina.costo)
     if cuota_esta_vencida(id_pago):
         cuota = cuota + ((cuota * recargo) / 100)
-    return cuota
+    return round(cuota)
 
 
 def cuota_esta_vencida(id_pago):
