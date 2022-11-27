@@ -228,12 +228,13 @@ def estado_socio(id):
         "phone": socio.telefono,
     }
     for pago in socio.pagos:
-        if pago.estado == False:
-            return {
-                "status": "BAD",
-                "description": "El socio registra deuda o sanción.",
-                "profile": datos_perfil,
-            }
+        if check_fecha_cuota_es_presente_o_pasada(pago):
+            if pago.estado == False:
+                return {
+                    "status": "BAD",
+                    "description": "El socio registra deuda o sanción.",
+                    "profile": datos_perfil,
+                }
     return {
         "status": "OK",
         "description": "El socio no registra deuda ni sanción.",
