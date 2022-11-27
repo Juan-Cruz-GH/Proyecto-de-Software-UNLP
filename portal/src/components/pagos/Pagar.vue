@@ -6,7 +6,6 @@
     </div>
     <h1 style="text-align:center">
         <strong>Pagar</strong>
-        {{ id }}
     </h1>
     <div style="text-align:center;">
         <h2>Subir comprobante (debe ser .jpg / .png / .pdf)</h2>
@@ -40,27 +39,20 @@ export default {
             return this.extension == "pdf" || this.extension == "png" || this.extension == "jpg"
         },
         pagar() {
-            console.log(this.$route.query.id)
             if (!this.esArchivoValido()) {
                 this.error = true;
                 return
             }
-            function getCookie(name) {
-                const value = `; ${document.cookie}`;
-                const parts = value.split(`; ${name}=`);
-                if (parts.length === 2) return parts.pop().split(';').shift();
-            }
+            const json = JSON.stringify({ month: this.$route.query.month, amount: this.$route.query.amount })
             const options = {
-                credentials: 'same-origin',
                 headers: {
-                    'X-CSRF-TOKEN': getCookie('csrf_access_token'),
+                    'Content-Type': 'application/json',
                 },
             };
             apiService
-                .post("/api/me/payments", options)
+                .post("/api/me/payments", json, options)
                 .then(() => {
-                    window.location.reload();
-                    this.getDataPagina(1);
+                    this.$router.push("/pagos");
                 })
                 .catch((e) => {
                     console.log(e);
