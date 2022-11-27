@@ -20,12 +20,12 @@
                 <td>{{ cuotaImpaga.year }}</td>
                 <td>
                     <button class="btn btn-primary" type="button">
-                        <RouterLink class="mx-2 text-white" aria-current="page" :to="{
-                            name: 'pagar', params:
-                                { id: cuotaImpaga.month }
+                        <RouterLink class="mx-2 text-white" aria-current="page" :to="
+                        {
+                            name: 'pagar',
+                            query: { month: cuotaImpaga.month, amount: cuotaImpaga.amount }
                         }">Pagar</RouterLink>
                     </button>
-                    <!-- <button class="btn btn-primary" type="button">Subir comprobante</button>-->
                 </td>
             </tr>
         </tbody>
@@ -54,45 +54,9 @@ export default {
             porPagina: 5,
             dataPagina: [],
             paginaActual: 1,
-            /*comprobantes: [],
-            i: 0*/
         };
     },
     methods: {
-        /*comprobanteEsValido() {
-            return (this.comprobantes[this.i].name.includes("jpg")
-                || this.comprobantes[this.i].name.includes("pdf")
-                || this.comprobantes[this.i].name.includes("png"))
-        },
-        pagar(cuotaImpaga) {
-            if (this.comprobanteEsValido) {
-                function getCookie(name) {
-                    const value = `; ${document.cookie}`;
-                    const parts = value.split(`; ${name}=`);
-                    if (parts.length === 2) return parts.pop().split(';').shift();
-                }
-                let archivo = comprobante.target.files[0];
-                if (archivo.name.includes("jpg") || archivo.name.includes("pdf") || archivo.name.includes("png")) {
-                    this.comprobante = comprobante;
-                }
-                console.log(this.comprobante)
-                const options = {
-                    credentials: 'same-origin',
-                    headers: {
-                        'X-CSRF-TOKEN': getCookie('csrf_access_token'),
-                    },
-                };
-                apiService
-                    .post("/api/me/payments", options)
-                    .then(() => {
-                        window.location.reload();
-                        this.getDataPagina(1);
-                    })
-                    .catch((e) => {
-                        this.errors.push(e);
-                    });
-            }
-        },*/
         getTotalPaginas() {    // Redondeo por si da con decimales
             return Math.ceil(this.cuotasImpagas.length / this.porPagina);
         },
@@ -118,8 +82,6 @@ export default {
         estaActiva(numPagina) {
             return numPagina == this.paginaActual ? "active" : "";
         }
-    },
-    computed: {
     },
     created() {
         apiService
