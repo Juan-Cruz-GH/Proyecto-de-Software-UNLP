@@ -34,19 +34,18 @@ def pagar_json(json, id):
         return generar_respuesta(
             "{'error': el id enviado en el header debe ser un entero}", 400, "text"
         )
-    diccionario = json[0]
-    pudo_pagar, mensaje = pagos.pagar_con_api(diccionario, id)
+    # diccionario = json[0]
+    pudo_pagar, mensaje = pagos.pagar_con_api(json, id)
     if pudo_pagar:
         return generar_respuesta(
             "{'month':'"
-            + str(diccionario["month"])
+            + str(json["month"])
             + "', 'amount':'"
-            + str(diccionario["amount"])
+            + str(json["amount"])
             + "'}",
             201,
             "application/json",
         )
-
     return generar_respuesta("{'error':'" + mensaje + "'}", 400, "text")
 
 
