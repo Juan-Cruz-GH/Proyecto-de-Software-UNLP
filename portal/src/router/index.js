@@ -5,6 +5,7 @@ import LoginView from "../views/LoginView.vue";
 import EstadisticasView from "../views/EstadisticasView.vue";
 import PagosView from "../views/PagosView.vue";
 import carnet from "../views/CarnetView.vue"
+import PagarView from "../views/PagarView.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,11 @@ const router = createRouter({
       path: "/pagos",
       name: "pagos",
       component: PagosView,
+    },
+    {
+      path: "/pagar/:id",
+      name: "pagar",
+      component: PagarView
     },
     {
       path: "/estadisticas",
