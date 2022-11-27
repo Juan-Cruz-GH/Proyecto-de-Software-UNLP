@@ -18,10 +18,12 @@
                 <td>$ {{ cuotaImpaga.amount }}</td>
                 <td>{{ cuotaImpaga.month }}</td>
                 <td>{{ cuotaImpaga.year }}</td>
-                <td v-on:click="pagar(cuotaImpaga)">
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="button">Pagar</button>
-                    </div>
+                <td>
+                    <input type="file" @change="subirComprobante">
+                    <!-- <button class="btn btn-primary" type="button">Subir comprobante</button>-->
+                </td>
+                <td v-if="subioComprobante()">
+                    <button class="btn btn-primary" type="button">Pagar</button>
                 </td>
             </tr>
         </tbody>
@@ -42,23 +44,32 @@
 import { apiService } from "@/api";
 
 export default {
-    inject: ['URL_API_PAYMENTS'],
     data() {
         return {
             cuotasImpagas: [],
             errors: [],
-            campos: ["Total", "Mes de cuota", "Año", "Pagar"],
+            campos: ["Total", "Mes de cuota", "Año", "Subir comprobante", "Pagar"],
             porPagina: 5,
             dataPagina: [],
-            paginaActual: 1
+            paginaActual: 1,
+            comprobante: null
         };
     },
     methods: {
         pagar(cuotaImpaga) {
-            //this.$router.push("/pagos/pagar");
-            console.log(cuotaImpaga.data)
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            }
+            const options = {
+                credentials: 'same-origin',
+                headers: {
+                    'X-CSRF-TOKEN': getCookie('csrf_access_token'),
+                },
+            };
             apiService
-                .post("/api/me/payments")
+                .post("/api/me/payments", options)
                 .then((response) => {
                     this.cuotasImpagas = response.data;
                     this.getDataPagina(1);
@@ -66,7 +77,16 @@ export default {
                 .catch((e) => {
                     this.errors.push(e);
                 });
-            console.log(cuotaImpaga.amount, cuotaImpaga.month, cuotaImpaga.year)
+        },
+        subirComprobante(comprobante) {
+            // el comprobante debe ser jpg pdf o png
+            let archivo = comprobante.target.files[0];
+            if (archivo.name.includes("jpg") || archivo.name.includes("pdf") || archivo.name.includes("png")) {
+                this.comprobante = comprobante;
+            }
+        },
+        subioComprobante() {
+            return this.comprobante != null;
         },
         getTotalPaginas() {    // Redondeo por si da con decimales
             return Math.ceil(this.cuotasImpagas.length / this.porPagina);
