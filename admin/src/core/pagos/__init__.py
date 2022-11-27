@@ -154,7 +154,7 @@ def calcular_cuota(id_pago, id_socio):
         cuota = cuota + int(disciplina.costo)
     if cuota_esta_vencida(id_pago):
         cuota = cuota + ((cuota * recargo) / 100)
-    return cuota
+    return round(cuota)
 
 
 def cuota_esta_vencida(id_pago):
