@@ -31,7 +31,7 @@ const router = createRouter({
       component: PagosView,
     },
     {
-      path: "/pagar/:id",
+      path: "/pagar",
       name: "pagar",
       component: PagarView
     },
