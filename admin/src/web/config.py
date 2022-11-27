@@ -13,7 +13,7 @@ class Config(object):
     JWT_TOKEN_LOCATION = ["cookies"]
     JWT_ACCESS_COOKIE_NAME = "access_token_cookie"
     JWT_ACCESS_TOKEN_EXPIRES = False
-    JWT_ACCESS_CSRF_HEADER_NAME = "X-Xrsf-Token"
+    JWT_ACCESS_CSRF_HEADER_NAME = "csrf_access_token"
     # Desactivar CSRF para testear API POST de registrar pagos
     # WTF_CSRF_CHECK_DEFAULT = False
 
