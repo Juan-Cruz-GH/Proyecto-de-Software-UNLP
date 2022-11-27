@@ -17,6 +17,7 @@
                         <span style="font-size: 1.5rem ;">{{ socio.profile.user }}</span><br>
                         {{ socio.profile.document_type }}: {{ socio.profile.document_number }} <br>
                         Socio: #{{ socio.profile.number }} <br>
+                        Estado: <span v-if="socio.status == 'OK'"> Al día</span> <span v-else>No esta al día</span> <br>
                         Email: {{ socio.profile.email }}<br>
                         Género: {{ socio.profile.gender }}<br>
                         Se identifica como: {{ socio.profile.gender_other }} <br>
