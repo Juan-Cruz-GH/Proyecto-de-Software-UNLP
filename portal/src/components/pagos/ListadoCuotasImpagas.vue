@@ -14,13 +14,17 @@
             </tr>
         </thead>
         <tbody>
-            <tr style="text-align: center;" v-for="cuotaImpaga, i in dataPagina">
+            <tr style="text-align: center;" v-for="cuotaImpaga in dataPagina">
                 <td>$ {{ cuotaImpaga.amount }}</td>
                 <td>{{ cuotaImpaga.month }}</td>
                 <td>{{ cuotaImpaga.year }}</td>
                 <td>
-                    <input id="{{cuotaImpaga.month}}" type="file" @change="seSubioComprobante">
-                    <button>Pagar</button>
+                    <button class="btn btn-primary" type="button">
+                        <RouterLink class="mx-2 text-white" aria-current="page" :to="{
+                            name: 'pagar', params:
+                                { id: cuotaImpaga.month }
+                        }">Pagar</RouterLink>
+                    </button>
                     <!-- <button class="btn btn-primary" type="button">Subir comprobante</button>-->
                 </td>
             </tr>
@@ -46,21 +50,16 @@ export default {
         return {
             cuotasImpagas: [],
             errors: [],
-            campos: ["Total", "Mes de cuota", "Año", "Pagar (subir comprobante .pdf / .png / .jpg)"],
+            campos: ["Total", "Mes de cuota", "Año", "Pagar"],
             porPagina: 5,
             dataPagina: [],
             paginaActual: 1,
-            comprobantes: [],
-            i: 0
+            /*comprobantes: [],
+            i: 0*/
         };
     },
     methods: {
-        seSubioComprobante(event) {
-            console.log("evento ", event)
-            console.log((document.getElementById("5").value).split("\\")[2])
-            this.comprobantes[this.i] = event.target.files[this.i];
-        },
-        comprobanteEsValido() {
+        /*comprobanteEsValido() {
             return (this.comprobantes[this.i].name.includes("jpg")
                 || this.comprobantes[this.i].name.includes("pdf")
                 || this.comprobantes[this.i].name.includes("png"))
@@ -93,7 +92,7 @@ export default {
                         this.errors.push(e);
                     });
             }
-        },
+        },*/
         getTotalPaginas() {    // Redondeo por si da con decimales
             return Math.ceil(this.cuotasImpagas.length / this.porPagina);
         },
