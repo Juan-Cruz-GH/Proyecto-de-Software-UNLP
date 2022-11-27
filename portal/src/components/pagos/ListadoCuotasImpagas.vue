@@ -14,16 +14,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr style="text-align: center;" v-for="cuotaImpaga in dataPagina">
+            <tr style="text-align: center;" v-for="cuotaImpaga, i in dataPagina">
                 <td>$ {{ cuotaImpaga.amount }}</td>
                 <td>{{ cuotaImpaga.month }}</td>
                 <td>{{ cuotaImpaga.year }}</td>
                 <td>
-                    <input type="file" @change="subirComprobante">
+                    <input id="{{cuotaImpaga.month}}" type="file" @change="seSubioComprobante">
+                    <button>Pagar</button>
                     <!-- <button class="btn btn-primary" type="button">Subir comprobante</button>-->
-                </td>
-                <td v-if="subioComprobante()">
-                    <button v-on:click="pagar(cuotaImpaga)" class="btn btn-primary" type="button">Pagar</button>
                 </td>
             </tr>
         </tbody>
@@ -48,45 +46,53 @@ export default {
         return {
             cuotasImpagas: [],
             errors: [],
-            campos: ["Total", "Mes de cuota", "Año", "Subir comprobante", "Pagar"],
+            campos: ["Total", "Mes de cuota", "Año", "Pagar (subir comprobante .pdf / .png / .jpg)"],
             porPagina: 5,
             dataPagina: [],
             paginaActual: 1,
-            comprobante: null
+            comprobantes: [],
+            i: 0
         };
     },
     methods: {
+        seSubioComprobante(event) {
+            console.log("evento ", event)
+            console.log((document.getElementById("5").value).split("\\")[2])
+            this.comprobantes[this.i] = event.target.files[this.i];
+        },
+        comprobanteEsValido() {
+            return (this.comprobantes[this.i].name.includes("jpg")
+                || this.comprobantes[this.i].name.includes("pdf")
+                || this.comprobantes[this.i].name.includes("png"))
+        },
         pagar(cuotaImpaga) {
-            function getCookie(name) {
-                const value = `; ${document.cookie}`;
-                const parts = value.split(`; ${name}=`);
-                if (parts.length === 2) return parts.pop().split(';').shift();
+            if (this.comprobanteEsValido) {
+                function getCookie(name) {
+                    const value = `; ${document.cookie}`;
+                    const parts = value.split(`; ${name}=`);
+                    if (parts.length === 2) return parts.pop().split(';').shift();
+                }
+                let archivo = comprobante.target.files[0];
+                if (archivo.name.includes("jpg") || archivo.name.includes("pdf") || archivo.name.includes("png")) {
+                    this.comprobante = comprobante;
+                }
+                console.log(this.comprobante)
+                const options = {
+                    credentials: 'same-origin',
+                    headers: {
+                        'X-CSRF-TOKEN': getCookie('csrf_access_token'),
+                    },
+                };
+                apiService
+                    .post("/api/me/payments", options)
+                    .then(() => {
+                        window.location.reload();
+                        this.getDataPagina(1);
+                    })
+                    .catch((e) => {
+                        this.errors.push(e);
+                    });
             }
-            const options = {
-                credentials: 'same-origin',
-                headers: {
-                    'X-CSRF-TOKEN': getCookie('csrf_access_token'),
-                },
-            };
-            apiService
-                .post("/api/me/payments", options)
-                .then((response) => {
-                    this.cuotasImpagas = response.data;
-                    this.getDataPagina(1);
-                })
-                .catch((e) => {
-                    this.errors.push(e);
-                });
-        },
-        subirComprobante(comprobante) {
-            // el comprobante debe ser jpg pdf o png
-            let archivo = comprobante.target.files[0];
-            if (archivo.name.includes("jpg") || archivo.name.includes("pdf") || archivo.name.includes("png")) {
-                this.comprobante = comprobante;
-            }
-        },
-        subioComprobante() {
-            return this.comprobante != null;
         },
         getTotalPaginas() {    // Redondeo por si da con decimales
             return Math.ceil(this.cuotasImpagas.length / this.porPagina);
