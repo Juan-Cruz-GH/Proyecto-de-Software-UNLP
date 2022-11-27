@@ -19,11 +19,13 @@
                 <td>{{ cuotaImpaga.month }}</td>
                 <td>{{ cuotaImpaga.year }}</td>
                 <td>
-                    <input type="file" @change="subirComprobante">
-                    <!-- <button class="btn btn-primary" type="button">Subir comprobante</button>-->
-                </td>
-                <td v-if="subioComprobante()">
-                    <button v-on:click="pagar(cuotaImpaga)" class="btn btn-primary" type="button">Pagar</button>
+                    <button class="btn btn-primary" type="button">
+                        <RouterLink class="mx-2 text-white" aria-current="page" :to="
+                        {
+                            name: 'pagar',
+                            query: { month: cuotaImpaga.month, amount: cuotaImpaga.amount }
+                        }">Pagar</RouterLink>
+                    </button>
                 </td>
             </tr>
         </tbody>
@@ -48,35 +50,13 @@ export default {
         return {
             cuotasImpagas: [],
             errors: [],
-            campos: ["Total", "Mes de cuota", "Año", "Subir comprobante", "Pagar"],
+            campos: ["Total", "Mes de cuota", "Año", "Pagar"],
             porPagina: 5,
             dataPagina: [],
             paginaActual: 1,
-            comprobante: null
         };
     },
     methods: {
-        pagar(cuotaImpaga) {
-            apiService
-                .post("/api/me/payments")
-                .then((response) => {
-                    this.cuotasImpagas = response.data;
-                    this.getDataPagina(1);
-                })
-                .catch((e) => {
-                    this.errors.push(e);
-                });
-        },
-        subirComprobante(comprobante) {
-            // el comprobante debe ser jpg pdf o png
-            let archivo = comprobante.target.files[0];
-            if (archivo.name.includes("jpg") || archivo.name.includes("pdf") || archivo.name.includes("png")) {
-                this.comprobante = comprobante;
-            }
-        },
-        subioComprobante() {
-            return this.comprobante != null;
-        },
         getTotalPaginas() {    // Redondeo por si da con decimales
             return Math.ceil(this.cuotasImpagas.length / this.porPagina);
         },
@@ -102,8 +82,6 @@ export default {
         estaActiva(numPagina) {
             return numPagina == this.paginaActual ? "active" : "";
         }
-    },
-    computed: {
     },
     created() {
         apiService
