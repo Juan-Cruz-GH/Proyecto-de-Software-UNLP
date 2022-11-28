@@ -39,7 +39,6 @@ import { RouterLink, RouterView } from "vue-router";
                     {{ authSocio.nombre }} {{ authSocio.apellido }}
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a class="dropdown-item" href="#">Perfil</a></li>
                     <li><a class="dropdown-item" @click="logout">Cerrar Sesion</a></li>
                   </ul>
                 </li>
