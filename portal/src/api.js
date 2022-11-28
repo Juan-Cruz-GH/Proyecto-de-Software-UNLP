@@ -8,4 +8,7 @@ const apiService = axios.create({
   xsrfCookieName: "csrf_access_token",
 });
 
+apiService.defaults.xsrfCookieName = 'csrf_access_token';
+apiService.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';
+
 export { apiService };

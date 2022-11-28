@@ -13,7 +13,7 @@ class Config(object):
     JWT_TOKEN_LOCATION = ["cookies"]
     JWT_ACCESS_COOKIE_NAME = "access_token_cookie"
     JWT_ACCESS_TOKEN_EXPIRES = False
-    JWT_ACCESS_CSRF_HEADER_NAME = "csrf_access_token"
+    JWT_ACCESS_CSRF_HEADER_NAME = "X-CSRF-TOKEN"
     JWT_COOKIE_DOMAIN = "https://admin-grupo23.proyecto2022.linti.unlp.edu.ar"
     #JWT_COOKIE_CSRF_PROTECT = False
     # Desactivar CSRF para testear API POST de registrar pagos
