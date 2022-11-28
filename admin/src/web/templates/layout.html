@@ -34,7 +34,9 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <li><a class="dropdown-item" href="{{ url_for('socios.socio_index') }}">Ver Socios</a></li>
+                {% if permiso(session["user"], "socio_new")%}
                 <li><a class="dropdown-item" href="{{ url_for('socios.form_socio') }}">Agregar Socio</a></li>
+                {% endif %}
               </ul>
             </li>
             <li class="nav-item dropdown">
