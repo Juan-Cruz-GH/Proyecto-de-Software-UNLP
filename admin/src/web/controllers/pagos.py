@@ -1,11 +1,10 @@
 import json
 
-from flask import Blueprint, render_template, request, Response, session, abort, flash
+from flask import Blueprint, render_template, request, session, abort, flash
 
 from src.core import configuracion_sistema
 from src.core import socios
 from src.core import pagos
-from src.web.controllers.validators.validator_configuracion import es_entero
 from src.web.helpers.permission import has_permission
 from src.web.exportaciones import recibo_PDF
 from src.decoradores.login import login_requerido
@@ -28,31 +27,8 @@ def pagar_json(json, id):
     """Recibe un json que es una lista con un solo elemento que tendria datos del pago
     los datos son "month" y "amount"."""
     if not configuracion_sistema.get_configuracion_general().activar_pagos:
-        return generar_respuesta("{'error':'Los pagos no estan activados'}", 400, "text")
-
-    if not es_entero(id):
-        return generar_respuesta(
-            "{'error': el id enviado en el header debe ser un entero}", 400, "text"
-        )
-    # diccionario = json[0]
-    pudo_pagar, mensaje = pagos.pagar_con_api(json, id)
-    if pudo_pagar:
-        return generar_respuesta(
-            "{'month':'"
-            + str(json["month"])
-            + "', 'amount':'"
-            + str(json["amount"])
-            + "'}",
-            201,
-            "application/json",
-        )
-    return generar_respuesta("{'error':'" + mensaje + "'}", 400, "text")
-
-
-def generar_respuesta(respuesta_json, codigo, tipo_respuesta):
-    """Genera una respuesta a los pedidos a la api POST de pagos, recibe un json,
-    el codigo que devuelve el servidor y el tipo de respuesta que envia"""
-    return Response(respuesta_json, status=codigo, mimetype=tipo_respuesta)
+        return False
+    return pagos.pagar_con_api(json, id)
 
 
 @pago_blueprint.route("/socioPagos/<id>/")
