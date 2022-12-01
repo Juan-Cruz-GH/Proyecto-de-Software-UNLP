@@ -1,8 +1,13 @@
 <template>
-    <div v-if="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div v-if="errorArchivo" class="alert alert-danger alert-dismissible fade show" role="alert">
         No se subió el comprobante o su formato es incorrecto.
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
-            v-on:click="swapEsconder"></button>
+            v-on:click="swapEsconderArchivo"></button>
+    </div>
+    <div v-if="errorPOST" class="alert alert-danger alert-dismissible fade show" role="alert">
+        No se pudo realizar el pago.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+            v-on:click="swapEsconderPOST"></button>
     </div>
     <h1 style="text-align:center">
         <strong>Pagar</strong>
@@ -21,12 +26,16 @@ export default {
             cuota: null,
             comprobante: null,
             extension: "",
-            error: false
+            errorArchivo: false,
+            errorPOST: false
         };
     },
     methods: {
-        swapEsconder() {
-            this.error = false;
+        swapEsconderArchivo() {
+            this.errorArchivo = false;
+        },
+        swapEsconderPOST() {
+            this.errorPOST = false;
         },
         seSubeArchivo(event) {
             this.comprobante = event.target.files[0];
@@ -43,6 +52,7 @@ export default {
                 this.error = true;
                 return
             }
+
             const json = JSON.stringify({ month: this.$route.query.month, amount: this.$route.query.amount })
             const options = {
                 headers: {
@@ -55,6 +65,7 @@ export default {
                     this.$router.push("/pagos");
                 })
                 .catch((e) => {
+                    this.errorPOST = true;
                     console.log(e);
                 });
         }
