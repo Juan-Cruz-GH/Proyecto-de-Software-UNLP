@@ -9,48 +9,45 @@ from src.web.controllers import configuracion_sistema
 from src.web.controllers import pagos
 from src.web.controllers.socios import json_informacion_socio
 from src.web.controllers.validators import validator_usuario
+from src.web.controllers.validators import validator_pagos
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
+
+
+def make_response_json(data, code=200):
+    response = make_response(data, code)
+    response.headers["Content-Type"] = "application/json"
+    return response
 
 
 @api_blueprint.get("/club/disciplinas")
 def obtener_disciplinas():
     """Retorna un json con todas las disciplinas que se practican en el club"""
-    respuesta = make_response(disciplinas.disciplina_json(), 200)
-    respuesta.headers["Content-Type"] = "application/json"
-    return respuesta
+    return make_response_json(disciplinas.disciplina_json())
 
 
 @api_blueprint.get("/club/socios-años")
 def socios_por_año():
     """Retorna un json con la cantidad de socios por año"""
-    respuesta = make_response(socios.socios_por_año(), 200)
-    respuesta.headers["Content-Type"] = "application/json"
-    return respuesta
+    return make_response_json(socios.socios_por_año())
 
 
 @api_blueprint.get("/club/socios-genero")
 def socios_genero():
     """Retorna un json con la cantidad de socios por genero"""
-    respuesta = make_response(socios.socios_genero(), 200)
-    respuesta.headers["Content-Type"] = "application/json"
-    return respuesta
+    return make_response_json(socios.socios_genero())
 
 
 @api_blueprint.get("/club/socios-disciplinas")
 def obtener_socios_disciplinas():
     """Retorna un json con los socios por disciplinas"""
-    respuesta = make_response(disciplinas.disciplinas_socios(), 200)
-    respuesta.headers["Content-Type"] = "application/json"
-    return respuesta
+    return make_response_json(disciplinas.disciplinas_socios())
 
 
 @api_blueprint.get("/club/info")
 def obtener_info_club():
     """Retorna el json con la información de contacto del club"""
-    respuesta = make_response(configuracion_sistema.info_contacto_json(), 200)
-    respuesta.headers["Content-Type"] = "application/json"
-    return respuesta
+    return make_response_json(configuracion_sistema.info_contacto_json())
 
 
 @api_blueprint.get("/me/disciplinas")
@@ -58,9 +55,7 @@ def obtener_info_club():
 def obtener_disciplinas_socio():
     """Retorna el json con todas las disciplinas que realiza
     el socio que está logueado actualmente en la app pública (JWT)"""
-    respuesta = make_response(socios.disciplinas_socio(get_jwt_identity()), 200)
-    respuesta.headers["Content-Type"] = "application/json"
-    return respuesta
+    return make_response_json(socios.disciplinas_socio(get_jwt_identity()))
 
 
 @api_blueprint.get("/me/license")
@@ -68,17 +63,7 @@ def obtener_disciplinas_socio():
 def obtener_info_y_estado_socio():
     """Retorna el json con el estado de credencial y los datos
     del socio que está logueado actualmente en la app pública (JWT)"""
-    respuesta = make_response(socios.json_estado_socio(get_jwt_identity()), 200)
-    respuesta.headers["Content-Type"] = "application/json"
-    return respuesta
-
-
-@api_blueprint.get("/me/profile")
-@jwt_required()
-def obtener_info_socio():
-    """Retorna el json con todos los datos
-    del socio que está logueado actualmente en la app pública (JWT)"""
-    pass
+    return make_response_json(socios.json_estado_socio(get_jwt_identity()))
 
 
 @api_blueprint.get("/me/payments")
@@ -86,9 +71,7 @@ def obtener_info_socio():
 def obtener_pagos_socio():
     """Retorna la lista de pagos registrados
     del socio que está logueado actualmente en la app pública (JWT)"""
-    respuesta = make_response(pagos.pagos_json(get_jwt_identity()), 200)
-    respuesta.headers["Content-Type"] = "application/json"
-    return respuesta
+    return make_response_json(pagos.pagos_json(get_jwt_identity()))
 
 
 @api_blueprint.get("/me/pending_payments")
@@ -96,9 +79,7 @@ def obtener_pagos_socio():
 def obtener_pagos_adeudados_socio():
     """Retorna la lista de pagos adeudados
     del socio que está logueado actualmente en la app pública (JWT)"""
-    respuesta = make_response(pagos.pagos_adeudados_json(get_jwt_identity()), 200)
-    respuesta.headers["Content-Type"] = "application/json"
-    return respuesta
+    return make_response_json(pagos.pagos_adeudados_json(get_jwt_identity()))
 
 
 @api_blueprint.post("/me/payments")
@@ -106,10 +87,11 @@ def obtener_pagos_adeudados_socio():
 def registrar_pago_socio():
     """Registra un nuevo pago para
     el socio que está logueado actualmente en la app pública (JWT)"""
-    pagos_json = pagos.pagar_json(request.get_json(), get_jwt_identity())
-    respuesta = make_response(pagos_json, 200)
-    respuesta.headers["Content-Type"] = "application/json"
-    return respuesta
+    if not validator_pagos.validar_inputs(request.get_json()):
+        return make_response({"Error": "El request fue incorrecto."}, 400)
+    if not pagos.pagar_json(request.get_json(), get_jwt_identity()):
+        return make_response({"Error": "La cuota o el mes no existen."}, 404)
+    return make_response_json({"msg": "Pago exitoso."}, 201)
 
 
 @api_blueprint.post("/auth")
@@ -130,9 +112,9 @@ def auth():
     if socio is None:
         return jsonify(message="Credenciales Invalidas"), 400
     access_token = create_access_token(identity=socio.id)
-    response = jsonify(access_token)
+    response = jsonify(token=access_token)
     set_access_cookies(response, access_token)
-    return response, 201
+    return make_response_json(response, 201)
 
 
 @api_blueprint.get("/logout_publico")
