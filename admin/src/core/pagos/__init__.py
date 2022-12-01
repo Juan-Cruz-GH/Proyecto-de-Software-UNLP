@@ -1,4 +1,5 @@
 from datetime import datetime, date
+from src.core.socios import check_fecha_cuota_es_presente_o_pasada
 
 from src.core import socios
 from src.core import configuracion_sistema
@@ -27,6 +28,7 @@ def listar_pagos_diccionario(id):
             pagos_pagados.append(diccionario)
     return pagos_pagados
 
+def pago
 
 def listar_pagos_adeudados_diccionario(id):
     """devuelve un diccionario con los pagos adeudados de un socio
@@ -37,7 +39,7 @@ def listar_pagos_adeudados_diccionario(id):
     todos_los_pagos = socio.pagos
     pagos_adeudados = []
     for pago in todos_los_pagos:
-        if pago.estado != True:
+        if pago.estado != True and check_fecha_cuota_es_presente_o_pasada(pago):
             diccionario = {
                 "month": pago.nro_cuota,
                 "amount": calcular_cuota(pago.id, socio.id),
