@@ -68,8 +68,8 @@ def pagar_con_api(diccionario, id):
             pago.fecha_pago = datetime.now()
             pago.estado = True
             db.session.commit()
-            return True, "El pago se realizo con exito"
-    return False, "No se pudo realizar el pago"
+            return True
+    return False
 
 
 def get_cuota(id):
