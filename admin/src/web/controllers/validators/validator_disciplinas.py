@@ -42,13 +42,13 @@ def costo_es_negativo(costo):
     return int(costo) < 0
 
 
+def costo_fuera_de_rango(costo):
+    return int(costo) > 1000000
+
+
 def nombre_es_valido(nombre):
     return re.fullmatch(r"[A-Za-z ]{1,50}", nombre)
 
 
 def horario_es_valido(horarios):
     return "de" in horarios
-
-
-def costo_fuera_de_rango(costo):
-    return int(costo) > 1000000
