@@ -28,7 +28,6 @@ def listar_pagos_diccionario(id):
             pagos_pagados.append(diccionario)
     return pagos_pagados
 
-def pago
 
 def listar_pagos_adeudados_diccionario(id):
     """devuelve un diccionario con los pagos adeudados de un socio
