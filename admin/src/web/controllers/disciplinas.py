@@ -22,6 +22,7 @@ def disciplina_json():
     """Retorna el json con todas las disciplinas"""
     return json.dumps(disciplinas.listar_disciplinas_diccionario())
 
+
 def disciplinas_socios():
     """Retorna un json con la cantidad de socios por disciplina"""
     return json.dumps(disciplinas.socios_habilitados_por_disciplina())
@@ -68,6 +69,9 @@ def disciplina_add():
     """Llama al validador de inputs para validar los inputs del formulario para agregar una disciplina. Si los inputs son validos, valida que la disciplina no exista ya. Si no existe, se la agrega."""
     if not (has_permission(session["user"], "disciplina_new")):
         return abort(403)
+
+    # request.form.get puede retornar None, no ejecutar metodos sin validar
+    # sucede lo mismo en socios, disciplinas y usuarios controller
     data_disciplina = {
         "nombre": request.form.get("nombre").capitalize(),
         "categoria": request.form.get("categoria").capitalize(),
