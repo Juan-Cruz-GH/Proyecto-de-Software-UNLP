@@ -125,9 +125,9 @@ def validar_disciplina_repetida_alta(nombre, categoria):
         Disciplina.query.filter_by(nombre=nombre)
         .filter(Disciplina.categoria == categoria)
         .first()
-    ) is None:
-        return True, "La disciplina no existe aún"
-    return False, "La disciplina ya existe"
+    ) is not None:
+        return False, "La disciplina ya existe"
+    return True, "La disciplina no existe aún"
 
 
 def validar_disciplina_repetida_modificacion(nombre, categoria, id):
@@ -137,6 +137,6 @@ def validar_disciplina_repetida_modificacion(nombre, categoria, id):
         .filter(Disciplina.categoria == categoria)
         .filter(Disciplina.id != id)
         .first()
-    ) is None:
-        return True, "La disciplina no existe aún"
-    return False, "La disciplina ya existe"
+    ) is not None:
+        return False, "La disciplina ya existe"
+    return True, "La disciplina no existe aún"

@@ -88,10 +88,10 @@ def disciplina_add():
     data_disciplina["nombre"] = data_disciplina["nombre"].capitalize()
     data_disciplina["categoria"] = data_disciplina["categoria"].capitalize()
 
-    no_existe, mensaje = disciplinas.validar_disciplina_repetida_alta(
+    existe, mensaje = disciplinas.validar_disciplina_repetida_alta(
         data_disciplina["nombre"], data_disciplina["categoria"]
     )
-    if not no_existe:
+    if existe:
         flash(mensaje)
         return redirect("/disciplinas/alta-disciplina")
     disciplinas.agregar_disciplina(data_disciplina)
@@ -120,12 +120,12 @@ def disciplina_update():
     data_disciplina["nombre"] = data_disciplina["nombre"].capitalize()
     data_disciplina["categoria"] = data_disciplina["categoria"].capitalize()
 
-    no_existe, mensaje = disciplinas.validar_disciplina_repetida_modificacion(
+    existe, mensaje = disciplinas.validar_disciplina_repetida_modificacion(
         data_disciplina["nombre"],
         data_disciplina["categoria"],
         data_disciplina["id"],
     )
-    if not no_existe:
+    if existe:
         flash(mensaje)
         return redirect("/disciplinas/" + data_disciplina["id"])
     disciplinas.modificar_disciplina(data_disciplina)
