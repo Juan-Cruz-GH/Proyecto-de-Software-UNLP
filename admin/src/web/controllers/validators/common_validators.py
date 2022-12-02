@@ -1,2 +1,2 @@
 def is_none(data):
-    return data == None
+    return data is None
