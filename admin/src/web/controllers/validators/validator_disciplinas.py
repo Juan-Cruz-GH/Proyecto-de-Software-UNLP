@@ -1,6 +1,6 @@
 import re
 
-from src.web.controllers.validators.common_validators import is_none
+from src.web.controllers.validators.common_validators import is_none, es_entero
 
 
 def validar_inputs(data):
@@ -11,7 +11,7 @@ def validar_inputs(data):
         return False, "El campo categoría no puede ser nulo"
     if datos_estan_vacios(data):
         return False, "Todos los datos deben llenarse"
-    if not costo_es_numero(data["costo"]):
+    if not es_entero(data["costo"]):
         return False, "El costo debe ser un numero"
     if costo_es_negativo(data["costo"]):
         return False, "El costo no puede ser negativo"
@@ -38,10 +38,6 @@ def datos_estan_vacios(data):
         or data["habilitada"] == ""
     ):
         return True
-
-
-def costo_es_numero(costo):
-    return costo.lstrip("-").isdigit()
 
 
 def costo_es_negativo(costo):
