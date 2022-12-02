@@ -20,6 +20,7 @@ def validar_inputs(data):
         return False, "El encabezado de los recibos es demasiado largo"
     if valor_fuera_de_rango(data["cuota_base"]):
         return False, "La cuota base es demasiado grande"
+    return True, "Los datos son validos"
 
 
 def datos_estan_vacios(data):
