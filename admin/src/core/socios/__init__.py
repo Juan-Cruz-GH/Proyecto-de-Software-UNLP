@@ -4,7 +4,7 @@ from datetime import datetime
 from src.core import configuracion_sistema
 from src.core.socios.socios import Socio
 from src.core.db import db
-from src.colores_api.colores_aleatorios import generar_color
+from src.core.colores_aleatorios import generar_color
 
 
 def agregar_socio(data):

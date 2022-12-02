@@ -3,11 +3,13 @@ from src.core.socios import buscar_socio
 from src.core.socios import socios_habilitados_disciplina
 from src.core.disciplinas.disciplinas import Disciplina
 from src.core.db import db
-from src.colores_api.colores_aleatorios import generar_color
+from src.core.colores_aleatorios import generar_color
+
 
 def nombre_disciplinas():
     """Retorna un json con los socios por disciplina"""
     return Disciplina.query.all()
+
 
 def agregar_disciplina(data):
     """Dar de alta una disciplina en la BD"""
@@ -16,6 +18,7 @@ def agregar_disciplina(data):
     db.session.commit()
     return disciplina
 
+
 def socios_habilitados_por_disciplina():
     """Retorna todos los socios inscriptos en alguna disciplina habilitado"""
     socios = socios_habilitados_disciplina()
@@ -23,14 +26,15 @@ def socios_habilitados_por_disciplina():
     socios_disciplinas = {}
     lista = []
     for disciplina in disciplinas:
-        socios_disciplinas[disciplina.nombre] = {'cantidad': 0, 'color': generar_color()}
+        socios_disciplinas[disciplina.nombre] = {"cantidad": 0, "color": generar_color()}
     for socio in socios:
         for dis_soc in socio.disciplinas:
-            socios_disciplinas[dis_soc.nombre]['cantidad'] = socios_disciplinas[dis_soc.nombre]['cantidad'] + 1
+            socios_disciplinas[dis_soc.nombre]["cantidad"] = (
+                socios_disciplinas[dis_soc.nombre]["cantidad"] + 1
+            )
     for key, value in socios_disciplinas.items():
-        lista.append([key, value['cantidad'], value['color']])
+        lista.append([key, value["cantidad"], value["color"]])
     return lista
-
 
 
 def buscar_disciplina(id):
