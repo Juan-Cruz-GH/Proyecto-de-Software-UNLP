@@ -1,7 +1,3 @@
-## TODO al 25/11 
-* Carnet (Hernán)
-* Terminar pagos (Juan)
-
 ## Logueo del socio en producción
  Email           | Password  |
 | ------------- |:-------------:| -:|
