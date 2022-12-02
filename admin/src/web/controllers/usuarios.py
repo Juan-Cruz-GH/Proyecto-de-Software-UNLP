@@ -43,8 +43,7 @@ def form_usuario():
     """Esta funcion devuelve el template con un formulario para dar de alta un usuario"""
     if not (has_permission(session["user"], "usuario_new")):
         return abort(403)
-    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])
-    }
+    kwargs = {"usuario": usuarios.buscar_usuario_email(session["user"])}
     return render_template("usuarios/alta_usuarios.html", **kwargs)
 
 
@@ -77,7 +76,11 @@ def usuario_add():
         "ROL_OPERADOR": request.form.get("rol_operador"),
     }
     validacion_inputs, mensaje = validator_usuario.validar_inputs(
-        data_usuario["email"], data_usuario["password"], data_rol_usuario
+        data_usuario["email"],
+        data_usuario["password"],
+        data_rol_usuario,
+        data_usuario["nombre"],
+        data_usuario["apellido"],
     )
     if validacion_inputs == False:
         flash(mensaje)
@@ -134,4 +137,3 @@ def usuario_delete(id):
         return abort(403)
     usuarios.eliminar_usuario(id)
     return redirect("/usuarios")
-

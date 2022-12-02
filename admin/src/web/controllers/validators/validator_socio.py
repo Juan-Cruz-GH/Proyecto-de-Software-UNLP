@@ -1,7 +1,15 @@
 import re
 
+from src.web.controllers.validators.common_validators import is_none
+
+
 def validar_inputs(data):
     """Esta funcion valida que los inputs sean del tipo correcto."""
+    if is_none(data["nombre"]):
+        return False, "El campo nombre no puede ser nulo"
+    if is_none(data["apellido"]):
+        return False, "El campo apellido no puede ser nulo"
+
     regex_email = "^[A-Za-z0-9]+[\._]?[A-Za-z0-9]+[@]\w+[.]\w{2,3}$"
     if not (
         data["nombre"] != ""
@@ -47,6 +55,7 @@ def validar_inputs(data):
         return False, "El tipo de documento debe estar dentro de las opciones."
     else:
         return True, "Inputs Validos"
+
 
 def validar_inscripcion(id_socio, id_disciplina):
     if not (id_socio.isdigit() and id_disciplina.isdigit()):

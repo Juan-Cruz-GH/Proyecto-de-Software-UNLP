@@ -1,8 +1,14 @@
 import re
 
+from src.web.controllers.validators.common_validators import is_none
+
 
 def validar_inputs(data):
     """Chequea que los datos del formulario sean válidos"""
+    if is_none(data["nombre"]):
+        return False, "El campo nombre no puede ser nulo"
+    if is_none(data["categoria"]):
+        return False, "El campo categoría no puede ser nulo"
     if datos_estan_vacios(data):
         return False, "Todos los datos deben llenarse"
     if not costo_es_numero(data["costo"]):

@@ -15,12 +15,15 @@ from src.decoradores.login import login_requerido
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
 
+
 def json_informacion_socio(id):
     """Devuelve un json con la informacion del socio pasado por id"""
     return json.dumps(socios.informacion_socio(id))
 
+
 def json_estado_socio(id):
     return json.dumps(socios.estado_socio(id))
+
 
 def socios_por_año():
     """Retorna la cantidad de socios por año de los ultimos 7 años"""
@@ -37,9 +40,11 @@ def disciplinas_socio(id):
     """Devuelve un json con todas las disciplinas que realiza el socio con id pasado por parametro"""
     return json.dumps(socios.disciplinas_socio_diccionario(id))
 
+
 def socios_genero():
     """Retorna un json con los socios por genero"""
     return json.dumps(socios.socios_por_sexo())
+
 
 @socio_blueprint.route("/")
 @login_requerido
@@ -94,8 +99,8 @@ def socio_add():
     """Esta funcion llama al metodo correspondiente para dar de alta un socio.
     Si recibe un 1 es porque ese dni ya esta cargado, si devuelve un 2 es porque ese mail ya esta cargado."""
     data_socio = {
-        "nombre": request.form.get("nombre").capitalize(),
-        "apellido": request.form.get("apellido").capitalize(),
+        "nombre": request.form.get("nombre"),
+        "apellido": request.form.get("apellido"),
         "email": request.form.get("email"),
         "password": request.form.get("password"),
         "activo": True,
@@ -115,6 +120,9 @@ def socio_add():
     if not validacion_inputs:
         flash(mensaje)
         return redirect("/socios/alta-socio")
+    data_socio["nombre"] = data_socio["nombre"].capitalize()
+    data_socio["apellido"] = data_socio["apellido"].capitalize()
+
     socio = socios.agregar_socio(data_socio)
     pagos.generar_pagos(socio.id)
     return redirect("/socios")
@@ -130,8 +138,8 @@ def socio_update():
     password = socio.password
     data_socio = {
         "id": request.form.get("id"),
-        "nombre": request.form.get("nombre").capitalize(),
-        "apellido": request.form.get("apellido").capitalize(),
+        "nombre": request.form.get("nombre"),
+        "apellido": request.form.get("apellido"),
         "email": request.form.get("email"),
         "password": password,
         "activo": True,
@@ -147,10 +155,14 @@ def socio_update():
     if not validacion_datos_existentes:
         flash(mensaje)
         return redirect("/socios/" + data_socio["id"])
+
     validacion_inputs, mensaje = validator_socio.validar_inputs(data_socio)
     if not validacion_inputs:
         flash(mensaje)
         return redirect("/socios/" + data_socio["id"])
+    data_socio["nombre"] = data_socio["nombre"].capitalize()
+    data_socio["apellido"] = data_socio["apellido"].capitalize()
+
     socios.modificar_socio(data_socio)
     return redirect("/socios")
 

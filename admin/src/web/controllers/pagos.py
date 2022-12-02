@@ -86,7 +86,7 @@ def generarRecibo(id):
         "recargo": configuracion.porcentaje_recargo,
         "pago": pagos.get_cuota(id),
     }
-    if data_pago["pago"].estado == True:
+    if data_pago["pago"].estado:
         output = recibo_PDF.generar_recibo_PDF(data_pago)
         return output
     else:

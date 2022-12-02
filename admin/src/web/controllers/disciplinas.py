@@ -73,8 +73,8 @@ def disciplina_add():
     # request.form.get puede retornar None, no ejecutar metodos sin validar
     # sucede lo mismo en socios, disciplinas y usuarios controller
     data_disciplina = {
-        "nombre": request.form.get("nombre").capitalize(),
-        "categoria": request.form.get("categoria").capitalize(),
+        "nombre": request.form.get("nombre"),
+        "categoria": request.form.get("categoria"),
         "instructores": request.form.get("instructores"),
         "horarios": request.form.get("horarios"),
         "costo": request.form.get("costo"),
@@ -84,6 +84,10 @@ def disciplina_add():
     if not inputs_validos:
         flash(mensaje)
         return redirect("/disciplinas/alta-disciplina")
+
+    data_disciplina["nombre"] = data_disciplina["nombre"].capitalize()
+    data_disciplina["categoria"] = data_disciplina["categoria"].capitalize()
+
     no_existe, mensaje = disciplinas.validar_disciplina_repetida_alta(
         data_disciplina["nombre"], data_disciplina["categoria"]
     )
@@ -102,8 +106,8 @@ def disciplina_update():
         return abort(403)
     data_disciplina = {
         "id": request.form.get("id"),
-        "nombre": request.form.get("nombre").capitalize(),
-        "categoria": request.form.get("categoria").capitalize(),
+        "nombre": request.form.get("nombre"),
+        "categoria": request.form.get("categoria"),
         "instructores": request.form.get("instructores"),
         "horarios": request.form.get("horarios"),
         "costo": request.form.get("costo"),
@@ -113,6 +117,9 @@ def disciplina_update():
     if not inputs_validos:
         flash(mensaje)
         return redirect("/disciplinas/" + data_disciplina["id"])
+    data_disciplina["nombre"] = data_disciplina["nombre"].capitalize()
+    data_disciplina["categoria"] = data_disciplina["categoria"].capitalize()
+
     no_existe, mensaje = disciplinas.validar_disciplina_repetida_modificacion(
         data_disciplina["nombre"],
         data_disciplina["categoria"],
