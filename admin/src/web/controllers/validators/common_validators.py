@@ -27,8 +27,8 @@ def valor_fuera_de_rango_float(dato, max_value=1_000_000):
     return float(dato) > max_value
 
 
-def valor_fuera_de_rango_entero(dato, valor=1_000_000):
-    return int(dato) > valor
+def valor_fuera_de_rango_entero(dato, max_value=1_000_000):
+    return int(dato) > max_value
 
 
 def valor_es_negativo_entero(costo):
