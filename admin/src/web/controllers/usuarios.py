@@ -129,7 +129,7 @@ def usuario_update():
     )
     if validacion_null:
         flash(mensaje)
-        return redirect("/usuarios/alta-usuario")
+        return redirect("/usuarios/" + data_usuario["id"])
     data_usuario["nombre"] = data_usuario["nombre"].capitalize()
     data_usuario["apellido"] = data_usuario["apellido"].capitalize()
     validacion, mensaje = usuarios.validar_datos_existentes(
