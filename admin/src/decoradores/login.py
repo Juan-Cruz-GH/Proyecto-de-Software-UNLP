@@ -8,9 +8,7 @@ def login_requerido(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        try:
-            session["user"]
-        except KeyError:
+        if "user" not in session:
             abort(401)
         return f(*args, **kwargs)
 
