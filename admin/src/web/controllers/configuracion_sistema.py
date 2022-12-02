@@ -55,80 +55,21 @@ def configuracion_actualizar():
     """
     if not (has_permission(session["user"], "config_update")):
         return abort(403)
-    paginado = {
-        "elementos_pagina": request.form.get("elementos_pagina"),
-    }
     configuracion = {
+        "elementos_pagina": request.form.get("elementos_pagina"),
         "activar_pagos": request.form.get("activar_pagos"),
         "encabezado_recibos": request.form.get("encabezado_recibos"),
         "informacion_contacto": request.form.get("informacion_contacto"),
         "cuota_base": request.form.get("cuota_base"),
         "porcentaje_recargo": request.form.get("porcentaje_recargo"),
     }
-
-    # Sanitizar datos
-    if configuracion["activar_pagos"] == "pagos activados":
-        configuracion["activar_pagos"] = True
-    else:
-        configuracion["activar_pagos"] = False
-    validar = True
-    hubo_error = False
-    validar, mensaje = validator_configuracion.validar_digito(
-        paginado["elementos_pagina"]
+    configuracion["activar_pagos"] = (
+        True if configuracion["activar_pagos"] == "pagos activados" else False
     )
-    if not validar:
-        flash("Elementos por página: " + mensaje)
-        hubo_error = True
-
-    validar, mensaje = validator_configuracion.validar_digito(
-        configuracion["cuota_base"]
-    )
-    if not validar:
-        flash("El valor de la cuota " + mensaje)
-        hubo_error = True
-
-    validar, mensaje = validator_configuracion.validar_digito(
-        configuracion["porcentaje_recargo"]
-    )
-    if not validar:
-        flash("El valor de porcentaje de recargo " + mensaje)
-        hubo_error = True
-
-    validar, mensaje = validator_configuracion.validar_positivo(
-        configuracion["porcentaje_recargo"]
-    )
-    if not validar:
-        flash("El valor de porcentaje de recargo " + mensaje)
-        hubo_error = True
-
-    validar, mensaje = validator_configuracion.validar_positivo(
-        configuracion["cuota_base"]
-    )
-    if not validar:
-        flash("El valor de la cuota " + mensaje)
-        hubo_error = True
-
-    validar, mensaje = validator_configuracion.validar_cadena(
-        configuracion["informacion_contacto"]
-    )
-    if not validar:
-        flash("Informacion de contacto: " + mensaje)
-        hubo_error = True
-
-    validar, mensaje = validator_configuracion.validar_cadena(
-        configuracion["encabezado_recibos"]
-    )
-    if not validar:
-        flash("Encabezado de los recibos: " + mensaje)
-        hubo_error = True
-    validar, mensaje = validator_configuracion.costo_fuera_de_rango(
-        configuracion["cuota_base"]
-    )
-    if validar:
-        flash("Cuota base: " + mensaje)
-        hubo_error = True
-    if hubo_error:
+    inputs_validos, mensaje = validator_configuracion.validar_inputs(configuracion)
+    if not inputs_validos:
+        flash(mensaje)
         return redirect("/configuracion_del_sistema/")
-
+    paginado = {"elementos_pagina": configuracion["elementos_pagina"]}
     configuracion_sistema.modificar_configuracion(configuracion, paginado)
     return redirect("/configuracion_del_sistema/")
