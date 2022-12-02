@@ -117,8 +117,8 @@ def usuario_update():
         estado = usuarios.validar_estado(request.form.get("activo"))
     data_usuario = {
         "id": request.form.get("id"),
-        "nombre": request.form.get("nombre").capitalize(),
-        "apellido": request.form.get("apellido").capitalize(),
+        "nombre": request.form.get("nombre"),
+        "apellido": request.form.get("apellido"),
         "email": request.form.get("email"),
         "activo": estado,
         "username": request.form.get("username"),
@@ -132,6 +132,7 @@ def usuario_update():
         return redirect("/usuarios/" + data_usuario["id"])
     data_usuario["nombre"] = data_usuario["nombre"].capitalize()
     data_usuario["apellido"] = data_usuario["apellido"].capitalize()
+
     validacion, mensaje = usuarios.validar_datos_existentes(
         data_usuario["email"],
         data_usuario["username"],
@@ -143,7 +144,7 @@ def usuario_update():
         return redirect("/usuarios/" + data_usuario["id"])
     else:
         usuarios.modificar_usuario(data_usuario)
-    return redirect("/usuarios")
+    return usuario_index()
 
 
 @usuario_blueprint.route("/eliminar/<id>", methods=["POST", "GET"])
