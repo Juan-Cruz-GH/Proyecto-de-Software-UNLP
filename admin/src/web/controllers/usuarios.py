@@ -64,8 +64,8 @@ def usuario_add():
     """Esta funcion llama al metodo correspondiente para dar de alta un usuario.
     Si recibe un 1 es porque ese dni ya esta cargado, si devuelve un 2 es porque ese mail ya esta cargado."""
     data_usuario = {
-        "nombre": request.form.get("nombre").capitalize(),
-        "apellido": request.form.get("apellido").capitalize(),
+        "nombre": request.form.get("nombre"),
+        "apellido": request.form.get("apellido"),
         "email": request.form.get("email"),
         "activo": True,
         "username": request.form.get("username"),
@@ -79,12 +79,20 @@ def usuario_add():
         data_usuario["email"],
         data_usuario["password"],
         data_rol_usuario,
-        data_usuario["nombre"],
-        data_usuario["apellido"],
     )
     if validacion_inputs == False:
         flash(mensaje)
         return redirect("/usuarios/alta-usuario")
+
+    validacion_null, mensaje = validator_usuario.validate_name_fields_are_null(
+        data_usuario["nombre"], data_usuario["apellido"]
+    )
+    if validacion_null:
+        flash(mensaje)
+        return redirect("/usuarios/alta-usuario")
+    data_usuario["nombre"] = data_usuario["nombre"].capitalize()
+    data_usuario["apellido"] = data_usuario["apellido"].capitalize()
+
     validacion, mensaje = usuarios.validar_datos_existentes(
         data_usuario["email"], data_usuario["username"], "alta"
     )
@@ -115,6 +123,15 @@ def usuario_update():
         "activo": estado,
         "username": request.form.get("username"),
     }
+
+    validacion_null, mensaje = validator_usuario.validate_name_fields_are_null(
+        data_usuario["nombre"], data_usuario["apellido"]
+    )
+    if validacion_null:
+        flash(mensaje)
+        return redirect("/usuarios/alta-usuario")
+    data_usuario["nombre"] = data_usuario["nombre"].capitalize()
+    data_usuario["apellido"] = data_usuario["apellido"].capitalize()
     validacion, mensaje = usuarios.validar_datos_existentes(
         data_usuario["email"],
         data_usuario["username"],
