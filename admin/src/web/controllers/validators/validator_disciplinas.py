@@ -1,6 +1,11 @@
 import re
 
-from src.web.controllers.validators.common_validators import is_none, es_entero
+from src.web.controllers.validators.common_validators import (
+    is_none,
+    is_integer,
+    valor_fuera_de_rango_entero,
+    valor_es_negativo_entero,
+)
 
 
 def validar_inputs(data):
@@ -11,11 +16,11 @@ def validar_inputs(data):
         return False, "El campo categoría no puede ser nulo"
     if datos_estan_vacios(data):
         return False, "Todos los datos deben llenarse"
-    if not es_entero(data["costo"]):
+    if not is_integer(data["costo"]):
         return False, "El costo debe ser un numero"
-    if costo_es_negativo(data["costo"]):
+    if valor_es_negativo_entero(data["costo"]):
         return False, "El costo no puede ser negativo"
-    if costo_fuera_de_rango(data["costo"]):
+    if valor_fuera_de_rango_entero(data["costo"]):
         return False, "El costo no puede superar un millon(1000000)"
     if not nombre_es_valido(data["nombre"]):
         return False, "El nombre de la disciplina no puede tener numeros"
@@ -38,14 +43,6 @@ def datos_estan_vacios(data):
         or data["habilitada"] == ""
     ):
         return True
-
-
-def costo_es_negativo(costo):
-    return int(costo) < 0
-
-
-def costo_fuera_de_rango(costo):
-    return int(costo) > 1000000
 
 
 def nombre_es_valido(nombre):

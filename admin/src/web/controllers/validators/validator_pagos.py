@@ -1,4 +1,4 @@
-from src.web.controllers.validators.common_validators import es_entero
+from src.web.controllers.validators.common_validators import is_integer
 
 
 def validar_inputs(json):
@@ -6,9 +6,9 @@ def validar_inputs(json):
     # el frontend y por tener el jwt_required en la api.
     if datos_estan_vacios(json):
         return False  # El mes y el monto deben estar presentes
-    if not es_entero(json["month"]):
+    if not is_integer(json["month"]):
         return False  # El mes no es un número
-    if not es_entero(json["amount"]):
+    if not is_integer(json["amount"]):
         return False  # El monto no es un número
     if not es_mes(json["month"]):
         return False  # El mes no es un mes
