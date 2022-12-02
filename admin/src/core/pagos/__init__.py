@@ -5,7 +5,7 @@ from src.core import socios
 from src.core import configuracion_sistema
 from src.core.pagos.pagos import Pago
 from src.core.db import db
-from src.web.controllers.validators.validator_configuracion import pago_fuera_de_rango
+from src.web.controllers.validators.validator_configuracion import valor_fuera_de_rango
 
 
 def listar_pagos_diccionario(id):
@@ -130,7 +130,7 @@ def pagar_cuota(id_pago, id_socio):
     cuota = get_cuota(id_pago)
     if cuota.total == 0:
         cuota.total = calcular_cuota(id_pago, id_socio)
-    validar = pago_fuera_de_rango(cuota.total)
+    validar = valor_fuera_de_rango(cuota.total)
     if validar:
         return False
     cuota.fecha_pago = datetime.now()
