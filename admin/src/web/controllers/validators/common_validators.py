@@ -2,13 +2,14 @@ ignored_keys = ["activar_pagos"]
 
 
 def dict_values_are_none(data):
-    for key, value in data.items():
-        if value is None and key not in ignored_keys:
+    for value in data.values():
+        if value is None:
             return True
     return False
 
 
 def dict_values_are_empty(data):
+    """La key activar_pagos puede estar vacía."""
     for key, value in data.items():
         if value == "" and key not in ignored_keys:
             return True
