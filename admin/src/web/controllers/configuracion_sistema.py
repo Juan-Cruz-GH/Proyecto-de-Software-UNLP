@@ -67,9 +67,7 @@ def configuracion_actualizar():
     if not inputs_validos:
         flash(mensaje)
         return redirect("/configuracion_del_sistema/")
-    configuracion["activar_pagos"] = (
-        True if configuracion["activar_pagos"] == "pagos activados" else False
-    )
+    configuracion["activar_pagos"] = configuracion["activar_pagos"] == "pagos activados"
     paginado = {"elementos_pagina": configuracion["elementos_pagina"]}
     configuracion_sistema.modificar_configuracion(configuracion, paginado)
     return redirect("/configuracion_del_sistema/")
