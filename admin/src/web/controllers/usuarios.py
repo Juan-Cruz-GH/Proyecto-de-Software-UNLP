@@ -5,6 +5,7 @@ from flask import Blueprint, render_template, request, flash, redirect, session,
 from src.core import usuarios
 from src.web.helpers.permission import has_permission
 from src.web.controllers.validators import validator_usuario
+from src.web.controllers.validators.common_validators import is_integer
 from src.web.decorators.login import login_requerido
 
 
@@ -51,7 +52,7 @@ def form_usuario():
 @login_requerido
 def usuario_profile(id):
     """Esta funcion llama al modulo correspondiente para obtener a un usuario por su id."""
-    if usuarios.buscar_usuario(id) is None:
+    if (not is_integer(id)) or (usuarios.buscar_usuario(id) is None):
         return abort(404)
     kwargs = {
         "usuario": usuarios.buscar_usuario(id),
@@ -142,7 +143,7 @@ def usuario_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un usuario."""
     if not (has_permission(session["user"], "usuario_destroy")):
         return abort(403)
-    if usuarios.buscar_usuario(id) is None:
+    if (not is_integer(id)) or (usuarios.buscar_usuario(id) is None):
         return abort(404)
     usuarios.eliminar_usuario(id)
     return redirect("/usuarios")

@@ -5,6 +5,7 @@ from flask import Blueprint, render_template, request, redirect, flash, session,
 from src.core import disciplinas
 from src.core import usuarios
 from src.web.controllers.validators import validator_disciplinas
+from src.web.controllers.validators.common_validators import is_integer
 from src.web.helpers.permission import has_permission
 from src.web.decorators.login import login_requerido
 
@@ -54,12 +55,12 @@ def form_disciplina():
 @login_requerido
 def disciplina_profile(id):
     """Busca una disciplina por el id indicado en la URL y devuelve el template con el formulario para modificar una disciplina"""
+    if (not is_integer(id)) or (disciplinas.buscar_disciplina(id) is None):
+        return abort(404)
     kwargs = {
         "disciplina": disciplinas.buscar_disciplina(id),
         "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
-    if kwargs["disciplina"] is None:
-        return abort(404)
     return render_template("disciplinas/perfil_disciplinas.html", **kwargs)
 
 
@@ -137,7 +138,7 @@ def disciplina_delete(id):
     """Le dice al modelo que borre la disciplina enviada"""
     if not (has_permission(session["user"], "disciplina_destroy")):
         return abort(403)
-    if disciplinas.buscar_disciplina(id) is None:
+    if (not is_integer(id)) or (disciplinas.buscar_disciplina(id) is None):
         return abort(404)
     disciplinas.eliminar_disciplina(id)
     return redirect("/disciplinas")

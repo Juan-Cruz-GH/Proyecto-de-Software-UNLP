@@ -11,6 +11,7 @@ from src.web.exportaciones import socios_PDF
 from src.web.helpers.permission import has_permission
 from src.web.controllers.validators import validator_socio
 from src.web.decorators.login import login_requerido
+from src.web.controllers.validators.common_validators import is_integer
 
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")
@@ -84,12 +85,12 @@ def form_socio():
 @login_requerido
 def socio_profile(id):
     """Esta funcion llama al modulo correspondiente para obtener a un socio por su id."""
+    if (not is_integer(id)) or (socios.buscar_socio(id) is None):
+        return abort(404)
     kwargs = {
         "socio": socios.buscar_socio(id),
         "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
-    if kwargs["socio"] is None:
-        return abort(404)
     return render_template("socios/perfil_socio.html", **kwargs)
 
 
@@ -171,7 +172,7 @@ def socio_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un socio."""
     if not (has_permission(session["user"], "socio_destroy")):
         return abort(403)
-    if socios.buscar_socio(id) is None:
+    if (not is_integer(id)) or (socios.buscar_socio(id) is None):
         return abort(404)
     socios.eliminar_socio(id)
     return redirect("/socios")
@@ -221,7 +222,7 @@ def inscripcion_socio(id):
     """Esta funcion retorna el formulario para la inscripcion del socio a una disciplina"""
     if not (has_permission(session["user"], "socio_new")):
         return abort(403)
-    if socios.buscar_socio(id) is None:
+    if (not is_integer(id)) or (socios.buscar_socio(id) is None):
         return abort(404)
     kwargs = {
         "id_socio": id,
