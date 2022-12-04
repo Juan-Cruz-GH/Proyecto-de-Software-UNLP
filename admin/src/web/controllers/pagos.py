@@ -85,7 +85,7 @@ def confirmar_pago(id):
 
 
 @pago_blueprint.route("/descargar_pdf_recibo/<id>")
-def generarRecibo(id):
+def generar_recibo(id):
     """Descarga un recibo en pdf para una cuota pagada"""
     if (not is_integer(id)) or (pagos.get_cuota(id) is None):
         return abort(404)
