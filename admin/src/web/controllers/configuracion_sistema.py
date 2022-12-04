@@ -35,7 +35,7 @@ def configuracion_index():
         paginado = {"paginado": configuracion_sistema.get_paginado()}
         config = {"config": configuracion_sistema.get_configuracion_general()}
 
-    if config["config"].activar_pagos == True:
+    if config["config"].activar_pagos:
         config["config"].activar_pagos = "checked"
     else:
         config["config"].activar_pagos = ""

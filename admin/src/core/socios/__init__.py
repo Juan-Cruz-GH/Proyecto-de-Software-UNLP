@@ -229,7 +229,7 @@ def estado_socio(id):
     }
     for pago in socio.pagos:
         if check_fecha_cuota_es_presente_o_pasada(pago):
-            if pago.estado == False:
+            if not pago.estado:
                 return {
                     "status": "BAD",
                     "description": "El socio registra deuda o sanción.",
@@ -248,7 +248,7 @@ def estado_socio_boolean(id):
     socio = buscar_socio(id)
     for pago in socio.pagos:
         if check_fecha_cuota_es_presente_o_pasada(pago):
-            if pago.estado == False:
+            if not pago.estado:
                 return False
     return True
 
