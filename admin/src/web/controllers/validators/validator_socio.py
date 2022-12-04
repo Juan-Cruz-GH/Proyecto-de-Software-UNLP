@@ -1,30 +1,18 @@
 import re
 
-from src.web.controllers.validators.common_validators import is_none
+from src.web.controllers.validators.common_validators import (
+    dict_values_are_none,
+    dict_values_are_empty,
+)
 
 
 def validar_inputs(data):
     """Esta funcion valida que los inputs sean del tipo correcto."""
-    if is_none(data["nombre"]):
-        return False, "El campo nombre no puede ser nulo"
-    if is_none(data["apellido"]):
-        return False, "El campo apellido no puede ser nulo"
+    if dict_values_are_none(data) or dict_values_are_empty(data):
+        return False, "Todos los datos deben llenarse"
 
     regex_email = "^[A-Za-z0-9]+[\._]?[A-Za-z0-9]+[@]\w+[.]\w{2,3}$"
-    if not (
-        data["nombre"] != ""
-        and data["apellido"] != ""
-        and data["email"] != ""
-        and data["password"] != ""
-        and data["tipo_documento"] != ""
-        and data["dni"] != ""
-        and data["genero"] != ""
-        and data["direccion"] != ""
-        and data["genero"] != ""
-        and data["telefono"] != ""
-    ):
-        return False, "Todos los datos deben estar completos"
-    elif not (data["dni"].isdigit() and data["telefono"].isdigit()):
+    if not (data["dni"].isdigit() and data["telefono"].isdigit()):
         return False, "El telefono y dni deben ser solo numeros, sin guiones ni puntos."
     elif not (
         re.fullmatch(r"[A-Za-z ]{1,50}", data["nombre"])

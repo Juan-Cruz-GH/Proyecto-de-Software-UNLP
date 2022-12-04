@@ -96,30 +96,29 @@ def socio_profile(id):
 @socio_blueprint.route("/alta", methods=["POST"])
 @login_requerido
 def socio_add():
-    """Esta funcion llama al metodo correspondiente para dar de alta un socio.
-    Si recibe un 1 es porque ese dni ya esta cargado, si devuelve un 2 es porque ese mail ya esta cargado."""
+    """Esta funcion llama al metodo correspondiente para dar de alta un socio."""
     data_socio = {
         "nombre": request.form.get("nombre"),
         "apellido": request.form.get("apellido"),
         "email": request.form.get("email"),
         "password": request.form.get("password"),
-        "activo": True,
         "tipo_documento": request.form.get("tipo_documento"),
         "dni": request.form.get("documento"),
         "genero": request.form.get("genero"),
         "direccion": request.form.get("direccion"),
         "telefono": request.form.get("telefono"),
     }
+    validacion_inputs, mensaje = validator_socio.validar_inputs(data_socio)
+    if not validacion_inputs:
+        flash(mensaje)
+        return redirect("/socios/alta-socio")
     validacion, mensaje = socios.validar_datos_existentes(
         data_socio["dni"], data_socio["email"], "alta"
     )
     if not validacion:
         flash(mensaje)
         return redirect("/socios/alta-socio")
-    validacion_inputs, mensaje = validator_socio.validar_inputs(data_socio)
-    if not validacion_inputs:
-        flash(mensaje)
-        return redirect("/socios/alta-socio")
+    data_socio["activo"] = True
     data_socio["nombre"] = data_socio["nombre"].capitalize()
     data_socio["apellido"] = data_socio["apellido"].capitalize()
 
@@ -142,24 +141,23 @@ def socio_update():
         "apellido": request.form.get("apellido"),
         "email": request.form.get("email"),
         "password": password,
-        "activo": True,
         "tipo_documento": request.form.get("tipo_documento"),
         "dni": request.form.get("documento"),
         "genero": request.form.get("genero"),
         "direccion": request.form.get("direccion"),
         "telefono": request.form.get("telefono"),
     }
+    validacion_inputs, mensaje = validator_socio.validar_inputs(data_socio)
+    if not validacion_inputs:
+        flash(mensaje)
+        return redirect("/socios/" + data_socio["id"])
     validacion_datos_existentes, mensaje = socios.validar_datos_existentes(
         data_socio["dni"], data_socio["email"], "modificacion", data_socio["id"]
     )
     if not validacion_datos_existentes:
         flash(mensaje)
         return redirect("/socios/" + data_socio["id"])
-
-    validacion_inputs, mensaje = validator_socio.validar_inputs(data_socio)
-    if not validacion_inputs:
-        flash(mensaje)
-        return redirect("/socios/" + data_socio["id"])
+    data_socio["activo"] = True
     data_socio["nombre"] = data_socio["nombre"].capitalize()
     data_socio["apellido"] = data_socio["apellido"].capitalize()
 
