@@ -21,7 +21,6 @@ def generar_CSV(data_socios):
     for dict in data_socios:
         del dict["password"]
         del dict["photo_path"]
-    print(data_socios)
     si = StringIO()
     with open("socios.csv", "w") as f:
         writer = csv.DictWriter(si, fieldnames=headers)
