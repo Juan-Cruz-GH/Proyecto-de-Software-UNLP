@@ -20,4 +20,4 @@ def validar_inputs(json):
 
 
 def es_mes(mes):
-    return mes in range(1, 13)
+    return int(mes) in range(1, 13)
