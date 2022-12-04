@@ -37,6 +37,8 @@ def pagos_socios(id):
     """Esta funcion retorna todos los pagos asociados al socio solicitado"""
     if not (has_permission(session["user"], "pago_index")):
         return abort(403)
+    if socios.buscar_socio(id) is None:
+        return abort(404)
     page = request.args.get("page", 1, type=int)
     kwargs = {
         "pagos": pagos.listar_pagos_socio(id, page),
@@ -50,6 +52,8 @@ def pagar_cuota(id):
     """Paso de confirmacion antes de cambiar el estado de una cuota impaga a pagada"""
     if not (has_permission(session["user"], "pago_pay")):
         return abort(403)
+    if pagos.get_cuota(id) is None:
+        return abort(404)
     pago = pagos.get_cuota(id)
     if pago.estado:
         return pagos_socios(pago.socio.id)
@@ -67,6 +71,8 @@ def confirmar_pago(id):
     """Cambia el estado de una cuota de impaga a pagada. Persiste la fecha y monto de pago en la base de datos"""
     if not (has_permission(session["user"], "pago_pay")):
         return abort(403)
+    if pagos.get_cuota(id) is None:
+        return abort(404)
     pago = pagos.get_cuota(id)
 
     if not pago.estado:
@@ -86,6 +92,8 @@ def generarRecibo(id):
         "recargo": configuracion.porcentaje_recargo,
         "pago": pagos.get_cuota(id),
     }
+    if data_pago["pago"] is None:
+        return abort(404)
     if data_pago["pago"].estado:
         output = recibo_PDF.generar_recibo_PDF(data_pago)
         return output
