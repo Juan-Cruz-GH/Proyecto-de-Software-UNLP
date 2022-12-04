@@ -31,10 +31,6 @@ def socios_por_año():
     return json.dumps(socios.socios_por_años())
 
 
-def existe_socio(id):
-    return socios.buscar_socio(id) is not None
-
-
 def disciplinas_socio(id):
     """Devuelve un json con todas las disciplinas que realiza el socio con id pasado por parametro"""
     return json.dumps(socios.disciplinas_socio_diccionario(id))

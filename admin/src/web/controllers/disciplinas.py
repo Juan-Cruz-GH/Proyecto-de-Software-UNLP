@@ -13,10 +13,6 @@ from src.web.decorators.login import login_requerido
 disciplina_blueprint = Blueprint("disciplinas", __name__, url_prefix="/disciplinas")
 
 
-def existe_disciplina(id):
-    return disciplinas.buscar_disciplina(id) is not None
-
-
 def disciplina_json():
     """Retorna el json con todas las disciplinas"""
     return json.dumps(disciplinas.listar_disciplinas_diccionario())
