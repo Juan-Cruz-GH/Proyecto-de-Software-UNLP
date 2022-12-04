@@ -1,5 +1,3 @@
-import json
-
 from flask import Blueprint, render_template, request, flash, redirect, session, abort
 
 from src.core import usuarios
