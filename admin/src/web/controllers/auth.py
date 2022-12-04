@@ -16,18 +16,16 @@ def login():
 @auth_blueprint.post("/authenticate")
 def authenticate():
     """Esta funcion realiza la autenticacion de un usuario"""
-    params = request.form
-    validacion, mensaje = validator_usuario.validar_inputs(
-        params["email"], params["password"], {"ROL_ADMINISTRADOR": "ignorar"}
-    )
+    datos = {"email": request.form.get("email"), "password": request.form.get("password")}
+    validacion, mensaje = validator_usuario.validar_inputs_auth(datos)
     if not validacion:
         flash(mensaje, "error")
         return redirect(url_for("auth.login"))
-    user = usuarios.find_user_by_mail_and_pass(params["email"], params["password"])
+    user = usuarios.find_user_by_mail_and_pass(datos["email"], datos["password"])
     if user is None:
         flash("Credenciales invalidas", "error")
         return redirect(url_for("auth.login"))
-    elif user.activo == False:
+    elif not user.activo:
         flash("Usted no tiene permitido acceder al sistema", "error")
         return redirect(url_for("auth.login"))
     session["user"] = user.email
