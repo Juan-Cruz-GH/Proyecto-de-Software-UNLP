@@ -6,9 +6,9 @@ from src.core.db import db
 from src.core.colores_aleatorios import generar_color
 
 
-def nombre_disciplinas():
-    """Retorna un json con los socios por disciplina"""
-    return Disciplina.query.all()
+def buscar_disciplina(id):
+    """Devuelve la disciplina con el id indicado"""
+    return Disciplina.query.get(id)
 
 
 def agregar_disciplina(data):
@@ -17,29 +17,6 @@ def agregar_disciplina(data):
     db.session.add(disciplina)
     db.session.commit()
     return disciplina
-
-
-def socios_habilitados_por_disciplina():
-    """Retorna todos los socios inscriptos en alguna disciplina habilitado"""
-    socios = socios_habilitados_disciplina()
-    disciplinas = nombre_disciplinas()
-    socios_disciplinas = {}
-    lista = []
-    for disciplina in disciplinas:
-        socios_disciplinas[disciplina.nombre] = {"cantidad": 0, "color": generar_color()}
-    for socio in socios:
-        for dis_soc in socio.disciplinas:
-            socios_disciplinas[dis_soc.nombre]["cantidad"] = (
-                socios_disciplinas[dis_soc.nombre]["cantidad"] + 1
-            )
-    for key, value in socios_disciplinas.items():
-        lista.append([key, value["cantidad"], value["color"]])
-    return lista
-
-
-def buscar_disciplina(id):
-    """Devuelve la disciplina con el id indicado"""
-    return Disciplina.query.get(id)
 
 
 def modificar_disciplina(data):
@@ -61,15 +38,37 @@ def eliminar_disciplina(id):
     db.session.commit()
 
 
-def relacionar_socio_disciplina(idDisciplina, idSocio):
-    disciplina = buscar_disciplina(idDisciplina)
-    socio = buscar_socio(idSocio)
-    disciplina.socios.append(socio)
+def relacionar_socio_disciplina(id_disciplina, id_socio):
+    disciplina = buscar_disciplina(id_disciplina)
+    disciplina.socios.append(buscar_socio(id_socio))
     db.session.commit()
 
 
 def esta_habilitada(id):
     return buscar_disciplina(id).habilitada
+
+
+def nombres_todas_las_disciplinas():
+    """Devuelve los nombres de todas las disciplinas"""
+    return db.session.query(Disciplina.nombre.distinct()).all()
+
+
+def socios_habilitados_por_disciplina():
+    """Retorna todos los socios inscriptos en alguna disciplina habilitado"""
+    socios = socios_habilitados_disciplina()
+    disciplinas = Disciplina.query.all()
+    socios_disciplinas = {}
+    lista = []
+    for disciplina in disciplinas:
+        socios_disciplinas[disciplina.nombre] = {"cantidad": 0, "color": generar_color()}
+    for socio in socios:
+        for dis_soc in socio.disciplinas:
+            socios_disciplinas[dis_soc.nombre]["cantidad"] = (
+                socios_disciplinas[dis_soc.nombre]["cantidad"] + 1
+            )
+    for key, value in socios_disciplinas.items():
+        lista.append([key, value["cantidad"], value["color"]])
+    return lista
 
 
 def listar_disciplinas_diccionario():
@@ -81,8 +80,8 @@ def listar_disciplinas_diccionario():
         dias_horarios = fila["horarios"].split(" de ")
         diccionario = {
             "name": fila["nombre"],
-            "days": dias_horarios[0],  # hay que consultar con el ayudante
-            "time": dias_horarios[1],  #
+            "days": dias_horarios[0],
+            "time": dias_horarios[1],
             "teacher": fila["instructores"],
             "price": fila["costo"],
             "category": fila["categoria"],
@@ -91,15 +90,10 @@ def listar_disciplinas_diccionario():
     return lista
 
 
-def todas_las_disciplinas():
-    """Devuelve los nombres de todas las disciplinas"""
-    return db.session.query(Disciplina.nombre.distinct()).all()
-
-
 def categorias_de_cada_disciplina():
     """Devuelve un diccionario donde cada clave es una disciplina y su valor es una lista de todas las categorias
     que tiene esa disciplina"""
-    disciplinas = todas_las_disciplinas()
+    disciplinas = nombres_todas_las_disciplinas()
     todas_las_categorias = {}
     for disciplina in disciplinas:
         categorias = (
