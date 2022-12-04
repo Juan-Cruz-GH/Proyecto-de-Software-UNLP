@@ -103,9 +103,7 @@ def auth():
     json = request.get_json()
     if not (("email") in json.keys() and ("password") in json.keys()):
         return jsonify(message="No se envió el email o la password."), 400
-    validacion, mensaje = validator_usuario.validar_inputs_publico(
-        json["email"], json["password"]
-    )
+    validacion, mensaje = validator_usuario.validar_inputs_auth(json)
     if not validacion:
         return jsonify(message=mensaje), 400
     socio = find_socio_by_email_and_pass(json["email"], json["password"])
