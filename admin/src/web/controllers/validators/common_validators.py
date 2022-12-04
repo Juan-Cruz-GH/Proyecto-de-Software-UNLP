@@ -1,5 +1,18 @@
-def is_none(data):
-    return data is None
+ignored_keys = ["activar_pagos"]
+
+
+def dict_values_are_none(data):
+    for key, value in data.items():
+        if value is None and key not in ignored_keys:
+            return True
+    return False
+
+
+def dict_values_are_empty(data):
+    for key, value in data.items():
+        if value == "" and key not in ignored_keys:
+            return True
+    return False
 
 
 def is_integer(dato):
@@ -7,7 +20,6 @@ def is_integer(dato):
 
 
 def is_float(dato):
-    """Valida que un dato sea un flotante. El return devuelve dos objetos: booleano, mensaje"""
     try:
         float(dato)
     except ValueError:
