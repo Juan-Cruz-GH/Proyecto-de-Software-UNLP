@@ -219,7 +219,7 @@ def inscripcion_socio(id):
         return abort(403)
     kwargs = {
         "id_socio": id,
-        "disciplinas": disciplinas.todas_las_disciplinas(),
+        "disciplinas": disciplinas.nombres_todas_las_disciplinas(),
         "categorias": disciplinas.categorias_de_cada_disciplina(),
         "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
