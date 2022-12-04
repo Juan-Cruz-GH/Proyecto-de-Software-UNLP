@@ -55,6 +55,8 @@ def usuario_profile(id):
         "usuario": usuarios.buscar_usuario(id),
         "rol": usuarios.verificar_rol_usuario(id),
     }
+    if kwargs["usuario"] is None:
+        return abort(404)
     return render_template("usuarios/perfil_usuario.html", **kwargs)
 
 
@@ -140,5 +142,7 @@ def usuario_delete(id):
     """Esta funcion llama al metodo correspondiente para eliminar un usuario."""
     if not (has_permission(session["user"], "usuario_destroy")):
         return abort(403)
+    if usuarios.buscar_usuario(id) is None:
+        return abort(404)
     usuarios.eliminar_usuario(id)
     return redirect("/usuarios")

@@ -58,6 +58,8 @@ def disciplina_profile(id):
         "disciplina": disciplinas.buscar_disciplina(id),
         "usuario": usuarios.buscar_usuario_email(session["user"]),
     }
+    if kwargs["disciplina"] is None:
+        return abort(404)
     return render_template("disciplinas/perfil_disciplinas.html", **kwargs)
 
 
@@ -135,5 +137,7 @@ def disciplina_delete(id):
     """Le dice al modelo que borre la disciplina enviada"""
     if not (has_permission(session["user"], "disciplina_destroy")):
         return abort(403)
+    if disciplinas.buscar_disciplina(id) is None:
+        return abort(404)
     disciplinas.eliminar_disciplina(id)
     return redirect("/disciplinas")

@@ -46,8 +46,7 @@ def upload_image(id):
         return abort(403)
     socio = buscar_socio(id)
     if socio is None:
-        flash("No se puede acceder a cargar foto para un socio que no existe")
-        return redirect("/")
+        return abort(404)
 
     form = UploadForm()
     if form.validate_on_submit():
@@ -73,8 +72,7 @@ def view_license(id):
         return abort(403)
     socio = buscar_socio(id)
     if socio is None:
-        flash("No se puede ver el carnet de un socio que no existe")
-        return redirect("/")
+        return abort(404)
     kwargs = {
         "url": request.url,
         "socio": socio,
@@ -115,8 +113,7 @@ def carnet_pdf_download(id):
         return abort(403)
     socio = buscar_socio(id)
     if socio is None:
-        flash("No se puede descargar el carnet de un socio que no existe")
-        return redirect("/")
+        return abort(404)
 
     path = image_full_path(get_photo_socio(id))
     kwargs = {
