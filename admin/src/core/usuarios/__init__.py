@@ -17,8 +17,9 @@ def agregar_usuario(data):
 
 def buscar_usuario(id):
     """Esta funcion busca un usuario por su id"""
-    usuario = Usuario.query.get(id)
-    return usuario
+    if int(id) > 2147483647:
+        return None
+    return Usuario.query.get(id)
 
 
 def buscar_usuario_email(email):

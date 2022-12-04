@@ -76,6 +76,8 @@ def pagar_con_api(diccionario, id):
 
 def get_cuota(id):
     """Busca una cuota por id"""
+    if int(id) > 2147483647:
+        return None
     return Pago.query.get(id)
 
 

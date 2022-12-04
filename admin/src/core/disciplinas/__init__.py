@@ -8,6 +8,8 @@ from src.core.colores_aleatorios import generar_color
 
 def buscar_disciplina(id):
     """Devuelve la disciplina con el id indicado"""
+    if int(id) > 2147483647:
+        return None
     return Disciplina.query.get(id)
 
 

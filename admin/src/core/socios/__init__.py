@@ -54,6 +54,8 @@ def socios_habilitados_disciplina():
 
 def buscar_socio(id):
     """Esta funcion busca un socio por su id"""
+    if int(id) > 2147483647:
+        return None
     return Socio.query.get(id)
 
 
