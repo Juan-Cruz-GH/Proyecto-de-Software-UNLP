@@ -265,14 +265,14 @@ def check_fecha_cuota_es_presente_o_pasada(pago):
 
 def save_photo(id, photo_path):
     socio = buscar_socio(id)
-    if socio != None:
+    if socio is not None:
         socio.photo_path = photo_path
         db.session.commit()
 
 
 def get_photo_socio(id):
     socio = buscar_socio(id)
-    if socio != None and socio.photo_path != None:
+    if socio is not None and socio.photo_path is not None:
         return socio.photo_path
     return "/public/uploads/default_photo.jpg"
 

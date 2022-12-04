@@ -22,7 +22,7 @@ class Pago(db.Model):
         self.socio_id = socio_id
         self.nro_cuota = nro_cuota
         self.estado = estado
-        if año_cuota != None:
+        if año_cuota is not None:
             self.año_cuota = año_cuota
 
     def __repr__(self):

@@ -30,7 +30,7 @@ def configuracion_index():
         return abort(403)
     paginado = {"paginado": configuracion_sistema.get_paginado()}
     config = {"config": configuracion_sistema.get_configuracion_general()}
-    if config["config"] == None or paginado["paginado"] == None:
+    if config["config"] is None or paginado["paginado"] is None:
         configuracion_sistema.configuracion_predeterminada()
         paginado = {"paginado": configuracion_sistema.get_paginado()}
         config = {"config": configuracion_sistema.get_configuracion_general()}

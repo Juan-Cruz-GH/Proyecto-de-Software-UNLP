@@ -34,7 +34,7 @@ def configuracion_predeterminada():
 def modificar_configuracion(data, data_paginado):
     # Recuperar cantidad de paginas, si no existe la fila en la db se la crea
     paginado = Configuracion_paginado.query.first()
-    if paginado == None:
+    if paginado is None:
         paginado = Configuracion_paginado(**data_paginado)
         db.session.add(paginado)
     else:
@@ -42,7 +42,7 @@ def modificar_configuracion(data, data_paginado):
 
     # Recuperar configuracion general, si no existe la fila en la db se la crea
     configuracion = Configuracion_general.query.first()
-    if configuracion == None:
+    if configuracion is None:
         configuracion = Configuracion_general(**data)
         db.session.add(configuracion)
     else:

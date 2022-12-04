@@ -45,7 +45,7 @@ def upload_image(id):
     if not (has_permission(session["user"], "carnet_upload")):
         return abort(403)
     socio = buscar_socio(id)
-    if socio == None:
+    if socio is None:
         flash("No se puede acceder a cargar foto para un socio que no existe")
         return redirect("/")
 
@@ -72,7 +72,7 @@ def view_license(id):
     if not (has_permission(session["user"], "carnet_license")):
         return abort(403)
     socio = buscar_socio(id)
-    if socio == None:
+    if socio is None:
         flash("No se puede ver el carnet de un socio que no existe")
         return redirect("/")
     kwargs = {
@@ -114,7 +114,7 @@ def carnet_pdf_download(id):
     if not (has_permission(session["user"], "carnet_download")):
         return abort(403)
     socio = buscar_socio(id)
-    if socio == None:
+    if socio is None:
         flash("No se puede descargar el carnet de un socio que no existe")
         return redirect("/")
 
