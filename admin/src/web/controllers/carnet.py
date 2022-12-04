@@ -5,7 +5,6 @@ from flask import (
     flash,
     url_for,
     session,
-    redirect,
     send_from_directory,
     url_for,
     abort,
