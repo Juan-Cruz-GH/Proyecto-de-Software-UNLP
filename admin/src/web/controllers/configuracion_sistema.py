@@ -44,7 +44,7 @@ def configuracion_index():
     return render_template("configuracion_sistema/configuracion_sistema.html", **kwargs)
 
 
-@configuracion_sistema_blueprint.route("/update", methods=["POST"])
+@configuracion_sistema_blueprint.post("/update")
 @login_requerido
 def configuracion_actualizar():
     """

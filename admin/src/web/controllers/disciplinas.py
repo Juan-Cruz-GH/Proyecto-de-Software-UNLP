@@ -13,9 +13,7 @@ disciplina_blueprint = Blueprint("disciplinas", __name__, url_prefix="/disciplin
 
 
 def existe_disciplina(id):
-    if disciplinas.buscar_disciplina(id) is None:
-        return False
-    return True
+    return disciplinas.buscar_disciplina(id) is not None
 
 
 def disciplina_json():
@@ -63,15 +61,12 @@ def disciplina_profile(id):
     return render_template("disciplinas/perfil_disciplinas.html", **kwargs)
 
 
-@disciplina_blueprint.route("/alta", methods=["POST"])
+@disciplina_blueprint.post("/alta")
 @login_requerido
 def disciplina_add():
     """Llama al validador de inputs para validar los inputs del formulario para agregar una disciplina. Si los inputs son validos, valida que la disciplina no exista ya. Si no existe, se la agrega."""
     if not (has_permission(session["user"], "disciplina_new")):
         return abort(403)
-
-    # request.form.get puede retornar None, no ejecutar metodos sin validar
-    # sucede lo mismo en socios, disciplinas y usuarios controller
     data_disciplina = {
         "nombre": request.form.get("nombre"),
         "categoria": request.form.get("categoria"),
@@ -99,7 +94,7 @@ def disciplina_add():
     return redirect("/disciplinas")
 
 
-@disciplina_blueprint.route("/modificacion", methods=["POST"])
+@disciplina_blueprint.post("/modificacion")
 @login_requerido
 def disciplina_update():
     """Llama al validador de inputs para validar los inputs del formulario para modificar una disciplina. Si los inputs son validos, valida que la disciplina no exista ya. Si no existe, se la modifica."""
