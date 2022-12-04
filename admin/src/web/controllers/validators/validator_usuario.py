@@ -20,17 +20,9 @@ def validar_inputs_add(data, roles):
     return validar_email(data["email"])
 
 
-def validar_inputs_update(data):
+def validar_inputs(data):
     """Esta funcion valida que los inputs sean
-    del tipo correcto durante la modificación."""
-    if dict_values_are_none(data) or dict_values_are_empty(data):
-        return False, "Todos los datos deben llenarse"
-    return validar_email(data["email"])
-
-
-def validar_inputs_auth(data):
-    """Esta funcion valida que los inputs
-    del login publico sean del tipo correcto"""
+    del tipo correcto durante la modificación o el auth."""
     if dict_values_are_none(data) or dict_values_are_empty(data):
         return False, "Todos los datos deben llenarse"
     return validar_email(data["email"])

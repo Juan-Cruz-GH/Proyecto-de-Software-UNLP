@@ -112,7 +112,7 @@ def usuario_update():
         "email": request.form.get("email"),
         "username": request.form.get("username"),
     }
-    validacion_inputs, mensaje = validator_usuario.validar_inputs_update(data_usuario)
+    validacion_inputs, mensaje = validator_usuario.validar_inputs(data_usuario)
     if not validacion_inputs:
         flash(mensaje)
         return redirect("/usuarios/" + data_usuario["id"])

@@ -17,7 +17,7 @@ def login():
 def authenticate():
     """Esta funcion realiza la autenticacion de un usuario"""
     datos = {"email": request.form.get("email"), "password": request.form.get("password")}
-    validacion, mensaje = validator_usuario.validar_inputs_auth(datos)
+    validacion, mensaje = validator_usuario.validar_inputs(datos)
     if not validacion:
         flash(mensaje, "error")
         return redirect(url_for("auth.login"))
