@@ -63,13 +63,13 @@ def configuracion_actualizar():
         "cuota_base": request.form.get("cuota_base"),
         "porcentaje_recargo": request.form.get("porcentaje_recargo"),
     }
-    configuracion["activar_pagos"] = (
-        True if configuracion["activar_pagos"] == "pagos activados" else False
-    )
     inputs_validos, mensaje = validator_configuracion.validar_inputs(configuracion)
     if not inputs_validos:
         flash(mensaje)
         return redirect("/configuracion_del_sistema/")
+    configuracion["activar_pagos"] = (
+        True if configuracion["activar_pagos"] == "pagos activados" else False
+    )
     paginado = {"elementos_pagina": configuracion["elementos_pagina"]}
     configuracion_sistema.modificar_configuracion(configuracion, paginado)
     return redirect("/configuracion_del_sistema/")

@@ -4,11 +4,13 @@ from src.web.controllers.validators.common_validators import (
     validar_longitud,
     is_positive_float,
     is_float,
+    dict_values_are_empty,
+    dict_values_are_none,
 )
 
 
 def validar_inputs(data):
-    if datos_estan_vacios(data):
+    if dict_values_are_none(data) or dict_values_are_empty(data):
         return False, "Todos los datos deben llenarse"
     if not is_integer(data["elementos_pagina"]):
         return False, "Elementos por página debe ser un numero"
@@ -27,15 +29,3 @@ def validar_inputs(data):
     if valor_fuera_de_rango_float(data["cuota_base"]):
         return False, "La cuota base es demasiado grande"
     return True, "Los datos son validos"
-
-
-def datos_estan_vacios(data):
-    """Si alguno de los datos está vacio retorna verdadero"""
-    if (
-        data["elementos_pagina"] == ""
-        or data["encabezado_recibos"] == ""
-        or data["informacion_contacto"] == ""
-        or data["cuota_base"] == ""
-        or data["porcentaje_recargo"] == ""
-    ):
-        return True
