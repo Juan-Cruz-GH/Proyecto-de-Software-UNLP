@@ -67,7 +67,6 @@ def usuario_add():
         "nombre": request.form.get("nombre"),
         "apellido": request.form.get("apellido"),
         "email": request.form.get("email"),
-        "activo": True,
         "username": request.form.get("username"),
         "password": request.form.get("password"),
     }
@@ -75,33 +74,25 @@ def usuario_add():
         "ROL_ADMINISTRADOR": request.form.get("rol_administrador"),
         "ROL_OPERADOR": request.form.get("rol_operador"),
     }
-    validacion_inputs, mensaje = validator_usuario.validar_inputs(
-        data_usuario["email"],
-        data_usuario["password"],
-        data_rol_usuario,
+    validacion_inputs, mensaje = validator_usuario.validar_inputs_add(
+        data_usuario, data_rol_usuario
     )
-    if validacion_inputs == False:
+    if not validacion_inputs:
         flash(mensaje)
         return redirect("/usuarios/alta-usuario")
 
-    validacion_null, mensaje = validator_usuario.validate_name_fields_are_null(
-        data_usuario["nombre"], data_usuario["apellido"]
-    )
-    if validacion_null:
-        flash(mensaje)
-        return redirect("/usuarios/alta-usuario")
+    data_usuario["activo"] = True
     data_usuario["nombre"] = data_usuario["nombre"].capitalize()
     data_usuario["apellido"] = data_usuario["apellido"].capitalize()
 
     validacion, mensaje = usuarios.validar_datos_existentes(
         data_usuario["email"], data_usuario["username"], "alta"
     )
-    if validacion == False:
+    if not validacion:
         flash(mensaje)
         return redirect("/usuarios/alta-usuario")
-    else:
-        usuario = usuarios.agregar_usuario(data_usuario)
-        usuarios.agregar_roles(usuario, data_rol_usuario)
+    usuario = usuarios.agregar_usuario(data_usuario)
+    usuarios.agregar_roles(usuario, data_rol_usuario)
     return redirect("/usuarios")
 
 
@@ -120,16 +111,14 @@ def usuario_update():
         "nombre": request.form.get("nombre"),
         "apellido": request.form.get("apellido"),
         "email": request.form.get("email"),
-        "activo": estado,
         "username": request.form.get("username"),
     }
-
-    validacion_null, mensaje = validator_usuario.validate_name_fields_are_null(
-        data_usuario["nombre"], data_usuario["apellido"]
-    )
-    if validacion_null:
+    validacion_inputs, mensaje = validator_usuario.validar_inputs_update(data_usuario)
+    if not validacion_inputs:
         flash(mensaje)
         return redirect("/usuarios/" + data_usuario["id"])
+
+    data_usuario["activo"] = estado
     data_usuario["nombre"] = data_usuario["nombre"].capitalize()
     data_usuario["apellido"] = data_usuario["apellido"].capitalize()
 
@@ -139,12 +128,11 @@ def usuario_update():
         "modificacion",
         data_usuario["id"],
     )
-    if validacion == False:
+    if not validacion:
         flash(mensaje)
         return redirect("/usuarios/" + data_usuario["id"])
-    else:
-        usuarios.modificar_usuario(data_usuario)
-    return usuario_index()
+    usuarios.modificar_usuario(data_usuario)
+    return redirect("/usuarios")
 
 
 @usuario_blueprint.route("/eliminar/<id>", methods=["POST", "GET"])

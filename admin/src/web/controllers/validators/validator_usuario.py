@@ -1,35 +1,43 @@
 import re
 
-from src.web.controllers.validators.common_validators import is_none
+from src.web.controllers.validators.common_validators import (
+    dict_values_are_none,
+    dict_values_are_empty,
+)
+
+REGEX_EMAIL = "^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$"
 
 
-def validate_name_fields_are_null(nombre, apellido):
-    if is_none(nombre):
-        return True, "El campo nombre  no puede ser nulo"
-    if is_none(apellido):
-        return True, "El campo apellido  no puede ser nulo"
-    return False, "Los campos no son nulo"
-
-
-def validar_inputs(email, password, data_rol):
-    """Esta funcion valida que los inputs sean del tipo correcto."""
-    regex_email = "^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$"
-    if not (email != "" and password != ""):
-        return False, "Todos los datos deben estar completos"
-    elif not (re.search(regex_email, email)):
-        return False, "El email debe ser valido"
-    elif data_rol["ROL_ADMINISTRADOR"] is None and data_rol["ROL_OPERADOR"] is None:
+def validar_inputs_add(data, roles):
+    """Esta funcion valida que los inputs sean
+    del tipo correcto durante la adición."""
+    if dict_values_are_none(data) or dict_values_are_empty(data):
+        return False, "Todos los datos deben llenarse"
+    if roles["ROL_OPERADOR"] is None and roles["ROL_ADMINISTRADOR"] is None:
         return False, "Se debe seleccionar un rol"
-    else:
-        return True, "Credenciales validas"
+    if roles["ROL_OPERADOR"] == "" and roles["ROL_ADMINISTRADOR"] == "":
+        return False, "Se debe seleccionar un rol"
+    return validar_email(data["email"])
 
 
-def validar_inputs_publico(email, password):
-    """Esta funcion valida que los inputs del login publico sean del tipo correcto"""
-    regex_email = "^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$"
-    if not (email != "" and password != ""):
-        return False, "Todos los datos deben estar completos"
-    elif not (re.search(regex_email, email)):
+def validar_inputs_update(data):
+    """Esta funcion valida que los inputs sean
+    del tipo correcto durante la modificación."""
+    if dict_values_are_none(data) or dict_values_are_empty(data):
+        return False, "Todos los datos deben llenarse"
+    return validar_email(data["email"])
+
+
+def validar_inputs_auth(data):
+    """Esta funcion valida que los inputs
+    del login publico sean del tipo correcto"""
+    if dict_values_are_none(data) or dict_values_are_empty(data):
+        return False, "Todos los datos deben llenarse"
+    return validar_email(data["email"])
+
+
+def validar_email(email):
+    if not (re.search(REGEX_EMAIL, email)):
         return False, "El email debe ser valido"
     else:
         return True, "Credenciales validas"
