@@ -53,7 +53,7 @@ Pagos Socio - Club Villa Elisa
         <td>
           <p class="fw-normal mb-1">AR$ {{pago.total}}</p>
         </td>
-        {% if pago.estado == False %}
+        {% if not pago.estado %}
         <td>
           <p class="fw-normal mb-1">Sin Fecha</p>
         </td>
@@ -68,7 +68,7 @@ Pagos Socio - Club Villa Elisa
         <td>
           <p class="fw-normal mb-1">{{pago.año_cuota}}</p>
         </td>
-        {% if pago.estado == False %}
+        {% if not pago.estado %}
         <td>
           <p class="fw-normal mb-1">No Pago</p>
         </td>

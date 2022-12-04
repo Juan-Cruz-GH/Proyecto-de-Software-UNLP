@@ -48,12 +48,12 @@ Modificacion Usuario - Club Villa Elisa
             <input type="email" id="email" name="email" class="form-control" value="{{usuario.email}}" required />
           </div>
         </div>
-        {% if rol != True %}
+        {% if not rol %}
         <div class="col">
           <div class="form-outline">
             <label class="form-label" for="activo">Estado</label>
             <select class="form-control select-input" id="activo" name="activo" required>
-              {% if usuario.activo == true %}
+              {% if usuario.activo %}
               <option value="activo" selected>Activo</option>
               <option value="inactivo">Inactivo</option>
               {% else %}
