@@ -7,7 +7,7 @@ from src.core import socios
 from src.core import pagos
 from src.web.helpers.permission import has_permission
 from src.web.exportaciones import recibo_PDF
-from src.decoradores.login import login_requerido
+from src.web.decorators.login import login_requerido
 
 
 pago_blueprint = Blueprint("pagos", __name__, url_prefix="/pagos")

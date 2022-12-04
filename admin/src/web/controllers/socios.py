@@ -10,7 +10,7 @@ from src.web.exportaciones import socios_CSV
 from src.web.exportaciones import socios_PDF
 from src.web.helpers.permission import has_permission
 from src.web.controllers.validators import validator_socio
-from src.decoradores.login import login_requerido
+from src.web.decorators.login import login_requerido
 
 
 socio_blueprint = Blueprint("socios", __name__, url_prefix="/socios")

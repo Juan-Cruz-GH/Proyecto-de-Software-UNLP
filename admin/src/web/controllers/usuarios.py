@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, flash, redirect, session,
 from src.core import usuarios
 from src.web.helpers.permission import has_permission
 from src.web.controllers.validators import validator_usuario
-from src.decoradores.login import login_requerido
+from src.web.decorators.login import login_requerido
 
 
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")

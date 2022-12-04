@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, flash, session,
 from src.web.helpers.permission import has_permission
 from src.core import configuracion_sistema
 from src.web.controllers.validators import validator_configuracion
-from src.decoradores.login import login_requerido
+from src.web.decorators.login import login_requerido
 
 
 configuracion_sistema_blueprint = Blueprint(

@@ -6,7 +6,7 @@ from src.core import disciplinas
 from src.core import usuarios
 from src.web.controllers.validators import validator_disciplinas
 from src.web.helpers.permission import has_permission
-from src.decoradores.login import login_requerido
+from src.web.decorators.login import login_requerido
 
 
 disciplina_blueprint = Blueprint("disciplinas", __name__, url_prefix="/disciplinas")

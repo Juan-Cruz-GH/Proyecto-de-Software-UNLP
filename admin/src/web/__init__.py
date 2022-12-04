@@ -13,7 +13,7 @@ from src.web.controllers.socios import socio_blueprint
 from src.web.controllers.pagos import pago_blueprint
 from src.web.controllers.auth import auth_blueprint
 from src.web.controllers.carnet import carnet_blueprint
-from src.decoradores.login import login_requerido
+from src.web.decorators.login import login_requerido
 from src.web.helpers import handlers
 from src.web.helpers.permission import has_permission
 from src.web.config import config

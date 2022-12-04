@@ -22,7 +22,7 @@ from src.core.socios import (
 from src.web.exportaciones import carnet_PDF
 from src.web.exportaciones.UploadForm import UploadForm, photos
 from src.web.helpers.permission import has_permission
-from src.decoradores.login import login_requerido
+from src.web.decorators.login import login_requerido
 
 
 carnet_blueprint = Blueprint("carnet", __name__, url_prefix="/carnet")
