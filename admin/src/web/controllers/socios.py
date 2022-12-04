@@ -31,9 +31,7 @@ def socios_por_año():
 
 
 def existe_socio(id):
-    if socios.buscar_socio(id) is None:
-        return False
-    return True
+    return socios.buscar_socio(id) is not None
 
 
 def disciplinas_socio(id):
@@ -93,7 +91,7 @@ def socio_profile(id):
     return render_template("socios/perfil_socio.html", **kwargs)
 
 
-@socio_blueprint.route("/alta", methods=["POST"])
+@socio_blueprint.post("/alta")
 @login_requerido
 def socio_add():
     """Esta funcion llama al metodo correspondiente para dar de alta un socio."""
@@ -127,7 +125,7 @@ def socio_add():
     return redirect("/socios")
 
 
-@socio_blueprint.route("/modificacion", methods=["POST"])
+@socio_blueprint.post("/modificacion")
 @login_requerido
 def socio_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un socio."""
@@ -228,7 +226,7 @@ def inscripcion_socio(id):
     return render_template("/socios/inscripcion_socios.html", **kwargs)
 
 
-@socio_blueprint.route("/inscripcion", methods=["POST"])
+@socio_blueprint.post("/inscripcion")
 @login_requerido
 def add_inscripcion():
     """Esta funcion realiza la inscripcion de un socio a una disciplina"""

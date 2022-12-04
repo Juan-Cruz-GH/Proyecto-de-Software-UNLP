@@ -58,11 +58,10 @@ def usuario_profile(id):
     return render_template("usuarios/perfil_usuario.html", **kwargs)
 
 
-@usuario_blueprint.route("/alta", methods=["POST"])
+@usuario_blueprint.post("/alta")
 @login_requerido
 def usuario_add():
-    """Esta funcion llama al metodo correspondiente para dar de alta un usuario.
-    Si recibe un 1 es porque ese dni ya esta cargado, si devuelve un 2 es porque ese mail ya esta cargado."""
+    """Esta funcion llama al metodo correspondiente para dar de alta un usuario."""
     data_usuario = {
         "nombre": request.form.get("nombre"),
         "apellido": request.form.get("apellido"),
@@ -96,7 +95,7 @@ def usuario_add():
     return redirect("/usuarios")
 
 
-@usuario_blueprint.route("/modificacion", methods=["POST"])
+@usuario_blueprint.post("/modificacion")
 @login_requerido
 def usuario_update():
     """Esta funcion llama al metodo correspondiente para modificar los datos de un usuario."""
