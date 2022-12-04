@@ -1,6 +1,5 @@
 from distutils.command.config import config
 from os import environ
-from datetime import datetime
 
 
 class Config(object):
@@ -15,9 +14,6 @@ class Config(object):
     JWT_ACCESS_TOKEN_EXPIRES = False
     JWT_ACCESS_CSRF_HEADER_NAME = "X-CSRF-TOKEN"
     JWT_COOKIE_DOMAIN = ".proyecto2022.linti.unlp.edu.ar"
-    #JWT_COOKIE_CSRF_PROTECT = False
-    # Desactivar CSRF para testear API POST de registrar pagos
-    # WTF_CSRF_CHECK_DEFAULT = False
 
 
 class ProductionConfig(Config):
