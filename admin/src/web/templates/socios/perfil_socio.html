@@ -89,10 +89,10 @@ Modificacion Socio - Club Villa Elisa
             <label class="form-label" for="genero">Genero</label>
             <select class="form-control select-input" id="genero" name="genero" required>
               <option value="{{socio.genero}}" selected>{{socio.genero}}</option>
-              {% if socio.genero == "femenino" %}
+              {% if socio.genero == "Femenino" or socio.genero == "femenino" %}
               <option value="Masculino">Masculino</option>
               <option value="Otro">Otro</option>
-              {% elif socio.genero == "masculino" %}
+              {% elif socio.genero == "Masculino" or socio.genero == "masculino" %}
               <option value="Femenino">Femenino</option>
               <option value="Otro">Otro</option>
               {% else %}
