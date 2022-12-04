@@ -87,9 +87,7 @@ def disciplina_add():
 
     data_disciplina["nombre"] = data_disciplina["nombre"].capitalize()
     data_disciplina["categoria"] = data_disciplina["categoria"].capitalize()
-    data_disciplina["habilitada"] = (
-        True if data_disciplina["habilitada"] == "Si" else False
-    )
+    data_disciplina["habilitada"] = data_disciplina["habilitada"] == "Si"
 
     existe, mensaje = disciplinas.validar_disciplina_repetida_alta(
         data_disciplina["nombre"], data_disciplina["categoria"]
@@ -122,9 +120,8 @@ def disciplina_update():
         return redirect("/disciplinas/" + data_disciplina["id"])
     data_disciplina["nombre"] = data_disciplina["nombre"].capitalize()
     data_disciplina["categoria"] = data_disciplina["categoria"].capitalize()
-    data_disciplina["habilitada"] = (
-        True if data_disciplina["habilitada"] == "Si" else False
-    )
+    data_disciplina["habilitada"] = data_disciplina["habilitada"] == "Si"
+
     existe, mensaje = disciplinas.validar_disciplina_repetida_modificacion(
         data_disciplina["nombre"],
         data_disciplina["categoria"],
