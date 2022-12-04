@@ -51,12 +51,12 @@ def form_usuario():
 @login_requerido
 def usuario_profile(id):
     """Esta funcion llama al modulo correspondiente para obtener a un usuario por su id."""
+    if usuarios.buscar_usuario(id) is None:
+        return abort(404)
     kwargs = {
         "usuario": usuarios.buscar_usuario(id),
         "rol": usuarios.verificar_rol_usuario(id),
     }
-    if kwargs["usuario"] is None:
-        return abort(404)
     return render_template("usuarios/perfil_usuario.html", **kwargs)
 
 
