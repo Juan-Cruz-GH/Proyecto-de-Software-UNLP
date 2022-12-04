@@ -51,7 +51,7 @@ def pagar_cuota(id):
     if not (has_permission(session["user"], "pago_pay")):
         return abort(403)
     pago = pagos.get_cuota(id)
-    if pago.estado == True:
+    if pago.estado:
         return pagos_socios(pago.socio.id)
     socio = socios.buscar_socio(pago.socio.id)
     if pago.total == 0:
@@ -69,7 +69,7 @@ def confirmar_pago(id):
         return abort(403)
     pago = pagos.get_cuota(id)
 
-    if pago.estado == False:
+    if not pago.estado:
         if not pagos.pagar_cuota(id, pago.socio.id):
             flash("Error. El valor de la cuota esta fuera de rango")
             return pagos_socios(pago.socio.id)
