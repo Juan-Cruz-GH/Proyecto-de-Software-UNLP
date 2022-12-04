@@ -1,20 +1,18 @@
 import re
 
 from src.web.controllers.validators.common_validators import (
-    is_none,
     is_integer,
     valor_fuera_de_rango_entero,
     valor_es_negativo_entero,
+    dict_values_are_empty,
+    dict_values_are_none,
 )
 
 
 def validar_inputs(data):
     """Chequea que los datos del formulario sean válidos"""
-    if is_none(data["nombre"]):
-        return False, "El campo nombre no puede ser nulo"
-    if is_none(data["categoria"]):
-        return False, "El campo categoría no puede ser nulo"
-    if datos_estan_vacios(data):
+
+    if dict_values_are_none(data) or dict_values_are_empty(data):
         return False, "Todos los datos deben llenarse"
     if not is_integer(data["costo"]):
         return False, "El costo debe ser un numero"
@@ -30,19 +28,6 @@ def validar_inputs(data):
             'El formato de los horarios es incorrecto, debe ser "Dia1 Dia2 (opcional) de X a Yhs"',
         )
     return True, "Los datos son validos"
-
-
-def datos_estan_vacios(data):
-    """Si alguno de los datos está vacio retorna verdadero"""
-    if (
-        data["nombre"] == ""
-        or data["categoria"] == ""
-        or data["instructores"] == ""
-        or data["horarios"] == ""
-        or data["costo"] == ""
-        or data["habilitada"] == ""
-    ):
-        return True
 
 
 def nombre_es_valido(nombre):

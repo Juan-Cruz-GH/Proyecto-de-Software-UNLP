@@ -78,7 +78,7 @@ def disciplina_add():
         "instructores": request.form.get("instructores"),
         "horarios": request.form.get("horarios"),
         "costo": request.form.get("costo"),
-        "habilitada": (request.form.get("habilitada") == "Si"),
+        "habilitada": request.form.get("habilitada"),
     }
     inputs_validos, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
     if not inputs_validos:
@@ -87,6 +87,9 @@ def disciplina_add():
 
     data_disciplina["nombre"] = data_disciplina["nombre"].capitalize()
     data_disciplina["categoria"] = data_disciplina["categoria"].capitalize()
+    data_disciplina["habilitada"] = (
+        True if data_disciplina["habilitada"] == "Si" else False
+    )
 
     existe, mensaje = disciplinas.validar_disciplina_repetida_alta(
         data_disciplina["nombre"], data_disciplina["categoria"]
@@ -111,7 +114,7 @@ def disciplina_update():
         "instructores": request.form.get("instructores"),
         "horarios": request.form.get("horarios"),
         "costo": request.form.get("costo"),
-        "habilitada": (request.form.get("habilitada") == "Si"),
+        "habilitada": request.form.get("habilitada"),
     }
     inputs_validos, mensaje = validator_disciplinas.validar_inputs(data_disciplina)
     if not inputs_validos:
@@ -119,7 +122,9 @@ def disciplina_update():
         return redirect("/disciplinas/" + data_disciplina["id"])
     data_disciplina["nombre"] = data_disciplina["nombre"].capitalize()
     data_disciplina["categoria"] = data_disciplina["categoria"].capitalize()
-
+    data_disciplina["habilitada"] = (
+        True if data_disciplina["habilitada"] == "Si" else False
+    )
     existe, mensaje = disciplinas.validar_disciplina_repetida_modificacion(
         data_disciplina["nombre"],
         data_disciplina["categoria"],
